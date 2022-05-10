@@ -6,6 +6,7 @@ import time
 bus_number  = 1
 i2c_address = 0x76
 
+while True:
 bus = SMBus(bus_number)
 
 digT = []
