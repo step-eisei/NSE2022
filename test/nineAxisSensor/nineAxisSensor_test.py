@@ -117,8 +117,11 @@ with open(filename, 'a') as f:
     writer = csv.writer(f)
     writer.writerow(["acc1","acc2","acc3","gyro1","gyro2","gyro3","mag1","mag2","mag3"])
 f.close()
-    
-while True:
+
+loop=True
+i=0
+while loop==True:
+    i+=1 
     acc = acc_value()
     gyro= gyro_value()
     mag = mag_value()
@@ -134,3 +137,9 @@ while True:
         writer.writerow([acc[0],acc[1],acc[2],gyro[0],gyro[1],gyro[2],mag[0],mag[1],mag[2]])
     f.close()
     
+    if i==199:
+        loop=False
+
+
+
+
