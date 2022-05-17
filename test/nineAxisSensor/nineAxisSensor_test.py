@@ -130,7 +130,7 @@ while loop==True:
     print("Gyro -> x:{}, y:{}, z: {}".format(gyro[0], gyro[1], gyro[2]))
     print("Mag -> x:{}, y:{}, z: {}".format(mag[0], mag[1], mag[2]))
     print("\n")
-    time.sleep(0.1)
+    time.sleep(0.01)
 
     with open(filename, 'a', newline="") as f:
         writer = csv.writer(f)
