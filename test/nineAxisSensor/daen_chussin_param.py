@@ -1,12 +1,12 @@
 #９軸データを真球化かつパラメータをparameter_folderに格納
 import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+#import matplotlib.pyplot as plt
+#from mpl_toolkits.mplot3d import Axes3D
 import os
 import datetime
 import csv
 
-fname='data00csv.txt'
+fname='test_0525_2128.csv'
 #data00csv.txtの最後の３列がmG（ミリガウス）単位の地磁気データx、y、zとなっている
 data=np.loadtxt(fname, delimiter=',',skiprows=1)
 print(data)
@@ -188,35 +188,3 @@ with open(gen_foldername+"/"+filename, 'w') as f:
     writer.writerow([x0,y0,z0,sx,sy,sz,P[0,0],P[0,1],P[0,2],P[1,0],P[1,1],P[1,2],P[2,0],P[2,1],P[2,2]])
 f.close()
 
-#データのプロット
-# グラフの枠を作成
-fig = plt.figure(figsize=(7,7))
-ax = fig.add_subplot(111, projection='3d')
-
-# X,Y,Z軸にラベルを設定
-ax.set_xlabel("X")
-ax.set_ylabel("Y")
-ax.set_zlabel("Z")
-ax.set_xlim([-500,500])
-ax.set_ylim([-400,600])
-ax.set_zlim([-600,400])
-#ax.set_box_aspect((1,1,1)) #自分のverだとエラー吐く
-
-# 生データ描画
-ax.plot(magx,magy,magz,marker=".",ms=1, linestyle='None')
-
-#回転・平行移動後の描画
-ax.plot(magx2,magy2,magz2,marker=".",ms=1, linestyle='None')
-
-#規定ベクトルの描画
-ax.plot([0+x0,v[0,0]*200+x0],[0+y0,v[1,0]*200+y0],[0+z0,v[2,0]*200+z0], marker='*')
-ax.plot([0+x0,v[0,1]*200+x0],[0+y0,v[1,1]*200+y0],[0+z0,v[2,1]*200+z0], marker='*')
-ax.plot([0+x0,v[0,2]*200+x0],[0+y0,v[1,2]*200+y0],[0+z0,v[2,2]*200+z0], marker='*')
-
-#xyz軸描画
-ax.plot([-500,500],[0,0],[0,0])
-ax.plot([0,0],[-400,600],[0,0])
-ax.plot([0,0],[0,0],[-400,600])
-
-# グラフ表示
-plt.show()

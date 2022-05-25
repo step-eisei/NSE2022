@@ -1,9 +1,9 @@
 #データを受け取ると真球化
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import os
 
-fname='data00csv.txt'
+fname='test_0525_2128.csv'
 #data00csv.txtの最後の３列がmG（ミリガウス）単位の地磁気データx、y、zとなっている
 nineaxis_data=np.loadtxt(fname, delimiter=',',skiprows=1)
 
@@ -13,7 +13,7 @@ magy=nineaxis_data[:,7]
 magz=-nineaxis_data[:,8]
 def true_sphere_parameter(fname):
     parameter_file=open("./parameter/"+"parameter_"+fname+"_.csv")
-    parameter=np.loadtxt(parameter_file, delimiter=',',skiprows=2)
+    parameter=np.loadtxt(parameter_file, delimiter=',',skiprows=1)
     x0,y0,z0,sx,sy,sz,P_00,P_01,P_02,P_10,P_11,P_12,P_20,P_21,P_22=parameter
     P=np.matrix([[P_00,P_01,P_02],
                 [P_10,P_11,P_12],
