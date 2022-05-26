@@ -105,40 +105,40 @@ def mag_value():
 
     return mag_data
 
+if __name__=="__main__":
 
+    bmx_setup()
+    time.sleep(0.1)
 
-bmx_setup()
-time.sleep(0.1)
-
-now_time = datetime.datetime.now()
-filename = 'test_' + now_time.strftime('%m%d_%H%M') + '.csv'
-# ファイル，1行目(カラム)の作成
-with open(filename, 'a') as f:
-    writer = csv.writer(f)
-    writer.writerow(["acc1","acc2","acc3","gyro1","gyro2","gyro3","mag1","mag2","mag3"])
-f.close()
-
-loop=True
-i=0
-while loop==True:
-    i+=1 
-    acc = acc_value()
-    gyro= gyro_value()
-    mag = mag_value()
-
-    print("Accl -> x:{}, y:{}, z: {}".format(acc[0], acc[1], acc[2]))
-    print("Gyro -> x:{}, y:{}, z: {}".format(gyro[0], gyro[1], gyro[2]))
-    print("Mag -> x:{}, y:{}, z: {}".format(mag[0], mag[1], mag[2]))
-    print("\n")
-    time.sleep(0.01)
-
-    with open(filename, 'a', newline="") as f:
+    now_time = datetime.datetime.now()
+    filename = 'test_' + now_time.strftime('%m%d_%H%M') + '.csv'
+    # ファイル，1行目(カラム)の作成
+    with open(filename, 'a') as f:
         writer = csv.writer(f)
-        writer.writerow([acc[0],acc[1],acc[2],gyro[0],gyro[1],gyro[2],mag[0],mag[1],mag[2]])
+        writer.writerow(["acc1","acc2","acc3","gyro1","gyro2","gyro3","mag1","mag2","mag3"])
     f.close()
+
+    loop=True
+    i=0
+    while loop==True:
+        i+=1 
+        acc = acc_value()
+        gyro= gyro_value()
+        mag = mag_value()
+
+        print("Accl -> x:{}, y:{}, z: {}".format(acc[0], acc[1], acc[2]))
+        print("Gyro -> x:{}, y:{}, z: {}".format(gyro[0], gyro[1], gyro[2]))
+        print("Mag -> x:{}, y:{}, z: {}".format(mag[0], mag[1], mag[2]))
+        print("\n")
+        time.sleep(0.1)
+
+        with open(filename, 'a', newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow([acc[0],acc[1],acc[2],gyro[0],gyro[1],gyro[2],mag[0],mag[1],mag[2]])
+        f.close()
     
-    if i==3000:
-        loop=False
+        if i==3000:
+            loop=False
 
 
 
