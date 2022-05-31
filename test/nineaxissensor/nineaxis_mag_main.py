@@ -309,7 +309,7 @@ f.close()
 gen_result_foldername = 'result'
 os.makedirs(gen_result_foldername,exist_ok=True)
 
-with open(filename, 'a') as f:
+with open(gen_result_foldername+"/"+filename, 'a') as f:
     writer = csv.writer(f)
     writer.writerow(["magx2","magy2","magz2"])
 f.close()
@@ -320,12 +320,12 @@ while loop==True:
     magx,magy,magz = mag_value()
     #移動計算のためデータ整形
     mag2=np.vstack([magx,magy,magz])
-    print(mag2.shape)
-    print(P.T.shape)
-    print(type(mag2))
+   #print(mag2.shape)
+   #print(P.T.shape)
+   #print(type(mag2))
     #回転
     mag2=P.T*mag2
-    print(mag2.shape)
+   #print(mag2.shape)
 
     #並行移動
     magx2=np.array(mag2)[0]-x0
@@ -340,7 +340,7 @@ while loop==True:
     
     with open(gen_result_foldername+"/"+filename, 'a', newline="") as f:
         writer = csv.writer(f)
-        writer.writerow([magx2,magy2,magz2])
+        writer.writerow([magx2[0],magy2[0],magz2[0]])
     f.close()
 
     theta=np.degrees(np.arctan2(magy2, magx2))
