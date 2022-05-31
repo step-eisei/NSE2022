@@ -137,7 +137,7 @@ while loop==True:
     gen_raw_foldername = 'rawdata'
     os.makedirs(gen_raw_foldername,exist_ok=True)
 
-    with open(gen_raw_foldername/filename, 'a', newline="") as f:
+    with open(gen_raw_foldername+"/"+filename, 'a', newline="") as f:
         writer = csv.writer(f)
         writer.writerow([acc[0],acc[1],acc[2],gyro[0],gyro[1],gyro[2],mag[0],mag[1],mag[2]])
     f.close()
@@ -147,7 +147,7 @@ while loop==True:
 
 
 #data00csv.txtの最後の３列がmG（ミリガウス）単位の地磁気データx、y、zとなっている
-data=np.loadtxt(gen_raw_foldername/filename, delimiter=',',skiprows=1)
+data=np.loadtxt(gen_raw_foldername+"/"+filename, delimiter=',',skiprows=1)
 print(data)
 #地磁気データ抽出
 magx=-data[:,6]
@@ -338,9 +338,9 @@ while loop==True:
     magz2=sz*magz2
 
     
-    with open(gen_result_foldername, 'a', newline="") as f:
+    with open(gen_result_foldername+"/"+filename, 'a', newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(magx2,magy2,magz2)
+        writer.writerow([magx2,magy2,magz2])
     f.close()
 
     theta=np.degrees(np.arctan2(magy2, magx2))
