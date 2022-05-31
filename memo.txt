@@ -1,0 +1,47 @@
+pi@raspberrypi:~/soft_uart $ minicom -b 9600 -D /dev/ttySOFT0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Welcome to minicom 2.8                                                  
+                                                                        
+OPTIONS: I18n                                                           
+Port /dev/ttySOFT0, 01:37:07                                            
+                                                                        
+Press CTRL-A Z for help on special keys                                 
+                                                                        
+´elloDialing directory..D  |    Leave Minicom?    |lear Screen.......C |
+                       hello                                            
+                            hello                                       
+                                 ´ello                                  
+                                      ´ello                             
+                                           hello                        
+                                                ´²ë¥´²llo              |
+                                                          ´²llo         
+                                                               ´²llo    
+                                                                    hello
+                                                                         helo
+                                                                            o
+                                                                            o
+
+
+
