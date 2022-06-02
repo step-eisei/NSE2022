@@ -112,10 +112,14 @@ def mag_value():
 bmx_setup()
 time.sleep(0.1)
 
+
+gen_raw_foldername = 'rawdata'
+os.makedirs(gen_raw_foldername,exist_ok=True)
+
 now_time = datetime.datetime.now()
 filename = now_time.strftime('%m%d_%H%M') + '.csv'
 # ファイル，1行目(カラム)の作成
-with open(filename, 'a') as f:
+with open(gen_raw_foldername+"/"+filename, 'a') as f:
     writer = csv.writer(f)
     writer.writerow(["acc1","acc2","acc3","gyro1","gyro2","gyro3","mag1","mag2","mag3"])
 f.close()
@@ -134,8 +138,6 @@ while loop==True:
     print("\n")
     time.sleep(0.1)
     
-    gen_raw_foldername = 'rawdata'
-    os.makedirs(gen_raw_foldername,exist_ok=True)
 
     with open(gen_raw_foldername+"/"+filename, 'a', newline="") as f:
         writer = csv.writer(f)
