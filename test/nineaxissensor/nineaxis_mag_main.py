@@ -10,7 +10,7 @@ import csv
 import numpy as np
 import os
 
-
+##caliblation前の 生データを取得
 # I2C
 ACCL_ADDR = 0x19
 ACCL_R_ADDR = 0x02
@@ -148,9 +148,12 @@ while loop==True:
         loop=False
 
 
+        
+##Caliblation 行程
+
 #data00csv.txtの最後の３列がmG（ミリガウス）単位の地磁気データx、y、zとなっている
 data=np.loadtxt(gen_raw_foldername+"/"+filename, delimiter=',',skiprows=1)
-print(data)
+#print(data)
 #地磁気データ抽出
 magx=-data[:,6]
 magy=data[:,7]
@@ -307,6 +310,8 @@ with open(gen_parameter_foldername+"/"+filename, 'w') as f:
     writer.writerow([x0,y0,z0,sx,sy,sz,P[0,0],P[0,1],P[0,2],P[1,0],P[1,1],P[1,2],P[2,0],P[2,1],P[2,2]])
 f.close()
 
+
+## Caliblation後の　θ算出
 
 gen_result_foldername = 'result'
 os.makedirs(gen_result_foldername,exist_ok=True)
