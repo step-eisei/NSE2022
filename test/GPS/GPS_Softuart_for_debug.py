@@ -12,7 +12,7 @@ def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新す�
     s.readline() # 最初の1行は中途半端なデーターが読めることがあるので、捨てる
     while True:
         try:
-            print(s.readline())
+            print(str(s.readline()))
             sentence = s.readline().decode('utf-8') # GPSデーターを読み、文字列に変換する
             if sentence[0] != '$': # 先頭が'$'でなければ捨てる
                 continue
