@@ -10,7 +10,7 @@ gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する
 def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
     while True:
         try:
-            s = serial.Serial('/dev/serial0', 9600, timeout=10)
+            s = serial.Serial('/dev/ttySOFT0', 4800, timeout=10)
             s.readline() # 最初の1行は中途半端なデーターが読めることがあるので、捨てる
             while True:
                 sentence = s.readline().decode('cp1252') # GPSデーターを読み、文字列に変換する
