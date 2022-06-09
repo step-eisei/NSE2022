@@ -8,7 +8,7 @@ gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する
                                     # 引数はタイムゾーンの時差と出力フォーマット
 
 def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
-    s = serial.Serial('/dev/ttySOFT0', 9600, timeout=10)
+    s = serial.Serial('/dev/ttySOFT0', 4800, timeout=20)
     s.readline() # 最初の1行は中途半端なデーターが読めることがあるので、捨てる
     while True:
         try:
