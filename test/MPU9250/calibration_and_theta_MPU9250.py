@@ -122,8 +122,8 @@ mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 # time.sleep(0.1)
 
 
-# gen_raw_foldername = 'rawdata'
-# os.makedirs(gen_raw_foldername,exist_ok=True)
+gen_raw_foldername = 'rawdata'
+os.makedirs(gen_raw_foldername,exist_ok=True)
 
 now_time = datetime.datetime.now()
 filename = now_time.strftime('%m%d_%H%M') + '.csv'
