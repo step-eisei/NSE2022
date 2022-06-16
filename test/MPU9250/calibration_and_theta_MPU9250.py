@@ -172,7 +172,7 @@ try:
             writer.writerow([accel['x'],accel['y'],accel['z'],gyro['x'],gyro['y'],gyro['z'],mag['x'],mag['y'],mag['z']])
         f.close()
 
-        if i==500:
+        if i==1000:
             loop=False
 
 except KeyboardInterrupt:
