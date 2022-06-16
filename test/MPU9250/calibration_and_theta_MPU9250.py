@@ -352,7 +352,10 @@ f.close()
 loop=True
 while loop==True: 
     
-    magx,magy,magz = mag_value()
+#     magx,magy,magz = mag_value()
+    magx = mag['x']
+    magy = mag['y']
+    magz = mag['z']
     #移動計算のためデータ整形
     mag2=np.vstack([magx,magy,magz])
    #print(mag2.shape)
