@@ -42,7 +42,7 @@ try:
         
         with open('xyz_record.csv','a',newline='') as f: 
             writer = csv.writer(f)
-            writer.writerow([mag['x'], mag['y'], mag['z'])
+            writer.writerow([mag['x'], mag['y'], mag['z']])
         f.close()
          
         time.sleep(0.5)
