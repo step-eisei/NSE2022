@@ -171,7 +171,7 @@ try:
         f.close()
 
         if i==500:
-        loop=False
+            loop=False
 
 except KeyboardInterrupt:
     sys.exit()
