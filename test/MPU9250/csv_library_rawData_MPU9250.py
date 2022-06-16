@@ -21,7 +21,7 @@ mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 DIFF_JST_FROM_UTC = 9
 jp_time = datetime.datetime.utcnow() + datetime.timedelta(hours=DIFF_JST_FROM_UTC)
 
-with open('mag_record_' + jp_time + '.csv','w',newline='') as f: 
+with open('mag_record_' + str(jp_time) + '.csv','w',newline='') as f: 
     writer = csv.writer(f)
     writer.writerow(["mag_x", "mag_y", "mag_z"])
 f.close()
@@ -44,7 +44,7 @@ try:
         print(" mz = " , ( mag['z'] ))
         print()
         
-        with open('mag_record_' + jp_time + '.csv','a',newline='') as f: 
+        with open('mag_record_' + str(jp_time) + '.csv','a',newline='') as f: 
             writer = csv.writer(f)
             writer.writerow([mag['x'], mag['y'], mag['z']])
         f.close()
