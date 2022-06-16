@@ -165,6 +165,8 @@ try:
         print(" mz = " , ( mag['z'] ))
         print()
         
+        time.sleep(0.1)
+        
         with open(gen_raw_foldername+"/"+filename, 'a', newline="") as f:
             writer = csv.writer(f)
             writer.writerow([accel['x'],accel['y'],accel['z'],gyro['x'],gyro['y'],gyro['z'],mag['x'],mag['y'],mag['z']])
