@@ -347,8 +347,8 @@ while loop==True:
     
     with open(gen_result_foldername+"/"+filename, 'a', newline="") as f:
         writer = csv.writer(f)
-        writer.writerow([magx2,magy2,magz2])
+        writer.writerow([magx2[0],magy2[0],magz2[0]])
     f.close()
 
-    theta=np.degrees(np.arctan2(magy2, magx2))
+    theta=np.degrees(np.arctan2(magy2[0], magx2[0]))
     print(theta)
