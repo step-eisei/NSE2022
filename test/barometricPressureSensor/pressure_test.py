@@ -188,6 +188,7 @@ while(i<=10):
         print(i)
     else:
         i=0 
+        print("yet")
 print("next\n")
 
 i=0
