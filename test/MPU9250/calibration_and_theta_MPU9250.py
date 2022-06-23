@@ -20,6 +20,7 @@ import datetime
 import csv
 import numpy as np
 import os
+from tqdm import tqdm
 
 import FaBo9Axis_MPU9250
 import sys
@@ -133,11 +134,9 @@ with open(gen_raw_foldername+"/"+filename, 'a') as f:
     writer.writerow(["acc1","acc2","acc3","gyro1","gyro2","gyro3","mag1","mag2","mag3"])
 f.close()
 
-loop=True
 i=0
 try:
-    while loop==True:
-        i+=1 
+    for i in tqdm(range(1000)):
 
     #     acc = acc_value()
     #     gyro= gyro_value()
@@ -171,9 +170,6 @@ try:
             writer = csv.writer(f)
             writer.writerow([accel['x'],accel['y'],accel['z'],gyro['x'],gyro['y'],gyro['z'],mag['x'],mag['y'],mag['z']])
         f.close()
-
-        if i==1000:
-            loop=False
 
 except KeyboardInterrupt:
     sys.exit()
