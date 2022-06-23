@@ -1,0 +1,90 @@
+high : 1009.8194376384014 hPa
+閾値: 1001.9793276384014
+yet
+yet
+yet
+yet
+yet
+yet
+yet
+yet
+yet
+flying
+
+pressure1 : 1008.560745664497 hPa
+1
+flying
+
+pressure1 : 1008.5071160860904 hPa
+2
+flying
+
+pressure1 : 1008.348658694604 hPa
+3
+flying
+
+pressure1 : 1008.3883659732325 hPa
+4
+flying
+
+pressure1 : 1008.3967566481099 hPa
+5
+flying
+
+pressure1 : 1008.4515474181004 hPa
+6
+flying
+
+pressure1 : 1008.3279797551005 hPa
+7
+flying
+
+pressure1 : 1008.3827629121001 hPa
+8
+flying
+
+pressure1 : 1008.3874887629377 hPa
+9
+flying
+
+pressure1 : 1008.2795332812343 hPa
+10
+flying
+
+pressure1 : 1008.3536052307244 hPa
+11
+next
+
+yet
+yet
+yet
+yet
+yet
+yet
+yet
+yet
+yet
+yet
+pressure2 : 1009.8086454438636 hPa
+1
+pressure2 : 1009.8086454438636 hPa
+2
+pressure2 : 1009.8086454438636 hPa
+3
+pressure2 : 1009.8086454438636 hPa
+4
+pressure2 : 1009.8086454438636 hPa
+5
+pressure2 : 1009.8086454438636 hPa
+6
+pressure2 : 1009.8086454438636 hPa
+7
+pressure2 : 1009.8086454438636 hPa
+8
+pressure2 : 1009.8044142923785 hPa
+9
+pressure2 : 1009.8044142923785 hPa
+10
+pressure2 : 1009.8044142923785 hPa
+11
+land
