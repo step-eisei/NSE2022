@@ -139,6 +139,8 @@ def main():
         writeReg(0xF2,ctrl_hum_reg)
         writeReg(0xF4,ctrl_meas_reg)
         writeReg(0xF5,config_reg)
+
+
     #ここまでが関数の定義
 
     setup()
@@ -165,6 +167,7 @@ def start():
     pressure_start=sum/20
     return pressure_start
 
+
 high=start() #地表での気圧を打ち上げ前に取得
 print('high : {} hPa'.format(high))
 
@@ -185,12 +188,11 @@ while(i<=10):
         print(i)
     else:
         i=0 
-print("next")
+print("next\n")
 
 i=0
 while(i<=10):
     pressure=main()
-    time.sleep(0.1)
 
     if pressure>high-0.05:
         i=i+1
@@ -200,5 +202,9 @@ while(i<=10):
         i=0
         print("yet")
 
+    time.sleep(0.1)
+
 print("land")
+
+
 
