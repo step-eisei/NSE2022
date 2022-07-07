@@ -62,8 +62,8 @@ try:
 #         print(" my = " , ( mag['y']   ), end='')
 #         print(" mz = " , ( mag['z'] ))
 #         print()
-        magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max + magX_min)/2)
-        magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max + magY_min)/2)
+        magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
+        magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
 
         with open('result/' + csv_name,'a',newline='') as f: 
             writer = csv.writer(f)
