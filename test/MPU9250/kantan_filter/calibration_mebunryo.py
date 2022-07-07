@@ -34,13 +34,13 @@ datetimeで得られる現在時刻にはスペース，コロン，ピリオド
 '''
 DIFF_JST_FROM_UTC = 9
 jp_time = datetime.datetime.utcnow() + datetime.timedelta(hours=DIFF_JST_FROM_UTC)
-csv_name = 'mag_record_' + str(jp_time).replace(' ', '_').replace(':', '-').replace('.', '_') + '.csv'
+csv_name = 'mag_record_calib_mebunryo_' + str(jp_time).replace(' ', '_').replace(':', '-').replace('.', '_') + '.csv'
 # print(jp_time)
 # >> 2022-07-07 13:28:32.197486
 # print(csv_name)
 # >> mag_record_2022-07-07_13-28-32_197156
 
-with open(csv_name,'w',newline='') as f: 
+with open('result/' + csv_name,'w',newline='') as f: 
     writer = csv.writer(f)
     writer.writerow(["magX_calibrated", "magY_calibrated", "magZ"])
 f.close()
@@ -65,7 +65,7 @@ try:
         magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max + magX_min)/2)
         magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max + magY_min)/2)
 
-        with open(csv_name,'a',newline='') as f: 
+        with open('result/' + csv_name,'a',newline='') as f: 
             writer = csv.writer(f)
             writer.writerow([magX_calibrated, magY_calibrated, mag['z']])
         f.close()
