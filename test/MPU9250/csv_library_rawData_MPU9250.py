@@ -22,22 +22,19 @@ mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 '''
 以下3行に渡ってcsvファイル名を作成している．
 datetimeで得られる現在時刻にはスペース，コロン，ピリオドが含まれており，
-これはLinuxでは保存できるがWindowsでは保存できない．
-よってそれらの文字でsplitした後，アンダーバーやハイフンに置換している．
+これはLinuxでは保存できるがWindowsでは保存できないため，
+それらの文字をreplaceでアンダーバーやハイフンに置換している．
 もっといい方法があると思うが，とりあえずこれで実装した．
 '''
 DIFF_JST_FROM_UTC = 9
-jp_time = re.split('[ :.]',str(datetime.datetime.utcnow() + datetime.timedelta(hours=DIFF_JST_FROM_UTC)))
-csv_name = 'mag_record_' + jp_time[0] + '_' + jp_time[1] + '-' + jp_time[2] + '-' + jp_time[3] + '_' + jp_time[4]
-# print(datetime.datetime.utcnow() + datetime.timedelta(hours=DIFF_JST_FROM_UTC))
-# >> 2022-07-07 13:28:32.197486
+jp_time = datetime.datetime.utcnow() + datetime.timedelta(hours=DIFF_JST_FROM_UTC)
+csv_name = str(jp_time).replace(' ', '_').replace(':', '-').replace('.', '_')
 # print(jp_time)
-# >> ['2022-07-07', '13', '28', '32', '197156']
+# >> 2022-07-07 13:28:32.197486
 # print(csv_name)
 # >> mag_record_2022-07-07_13-28-32_197156
 
-
-with open('mag_record_' + str(jp_time) + '.csv','w',newline='') as f: 
+with open(csv_name,'w',newline='') as f: 
     writer = csv.writer(f)
     writer.writerow(["mag_x", "mag_y", "mag_z"])
 f.close()
@@ -60,7 +57,7 @@ try:
         print(" mz = " , ( mag['z'] ))
         print()
         
-        with open('mag_record_' + str(jp_time) + '.csv','a',newline='') as f: 
+        with open(csv_name,'a',newline='') as f: 
             writer = csv.writer(f)
             writer.writerow([mag['x'], mag['y'], mag['z']])
         f.close()
