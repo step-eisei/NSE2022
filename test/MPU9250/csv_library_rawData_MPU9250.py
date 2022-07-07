@@ -28,7 +28,7 @@ datetimeで得られる現在時刻にはスペース，コロン，ピリオド
 '''
 DIFF_JST_FROM_UTC = 9
 jp_time = datetime.datetime.utcnow() + datetime.timedelta(hours=DIFF_JST_FROM_UTC)
-csv_name = str(jp_time).replace(' ', '_').replace(':', '-').replace('.', '_')
+csv_name = 'mag_record' + str(jp_time).replace(' ', '_').replace(':', '-').replace('.', '_')
 # print(jp_time)
 # >> 2022-07-07 13:28:32.197486
 # print(csv_name)
