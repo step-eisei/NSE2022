@@ -2,7 +2,7 @@ from smbus import SMBus
 import time
 
 
-def main():
+def ():
     bus_number  = 1
     i2c_address = 0x76
     bus = SMBus(bus_number)
@@ -160,7 +160,7 @@ def start():
     sum=0
     
     for i  in range(20):
-        pressure=main()
+        pressure=pressure()
         sum+=pressure
         time.sleep(0.1)
 
@@ -176,7 +176,7 @@ print('high : {} hPa'.format(high))
 
 i=0
 while(i<=10):
-    pressure=main()
+    pressure=pressure()
     time.sleep(0.1)
     print("閾値: "+str(high-7.84011))
 
@@ -193,7 +193,7 @@ print("next\n")
 
 i=0
 while(i<=10):
-    pressure=main()
+    pressure=pressure()
 
     if pressure>high-0.05:
         i=i+1
