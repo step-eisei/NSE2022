@@ -5,9 +5,13 @@
 from gpiozero import Motor
 from time import sleep
 
-motor = Motor(17, 18)
-motor.forward(0.2)
+motor1 = Motor(23, 24)
+motor2 = Motor(16, 26)
+motor1.forward(0.2)
+motor2.forward(0.2)
 sleep(2)
-motor.backward(0.5)
+motor1.backward(0.5)
+motor2.backward(0.5)
 sleep(3)
-motor.stop()
+motor1.stop()
+motor2.stop()
