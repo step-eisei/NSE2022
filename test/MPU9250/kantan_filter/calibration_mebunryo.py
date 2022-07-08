@@ -16,6 +16,7 @@ import sys
 import csv
 import datetime
 import re
+import math
 
 mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 
@@ -24,6 +25,9 @@ magX_max = 35.0
 magX_min = -24.0
 magY_max = 68.0
 magY_min = 11.0
+
+magXs = [0]*5
+magYs = [0]*5
 
 '''
 以下3行に渡ってcsvファイル名を作成している．
@@ -62,10 +66,31 @@ try:
 #         print(" my = " , ( mag['y']   ), end='')
 #         print(" mz = " , ( mag['z'] ))
 #         print()
+           
+        # キャリブレーション
         magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
         magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
         
-#         とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
+        # ローパスフィルタ
+        magXs[0] = magXs[1]
+        magXs[1] = magXs[2]
+        magXs[2] = magXs[3]
+        magXs[3] = magXs[4]
+        magXs[4] = magXs[5]
+        magXs[5] = magX_calibrated
+        magX_mean = sum(magXs)/5
+        
+        magYs[0] = magYs[1]
+        magYs[1] = magYs[2]
+        magYs[2] = magYs[3]
+        magYs[3] = magYs[4]
+        magYs[4] = magYs[5]
+        magYs[5] = magY_calibrated
+        magY_mean = sum(magYs)/5
+        
+ 
+        
+        # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
         theta_absolute = atan2(magY_calibrated, magX_calibrated)
         print(theta_absolute)
 
