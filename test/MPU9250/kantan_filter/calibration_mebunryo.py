@@ -65,12 +65,13 @@ try:
         magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
         magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
         
-#         とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtehta_absoluteにするには演算が必要かも
+#         とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
         theta_absolute = atan2(magY_calibrated, magX_calibrated)
+        print(theta_absolute)
 
         with open('result/' + csv_name,'a',newline='') as f: 
             writer = csv.writer(f)
-            writer.writerow([mag['x'], mag['y'], mag['z'], magX_calibrated, magY_calibrated])
+            writer.writerow([mag['x'], mag['y'], mag['z'], magX_calibrated, magY_calibrated, theta_absolute])
         f.close()
          
         time.sleep(0.5)
