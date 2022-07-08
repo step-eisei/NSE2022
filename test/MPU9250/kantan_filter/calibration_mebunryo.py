@@ -99,7 +99,7 @@ try:
             writer.writerow([mag['x'], mag['y'], mag['z'], magX_calibrated, magY_calibrated, theta_absolute, magX_mean, magY_mean, theta_absolute_lowPass])
         f.close()
          
-        time.sleep(0.7)
+        time.sleep(0.3)
 
 except KeyboardInterrupt:
     sys.exit()
