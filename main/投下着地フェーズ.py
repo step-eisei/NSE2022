@@ -1,8 +1,30 @@
-from smbus import SMBus
+#気圧⇒GPS⇒ニクロム⇒前進⇒GPS（⇒ニクロム…）
+
+from xml.dom.expatbuilder import parseString
+from xmlrpc.client import NOT_WELLFORMED_ERROR
+from gpiozero import Motor
 import time
+import RPi.GPIO as GPIO
+from smbus import SMBus
 
 
-def ():
+def go_ahead():
+    motor = Motor(17, 18)
+    motor.forward(5)
+    motor.stop()
+
+def nchrm():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(17,  GPIO.OUT)
+
+    GPIO.output(17, True)
+    #ここの数字は実験次第
+    time.sleep(10)
+    GPIO.output(17, False)
+
+#def GPS():
+
+def main():
     bus_number  = 1
     i2c_address = 0x76
     bus = SMBus(bus_number)
@@ -66,7 +88,6 @@ def ():
 
         compensate_T(temp_raw)
         x=compensate_P(pres_raw)
-        #compensate_H(hum_raw)
 
         return x
 
@@ -103,24 +124,6 @@ def ():
         v1 = (adc_T / 16384.0 - digT[0] / 1024.0) * digT[1]
         v2 = (adc_T / 131072.0 - digT[0] / 8192.0) * (adc_T / 131072.0 - digT[0] / 8192.0) * digT[2]
         t_fine = v1 + v2
-        #temperature = t_fine / 5120.0
-        #print('temp : {} ℃'.format(temperature))
-        # print "temp : %-6.2f ℃" % (temperature) 
-
-    # def compensate_H(adc_H):
-    # 	global t_fine
-    # 	var_h = t_fine - 76800.0
-    # 	if var_h != 0:
-    # 		var_h = (adc_H - (digH[3] * 64.0 + digH[4]/16384.0 * var_h)) * (digH[1] / 65536.0 * (1.0 + digH[5] / 67108864.0 * var_h * (1.0 + digH[2] / 67108864.0 * var_h)))
-    # 	else:
-    # 		return 0
-    # 	var_h = var_h * (1.0 - digH[0] * var_h / 524288.0)
-    # 	if var_h > 100.0:
-    # 		var_h = 100.0
-    # 	elif var_h < 0.0:
-    # 		var_h = 0.0
-        #print('hum : {}'.format(var_h))
-        # print "hum : %6.2f ％" % (var_h)
 
 
     def setup():
@@ -140,9 +143,6 @@ def ():
         writeReg(0xF4,ctrl_meas_reg)
         writeReg(0xF5,config_reg)
 
-
-    #ここまでが関数の定義
-
     setup()
     get_calib_param()
 
@@ -160,7 +160,7 @@ def start():
     sum=0
     
     for i  in range(20):
-        pressure=pressure()
+        pressure=main()
         sum+=pressure
         time.sleep(0.1)
 
@@ -168,44 +168,62 @@ def start():
     return pressure_start
 
 
+#ここまでが関数の定義
+
 high=start() #地表での気圧を打ち上げ前に取得
 print('high : {} hPa'.format(high))
 
-#time.sleep(30)
- #地上の気圧測定してから上空にあがるまで待つ必要がある
 
+print("閾値: "+str(high-7.84011))
 i=0
 while(i<=10):
-    pressure=pressure()
+    pressure=main()
     time.sleep(0.1)
-    print("閾値: "+str(high-7.84011))
 
 
-    if pressure<(high-7.84011):
+    if pressure<(high-7.84011): #５０ｍ以上になったら上がったと判断
         i+=1
         print("flying\n")
         print('pressure1 : {} hPa'.format(pressure))
         print(i)
-    else:
-        i=0 
-        print("yet")
-print("next\n")
+    else: #５０ｍ地点に上がりきるまでyetを出力
+        i=0
+        print("yet") 
+print("next\n") #１０回連続５０ｍ以上の値になったら着地判定へ
 
 i=0
 while(i<=10):
-    pressure=pressure()
+    pressure=main()
 
-    if pressure>high-0.05:
+    if pressure>high-0.05: #地面の値に近いとき着地
         i=i+1
         print('pressure2 : {} hPa'.format(pressure))
         print(i)
-    else:
+    else: #地面での値より小さいときまだ飛んでいると判断
         i=0
         print("yet")
 
     time.sleep(0.1)
 
 print("land")
+#着地検知
 
+while(i<=3): #展開検知
+    #past=GPS()
+    nchrm() #10s
+    go_ahead() #5s
+    #now=GPS()
 
+    range=0.5
+    #GPSの誤差，今は適当
+    
+    if past-range<now<past+range: #GPSの値の誤差を含める必要あり
+        print("stopping")
+        time.sleep(2)
+        continue
+    else:
+        print("moving")
+        i=i+1
+    break
 
+print("open!")
