@@ -76,16 +76,14 @@ try:
         magXs[1] = magXs[2]
         magXs[2] = magXs[3]
         magXs[3] = magXs[4]
-        magXs[4] = magXs[5]
-        magXs[5] = magX_calibrated
+        magXs[4] = magX_calibrated
         magX_mean = sum(magXs)/5
         
         magYs[0] = magYs[1]
         magYs[1] = magYs[2]
         magYs[2] = magYs[3]
         magYs[3] = magYs[4]
-        magYs[4] = magYs[5]
-        magYs[5] = magY_calibrated
+        magYs[4] = magY_calibrated
         magY_mean = sum(magYs)/5
         
  
