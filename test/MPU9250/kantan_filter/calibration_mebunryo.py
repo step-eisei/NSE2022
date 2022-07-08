@@ -46,7 +46,7 @@ csv_name = 'mag_record_calib_mebunryo_' + str(jp_time).replace(' ', '_').replace
 
 with open('result/' + csv_name,'w',newline='') as f: 
     writer = csv.writer(f)
-    writer.writerow(["magX", "magY", "magZ", "magX_calibrated", "magY_calibrated", "theta_absolute"])
+    writer.writerow(["magX", "magY", "magZ", "magX_calibrated", "magY_calibrated", "theta_absolute", "magX_mean", "magY_mean", "theta_absolute_lowPass"])
 f.close()
 
 try:
@@ -92,11 +92,13 @@ try:
         
         # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
         theta_absolute = atan2(magY_calibrated, magX_calibrated)
-        print(theta_absolute)
+        # print(theta_absolute)
+        theta_absolute_lowPass = atan2(magY_mean, magX_mean)
+        print(theta_absolute_lowPass)
 
         with open('result/' + csv_name,'a',newline='') as f: 
             writer = csv.writer(f)
-            writer.writerow([mag['x'], mag['y'], mag['z'], magX_calibrated, magY_calibrated, theta_absolute])
+            writer.writerow([mag['x'], mag['y'], mag['z'], magX_calibrated, magY_calibrated, theta_absolute, magX_mean, magY_mean, theta_absolute_lowPass])
         f.close()
          
         time.sleep(0.5)
