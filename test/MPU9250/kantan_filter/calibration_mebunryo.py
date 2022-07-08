@@ -42,7 +42,7 @@ csv_name = 'mag_record_calib_mebunryo_' + str(jp_time).replace(' ', '_').replace
 
 with open('result/' + csv_name,'w',newline='') as f: 
     writer = csv.writer(f)
-    writer.writerow(["magX_calibrated", "magY_calibrated", "magZ"])
+    writer.writerow(["magX", "magY", "magZ", "magX_calibrated", "magY_calibrated"])
 f.close()
 
 try:
@@ -67,7 +67,7 @@ try:
 
         with open('result/' + csv_name,'a',newline='') as f: 
             writer = csv.writer(f)
-            writer.writerow([magX_calibrated, magY_calibrated, mag['z']])
+            writer.writerow([mag['x'], mag['y'], mag['z'], magX_calibrated, magY_calibrated])
         f.close()
          
         time.sleep(0.5)
