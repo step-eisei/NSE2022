@@ -89,9 +89,9 @@ try:
  
         
         # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
-        theta_absolute = atan2(magY_calibrated, magX_calibrated)
+        theta_absolute = math.atan2(magY_calibrated, magX_calibrated)
         # print(theta_absolute)
-        theta_absolute_lowPass = atan2(magY_mean, magX_mean)
+        theta_absolute_lowPass = math.atan2(magY_mean, magX_mean)
         print(theta_absolute_lowPass)
 
         with open('result/' + csv_name,'a',newline='') as f: 
