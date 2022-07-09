@@ -5,13 +5,18 @@
 from gpiozero import Motor
 from time import sleep
 
+print("forward")
 motor1 = Motor(23, 24)
 motor2 = Motor(16, 26)
 motor1.forward(0.2)
 motor2.forward(0.2)
 sleep(2)
+
+print("backward")
 motor1.backward(0.5)
 motor2.backward(0.5)
 sleep(3)
+
+print("stop")
 motor1.stop()
 motor2.stop()
