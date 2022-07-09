@@ -79,5 +79,5 @@ time.sleep(3)
 
 #----------------------------------------
 pwm_left.stop()
-# pwm_right.stop()
+pwm_right.stop()
 GPIO.cleanup()
