@@ -47,8 +47,8 @@ pwm_left.ChangeDutyCycle(DUTY_A)
 # GPIO.output(14, GPIO.HIGH)
 # GPIO.output(15, GPIO.LOW)
 # time.sleep(3)
-GPIO.output(PIN_A, GPIO.HIGH)
-GPIO.output(PIN_B, GPIO.LOW)
+GPIO.output(PIN_AIN1, GPIO.HIGH)
+GPIO.output(PIN_AIN2, GPIO.LOW)
 time.sleep(3)
 
 # # 左モータブレーキ？
