@@ -32,7 +32,7 @@ pwm_right = GPIO.PWM(PIN_PWMB, 50)
 pwm_right.start(10)
 pwm_right.ChangeDutyCycle(DUTY_B)
 
-sleep
+# sleep
 time.sleep(2)
 
 # ----------------------------------------
