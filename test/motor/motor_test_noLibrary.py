@@ -86,5 +86,5 @@ pwm_left.ChangeDutyCycle(DUTY_A)
 
 #----------------------------------------
 pwm_left.stop()
-pwm_right.stop()
+# pwm_right.stop()
 GPIO.cleanup()
