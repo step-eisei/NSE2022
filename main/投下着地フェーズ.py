@@ -22,7 +22,7 @@ def nchrm():
     time.sleep(10)
     GPIO.output(17, False)
 
-#def GPS():
+#def GPS(): #GPS取得のプログラムを入れる予定
 
 def main():
     bus_number  = 1
