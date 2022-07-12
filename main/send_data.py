@@ -1,4 +1,5 @@
 # float型の変数X,Y,Zを送信エンコードして，送信するプログラムです．
+# 動作確認済みです．
 
 import serial
 import time
