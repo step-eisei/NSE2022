@@ -1,4 +1,5 @@
 # 受信側の端末で実行するプログラムです．
+# 動作確認済みです．
 
 import serial
 import time
