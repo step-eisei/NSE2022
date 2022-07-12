@@ -129,6 +129,8 @@ def angle(x_now, y_now, theta_absolute):
 
 # gpsからゴール基準で自己位置を求める関数(国土地理院より)
 def calc_xy(gps_latitude, gps_longitude):
+    global goal_latitude
+    global goal_longitude
     
     """ 緯度経度を平面直角座標に変換する
     - input:
