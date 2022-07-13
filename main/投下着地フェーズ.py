@@ -1,16 +1,34 @@
 #気圧⇒GPS⇒ニクロム⇒前進⇒GPS（⇒ニクロム…）
 
+#気圧⇒GPS⇒ニクロム⇒前進⇒GPS（⇒ニクロム…）
+
 from xml.dom.expatbuilder import parseString
 from xmlrpc.client import NOT_WELLFORMED_ERROR
 from gpiozero import Motor
 import time
 import RPi.GPIO as GPIO
 from smbus import SMBus
+import math
+from gpiozero import Motor
+import numpy as np
+import serial
+import micropyGPS
+import csv
+import threading
+
+theta = 0
+gps_latitude = 0
+gps_longitude = 0
+x_now = 0
+y_now = 0
+x_goal = 0
+y_goal = 0
+satellites_used = 0
 
 
 def go_ahead():
     motor = Motor(17, 18)
-    motor.forward(5)
+    motor.forward(2)
     motor.stop()
 
 def nchrm():
@@ -22,7 +40,33 @@ def nchrm():
     time.sleep(10)
     GPIO.output(17, False)
 
-#def GPS(): #GPS取得のプログラムを入れる予定
+def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
+    s = serial.Serial('/dev/ttySOFT0', 4800, timeout=20)
+    s.readline() # 最初の1行は中途半端なデーターが読めることがあるので、捨てる
+    while True:
+        try:
+            sentence = s.readline().decode('utf-8') # GPSデーターを読み、文字列に変換する
+            if sentence[0] != '$': # 先頭が'$'でなければ捨てる
+                continue
+            for x in sentence: # 読んだ文字列を解析してGPSオブジェクトにデーターを追加、更新する
+                gps.update(x)
+        except:
+            print("GPS error, but ignored")
+
+def getgps():
+    global gps_latitude
+    global gps_longitude
+    global gps
+    while True:
+        if gps.clean_sentences > 20: # ちゃんとしたデーターがある程度たまったら出力する
+            h = gps.timestamp[0] if gps.timestamp[0] < 24 else gps.timestamp[0] - 24
+
+            gps_latitude = gps.latitude[0]
+            gps_longitude = gps.longitude[0]
+
+            break
+        time.sleep(3)
+    return gps_latitude,gps_longitude
 
 def main():
     bus_number  = 1
@@ -167,8 +211,9 @@ def start():
     pressure_start=sum/20
     return pressure_start
 
-
 #ここまでが関数の定義
+
+
 
 high=start() #地表での気圧を打ち上げ前に取得
 print('high : {} hPa'.format(high))
@@ -208,22 +253,45 @@ while(i<=10):
 print("land")
 #着地検知
 
-while(i<=3): #展開検知
-    #past=GPS()
-    nchrm() #10s
-    go_ahead() #5s
-    #now=GPS()
+#gpsの設定
+gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
+                                     # 引数はタイムゾーンの時差と出力フォーマット
+gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行するスレッドを生成
+gpsthread.setDaemon(True)
+gpsthread.start() 
 
-    range=0.5
-    #GPSの誤差，今は適当
-    
-    if past-range<now<past+range: #GPSの値の誤差を含める必要あり
+while True:#展開検知
+    getgps() #gpsの値取得
+    past_lat=gps_latitude
+    past_long=gps_longitude
+    nchrm() #10s
+    go_ahead() #2s
+    getgps()
+    lat_1=gps_latitude
+    long_1=gps_longitude
+    go_ahead() #2s
+    getgps()
+    lat_2=gps_latitude
+    long_2=gps_longitude
+
+    lat_range=0.0075 #誤差，若干大きめにとってる
+    long_range=0.001
+
+    if past_lat-lat_range<lat_1<past_lat+lat_range and past_long-long_range<long_1<past_long+long_range: 
         print("stopping")
-        time.sleep(2)
+        print("past:"+past_lat+"/"+past_long+"\n")
+        print("now:"+lat_1+"/"+long_1)
         continue
-    else:
+    elif past_lat-lat_range<lat_2<past_lat+lat_range and past_long-long_range<long_2<past_long+long_range:
+        print("stopping")
+        print("past:"+past_lat+"/"+past_long+"\n")
+        print("now:"+lat_2+"/"+long_2)
+        continue
+           
+    else: 
         print("moving")
-        i=i+1
-    break
+        print("past:"+past_lat+"/"+past_long+"\n")
+        print("now:"+lat_2+"/"+long_2+"\n")
+        break
 
 print("open!")
