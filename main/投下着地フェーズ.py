@@ -1,7 +1,5 @@
 #気圧⇒GPS⇒ニクロム⇒前進⇒GPS（⇒ニクロム…）
 
-#気圧⇒GPS⇒ニクロム⇒前進⇒GPS（⇒ニクロム…）
-
 from xml.dom.expatbuilder import parseString
 from xmlrpc.client import NOT_WELLFORMED_ERROR
 from gpiozero import Motor
