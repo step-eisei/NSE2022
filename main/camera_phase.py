@@ -61,11 +61,11 @@ def scanprop(img_th):
     #赤の割合を計算する
     width=img_th.shape[1]
     height=img_th.shape[0]
-    img_th.size=width*height
+    size=width*height
 
-    red_area=np.CountNonzero(img_th)
+    red_area=np.count_nonzero(img_th)
 
-    prop=(red_area/img_th.size)*100
+    prop=(red_area/size)*100
 
     return prop
 
@@ -88,10 +88,9 @@ def takepic():
     img_th=rgbbinary(img,val) #条件を満たす要素を255，それ以外を0とする配列
     (image.fromarray(img_th)).save('scanth.jpg')
     theta=scantheta(img_th)
-    prop=scanprop(im_th)
+    prop=scanprop(img_th)
 
     return theta,prop
-
 
 
 data = takepic()
