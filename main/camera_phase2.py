@@ -165,7 +165,7 @@ for i in range(5):
     data = takepic()
     theta = data[0]
     rotate(theta)
-    go_ahead
+    go_ahead()
 
 print("finish")
 
