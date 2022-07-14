@@ -1,5 +1,4 @@
 # カメラで画像を撮影し，thetaを出力するまでのプログラムです．動作確認済みです．
-# 明日(7/12)に「赤コーン探索」，「進行方向修正」などのプログラムを追加する予定です．
 
 from PIL import Image,ImageOps
 import numpy as np
@@ -58,10 +57,21 @@ def scantheta(img_th):
 
     return theta
 
+def scanprop(img_th):
+    #赤の割合を計算する
+    width=img_th.shape[1]
+    height=img_th.shape[0]
+    img_th.size=width*height
+
+    red_area=np.countnonzero(img_th)
+
+    prop=(red_area/img_th.size)*100
+
+    return prop
+
 def takepic():
     # 撮影
     camera.capture('image.jpg')
-    
 
     # 読み込み
     img= image.open ('image.jpg')
@@ -78,12 +88,15 @@ def takepic():
     img_th=rgbbinary(img,val) #条件を満たす要素を255，それ以外を0とする配列
     (image.fromarray(img_th)).save('scanth.jpg')
     theta=scantheta(img_th)
+    prop=scanprop(im_th)
 
-    return theta
+    return theta,prop
 
 
 
-theta = takepic()
+data = takepic()
+
+theta = takepic[0]
 
 print("theta="+str(theta))
 
