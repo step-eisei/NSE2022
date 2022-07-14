@@ -9,26 +9,17 @@ from smbus import SMBus
 import math
 from gpiozero import Motor
 import numpy as np
-import serial
-import micropyGPS
 import csv
 import threading
-
-theta = 0
-gps_latitude = 0
-gps_longitude = 0
-x_now = 0
-y_now = 0
-x_goal = 0
-y_goal = 0
-satellites_used = 0
-
+import time
+import timeout_decorator
 
 def nchrm():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(17,  GPIO.OUT)
 
     GPIO.output(17, True)
+    #ここの数字は実験次第
     time.sleep(2)
     GPIO.output(17, False)
     time.sleep(5)
@@ -221,9 +212,18 @@ print("land")
 
 #展開検知
 while True:
-    nchrm() 
-    data=takepic() #カメラ呼び出し
-    red_open=data[1] #赤の割合取得,prop
+    nchrm() #7s
+
+    timeout_decorator.timeout(10) #タイムアウトの制限時間を10sに設定
+    if __name__=='__main__':
+        try:
+            data=takepic()
+            red_open=data[1] #赤の割合取得
+        except:
+            print("try again")
+        else:
+            print("end")
+
     red_close=80 #閉じてる時の割合(%)，決めておく
     range=60 #開閉時の差
 
@@ -234,3 +234,4 @@ while True:
         print("red:"+red_open+"\n")
         continue
 print("open!!")
+
