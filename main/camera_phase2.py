@@ -21,6 +21,8 @@ theta = 60
 
 borderprop = 20
 
+takepic_counter = 0
+
 image=Image
 imageo=ImageOps
 camera=picamera.PiCamera()
@@ -128,11 +130,12 @@ def scanprop(img_th):
     return prop
 
 def takepic():
+    global takepic_counter
     # 撮影
-    camera.capture('image.jpg')
+    camera.capture('image'+str(takepic_counter)+'.jpg')
 
     # 読み込み
-    img= image.open ('image.jpg')
+    img= image.open ('image'+str(takepic_counter)+'.jpg')
     #hsv空間に変換 「色相(Hue)」「彩度(Saturation)」「明度(Value)」
     img_hsv=image.open('image.jpg').convert('HSV')
     #それぞれ上下左右反転し，Pillow → Numpyへ変換
@@ -144,10 +147,11 @@ def takepic():
     # 解析
     val=vscan(img_hsv) # 画像全体の明度(Value)の平均を取得
     img_th=rgbbinary(img,val) #条件を満たす要素を255，それ以外を0とする配列
-    (image.fromarray(img_th)).save('scanth.jpg')
+    (image.fromarray(img_th)).save('scanth'+str(takepic_counter)+'.jpg')
     theta=scantheta(img_th)
     prop=scanprop(img_th)
-
+    takepic_counter += 1
+    
     return theta,prop
 
 
