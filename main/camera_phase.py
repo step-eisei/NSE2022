@@ -63,7 +63,7 @@ def scanprop(img_th):
     height=img_th.shape[0]
     img_th.size=width*height
 
-    red_area=np.countnonzero(img_th)
+    red_area=np.CountNonzero(img_th)
 
     prop=(red_area/img_th.size)*100
 
