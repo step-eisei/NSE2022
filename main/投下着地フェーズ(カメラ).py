@@ -14,7 +14,7 @@ import threading
 import time
 import timeout_decorator
 
-def nchrm():
+def nchrm(): #ニクロム線加熱
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(17,  GPIO.OUT)
 
@@ -25,7 +25,7 @@ def nchrm():
     time.sleep(5)
 
 
-def main():
+def main(): #mainを呼び出すと気圧の値が返ってくる
     bus_number  = 1
     i2c_address = 0x76
     bus = SMBus(bus_number)
@@ -157,7 +157,7 @@ def main():
 
 #　↑ここまでが気圧を測定するプログラム
 
-def start():
+def start(): #投下前に地上での気圧の値を取得，閾値とする
     sum=0
     
     for i  in range(20):
@@ -172,12 +172,12 @@ def start():
 
 
 
-high=start() #地表での気圧を打ち上げ前に取得
+high=start() #地表での気圧，閾値
 print('high : {} hPa'.format(high))
 print("閾値: "+str(high-7.84011))
 i=0
 
-while(i<=10):
+while(i<=10): #落下中かを判断
     pressure=main()
     time.sleep(0.1)
 
@@ -193,7 +193,7 @@ while(i<=10):
 print("next\n") #１０回連続５０ｍ以上の値になったら着地判定へ
 
 i=0
-while(i<=10):
+while(i<=10): #着地したかを判断
     pressure=main()
 
     if pressure>high-0.05: #地面の値に近いとき着地
@@ -211,21 +211,21 @@ print("land")
 
 
 #展開検知
-while True:
+while True: #赤の割合が減るまで繰り返す
     nchrm() #7s
 
     timeout_decorator.timeout(10) #タイムアウトの制限時間を10sに設定
     if __name__=='__main__':
         try:
-            data=takepic()
+            data=takepic() #カメラの関数，ここには書いてない
             red_open=data[1] #赤の割合取得
         except:
             print("try again")
         else:
             print("end")
 
-    red_close=80 #閉じてる時の割合(%)，決めておく
-    range=60 #開閉時の差
+    red_close=80 #閉じてる時の割合(%)，今は適当
+    range=60 #開閉時の差，今は適当
 
     if red_open<red_close-range:
         break
@@ -234,4 +234,3 @@ while True:
         print("red:"+red_open+"\n")
         continue
 print("open!!")
-
