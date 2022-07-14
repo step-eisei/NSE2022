@@ -96,8 +96,9 @@ def takepic():
 
 data = takepic()
 
-theta = takepic[0]
+theta = data[0]
+prop = data[1]
 
 print("theta="+str(theta))
-
+print("prop="+str(prop))
    
