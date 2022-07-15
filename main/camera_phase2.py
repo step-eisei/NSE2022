@@ -1,14 +1,74 @@
-# カメラで画像を撮影し，thetaを出力するまでのプログラムです．動作確認済みです．
-
+# 案1 rungps()関数をthreadする方法
+# 未定義：モータのピン番号，モータ制御のduty比や時間など，座標計算時の定数をループするか，スタックの条件，スタックの緯度・経度
+# magnetは作っていません
+import time
+from gpiozero import Motor
 from PIL import Image,ImageOps
 import numpy as np
 import picamera
 import math
 
+# モータのピン割り当て(GPIO 〇〇)
+motor_right = Motor(17, 18)
+motor_left = Motor(15, 16)
+# 左右のduty比(定義域：0~1)
+duty_right = 0
+duty_left = 0
+
+T_straight = 5
+
+theta = 60
+
+borderprop = 20
+
+takepic_counter = 0
+
 image=Image
 imageo=ImageOps
 camera=picamera.PiCamera()
 
+# 機体を旋回させる関数
+def rotate(theta_relative):
+    global motor_right
+    global motor_left
+    global duty_right
+    global duty_left
+    const = 0       # 単位角度における回転所要時間
+    if(theta_relative > 0):
+        motor_right.forward(duty_right)
+        motor_left.backward(duty_left)
+    if(theta_relative < 0):
+        motor_right.backward(duty_right)
+        motor_left.forward(duty_left)
+    time.sleep(math.fabs(theta_relative)*const)
+    motor_right.stop()
+    motor_left.stop()
+
+# 機体を前進させる関数
+def go_ahead():
+    global motor_right
+    global motor_left
+    global duty_right
+    global duty_left
+    global T_straight
+    motor_right.forward(duty_right)
+    motor_left.forward(duty_left)
+    time.sleep(T_straight)
+    motor_right.stop()
+    motor_left.stop()
+
+# 機体を後進させる関数
+def go_back():
+    global motor_right
+    global motor_left
+    global duty_right
+    global duty_left
+    global T_straight
+    motor_right.backward(duty_right)
+    motor_left.backward(duty_left)
+    time.sleep(T_straight)
+    motor_right.stop()
+    motor_left.stop()
 
 def rgbbinary(img,val):
     #画像のチャンネルを分ける
@@ -70,11 +130,12 @@ def scanprop(img_th):
     return prop
 
 def takepic():
+    global takepic_counter
     # 撮影
-    camera.capture('image.jpg')
+    camera.capture('image'+str(takepic_counter)+'.jpg')
 
     # 読み込み
-    img= image.open ('image.jpg')
+    img= image.open ('image'+str(takepic_counter)+'.jpg')
     #hsv空間に変換 「色相(Hue)」「彩度(Saturation)」「明度(Value)」
     img_hsv=image.open('image.jpg').convert('HSV')
     #それぞれ上下左右反転し，Pillow → Numpyへ変換
@@ -86,18 +147,29 @@ def takepic():
     # 解析
     val=vscan(img_hsv) # 画像全体の明度(Value)の平均を取得
     img_th=rgbbinary(img,val) #条件を満たす要素を255，それ以外を0とする配列
-    (image.fromarray(img_th)).save('scanth.jpg')
+    (image.fromarray(img_th)).save('scanth'+str(takepic_counter)+'.jpg')
     theta=scantheta(img_th)
     prop=scanprop(img_th)
-
+    takepic_counter += 1
+    
     return theta,prop
 
 
-data = takepic()
+
 
 theta = data[0]
 prop = data[1]
 
-print("theta="+str(theta))
-print("prop="+str(prop))
-   
+while True:
+    data = takepic()
+    prop = data[1]
+    if prop > borderprop:
+        break
+for i in range(5):
+    data = takepic()
+    theta = data[0]
+    rotate(theta)
+    go_ahead()
+
+print("finish")
+
