@@ -8,7 +8,7 @@ import threading
 import time
 import timeout_decorator
 
-prop_closed=60 # この値よりも，R割合が低くなるとカプセルが展開したと判断
+prop_closed=60 # この値よりも，Rの割合が低くなるとカプセルが展開したと判断
 
 def nchrm(): #ニクロム線加熱
     GPIO.setmode(GPIO.BCM)
@@ -147,11 +147,11 @@ def pressure():
     if __name__ == '__main__':
         try:
             x=readData() #気圧の値読み取り
+            print(x)
             return x #pressure関数が呼び出されたら渡す
         except KeyboardInterrupt:
             pass
 
-#　↑ここまでが気圧を測定するプログラム
 
 def average_pressure(): #投下前に地上での気圧の値を取得，閾値とする
     sum=0
@@ -164,65 +164,40 @@ def average_pressure(): #投下前に地上での気圧の値を取得，閾値�
     average_pressure=sum/20
     return average_pressure
 
-#ここまでが関数の定義
 
+land_pressure=average_pressure() #基準となる地表での気圧を取得
 
-
-land_pressure=average_pressure() #地表での気圧，閾値
-print('land_pressure : {} hPa'.format(land_pressure))
-print("閾値: "+str(land_pressure-7.84011))
 i=0
-
 while(i<=10): #上昇したかを判断
     pressure=pressure()
     time.sleep(0.1)
-
-    if pressure<(land_pressure-7.84011): #50 m以上になったら上がったと判断
+    
+    if pressure<(land_pressure-7.84011):
         i+=1
-        print("flying\n")
-        print('pressure1 : {} hPa'.format(pressure))
-        print(i)
-    else: #50 m地点に上がりきるまでyetを出力
-        i=0
-        print("yet") 
-print("next\n") #10 回連続50 m以上の値になったら着地判定へ
+    else:
+        i=0 
+print("In the sky")
+
 
 i=0
 while(i<=10): #着地したかを判断
     pressure=pressure()
 
-    if pressure>land_pressure-0.05: #地面の値に近いとき着地
+    if pressure>(land_pressure-0.05): 
         i=i+1
-        print('pressure2 : {} hPa'.format(pressure))
-        print(i)
-    else: #地面での値より小さいときまだ飛んでいると判断
+    else: 
         i=0
-        print("yet")
-
     time.sleep(0.1)
-
-print("land")
-#着地検知
+print("On the land")
 
 
 #展開検知
-while True: #赤の割合が減るまで繰り返す
+while True: #赤の割合が一定以下になるまで繰り返す
     nchrm()
 
-    timeout_decorator.timeout(10) #タイムアウトの制限時間を10sに設定
-    if __name__=='__main__':
-        try:
-            data=takepic() #カメラの関数，ここには書いてない
-            prop=data[1] #赤の割合取得
-        except:
-            print("try again")
-        else:
-            print("end")
+    data=takepic()
+    prop=data[1] #Rの割合取得
+    
 
-    if prop<prop_closed:
+    if prop　<　prop_closed:
         break
-    else:
-        print("close\n")
-        print("red:"+str(prop)+"\n")
-        continue
-print("open!!")
