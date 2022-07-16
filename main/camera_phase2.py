@@ -1,5 +1,5 @@
-# カメラで画像を撮影し，thetaを出力するまでのプログラムです．動作確認済みです．
-
+import time
+from gpiozero import Motor
 from PIL import Image,ImageOps
 import numpy as np
 import picamera
@@ -9,7 +9,62 @@ image=Image
 imageo=ImageOps
 camera=picamera.PiCamera()
 
+# モータのピン割り当て(GPIO 〇〇)
+motor_right = Motor(17, 18)
+motor_left = Motor(15, 16)
+# 左右のduty比(定義域：0~1)
+duty_right = 0
+duty_left = 0
+
+T_straight = 5
+theta = 0
+borderprop = 20
 takepic_counter=1
+
+
+# 機体を旋回させる関数
+def rotate(theta_relative):
+    global motor_right
+    global motor_left
+    global duty_right
+    global duty_left
+    const = 0       # 単位角度における回転所要時間
+    if(theta_relative > 0):
+        motor_right.forward(duty_right)
+        motor_left.backward(duty_left)
+    if(theta_relative < 0):
+        motor_right.backward(duty_right)
+        motor_left.forward(duty_left)
+    time.sleep(math.fabs(theta_relative)*const)
+    motor_right.stop()
+    motor_left.stop()
+
+# 機体を前進させる関数
+def go_ahead():
+    global motor_right
+    global motor_left
+    global duty_right
+    global duty_left
+    global T_straight
+    motor_right.forward(duty_right)
+    motor_left.forward(duty_left)
+    time.sleep(T_straight)
+    motor_right.stop()
+    motor_left.stop()
+
+# 機体を後進させる関数
+def go_back():
+    global motor_right
+    global motor_left
+    global duty_right
+    global duty_left
+    global T_straight
+    motor_right.backward(duty_right)
+    motor_left.backward(duty_left)
+    time.sleep(T_straight)
+    motor_right.stop()
+    motor_left.stop()
+
 
 def csv_write_f():
 
@@ -132,10 +187,22 @@ def takepic():
     return theta,prop
 
 
-data = takepic()
+while True:
+    data = takepic()
+    prop = data[1]
+    if prop > boderprop:
+        break
+    rotate(50)
 
-theta = data[0]
-prop = data[1]
+for i in range(7):
+    data = takepic()
+    theta = data[0]
+    rotate(theta)
+    go_ahead()
 
-print("theta="+str(theta))
-print("prop="+str(prop))
+print("goal!!")
+
+
+
+
+
