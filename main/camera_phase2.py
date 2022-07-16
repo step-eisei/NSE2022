@@ -104,7 +104,7 @@ def scanprop(img_th):
 
 def takepic():
     # 撮影
-    
+    global takepic_counter
     camera.capture("image"+str(takepic_counter)+".jpg")
 
     # 読み込み
