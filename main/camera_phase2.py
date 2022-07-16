@@ -108,7 +108,7 @@ def takepic():
     camera.capture("image"+str(takepic_counter)+".jpg")
 
     # 読み込み
-    img= image.open ("image."+str(takepic_counter)+"jpg")
+    img= image.open ("image"+str(takepic_counter)+".jpg")
     #hsv空間に変換 「色相(Hue)」「彩度(Saturation)」「明度(Value)」
     img_hsv=image.open("image"+str(takepic_counter)+".jpg").convert('HSV')
     #それぞれ上下左右反転し，Pillow → Numpyへ変換
