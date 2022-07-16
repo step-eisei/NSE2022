@@ -1,10 +1,7 @@
-#気圧⇒GPS⇒ニクロム⇒前進⇒GPS（⇒ニクロム…）
-
 from xml.dom.expatbuilder import parseString
 from xmlrpc.client import NOT_WELLFORMED_ERROR
 from gpiozero import Motor
 import time
-import RPi.GPIO as GPIO
 from smbus import SMBus
 import math
 from gpiozero import Motor
@@ -25,7 +22,7 @@ def nchrm(): #ニクロム線加熱
     time.sleep(5)
 
 
-def main(): #mainを呼び出すと気圧の値が返ってくる
+def pressure():
     bus_number  = 1
     i2c_address = 0x76
     bus = SMBus(bus_number)
@@ -151,52 +148,51 @@ def main(): #mainを呼び出すと気圧の値が返ってくる
     if __name__ == '__main__':
         try:
             x=readData() #気圧の値読み取り
-            return x #main関数が呼び出されたら渡す
+            return x #pressure関数が呼び出されたら渡す
         except KeyboardInterrupt:
             pass
 
 #　↑ここまでが気圧を測定するプログラム
 
-def start(): #投下前に地上での気圧の値を取得，閾値とする
+def average_pressure(): #投下前に地上での気圧の値を取得，閾値とする
     sum=0
     
     for i  in range(20):
-        pressure=main()
+        pressure=pressure()
         sum+=pressure
         time.sleep(0.1)
 
-    pressure_start=sum/20
-    return pressure_start
+    average_pressure=sum/20
+    return average_pressure
 
 #ここまでが関数の定義
 
 
 
-high=start() #地表での気圧，閾値
-print('high : {} hPa'.format(high))
-print("閾値: "+str(high-7.84011))
+land_pressure=average_pressure() #地表での気圧，閾値
+print('land_pressure : {} hPa'.format(land_pressure))
+print("閾値: "+str(land_pressure-7.84011))
 i=0
 
-while(i<=10): #落下中かを判断
-    pressure=main()
+while(i<=10): #上昇したかを判断
+    pressure=pressure()
     time.sleep(0.1)
 
-
-    if pressure<(high-7.84011): #５０ｍ以上になったら上がったと判断
+    if pressure<(land_pressure-7.84011): #50 m以上になったら上がったと判断
         i+=1
         print("flying\n")
         print('pressure1 : {} hPa'.format(pressure))
         print(i)
-    else: #５０ｍ地点に上がりきるまでyetを出力
+    else: #50 m地点に上がりきるまでyetを出力
         i=0
         print("yet") 
-print("next\n") #１０回連続５０ｍ以上の値になったら着地判定へ
+print("next\n") #10 回連続50 m以上の値になったら着地判定へ
 
 i=0
 while(i<=10): #着地したかを判断
-    pressure=main()
+    pressure=pressure()
 
-    if pressure>high-0.05: #地面の値に近いとき着地
+    if pressure>land_pressure-0.05: #地面の値に近いとき着地
         i=i+1
         print('pressure2 : {} hPa'.format(pressure))
         print(i)
@@ -218,7 +214,7 @@ while True: #赤の割合が減るまで繰り返す
     if __name__=='__main__':
         try:
             data=takepic() #カメラの関数，ここには書いてない
-            red_open=data[1] #赤の割合取得
+            prop=data[1] #赤の割合取得
         except:
             print("try again")
         else:
@@ -227,10 +223,10 @@ while True: #赤の割合が減るまで繰り返す
     red_close=80 #閉じてる時の割合(%)，今は適当
     range=60 #開閉時の差，今は適当
 
-    if red_open<red_close-range:
+    if prop<red_close-range:
         break
     else:
         print("close\n")
-        print("red:"+red_open+"\n")
+        print("red:"+prop+"\n")
         continue
 print("open!!")
