@@ -36,43 +36,43 @@ pwm_right.ChangeDutyCycle(DUTY_B)
 time.sleep(2)
 
 # ----------------------------------------
-# 左モータ前進
+# 右モータ後進
 GPIO.output(PIN_AIN1, GPIO.HIGH)
 GPIO.output(PIN_AIN2, GPIO.LOW)
 time.sleep(3)
 
-# 左モータブレーキ？
+# 右モータブレーキ？
 GPIO.output(PIN_AIN1, GPIO.HIGH)
 GPIO.output(PIN_AIN2, GPIO.HIGH)
 time.sleep(1)
 
-# 左モータ後進
+# 右モータ前進
 GPIO.output(PIN_AIN1, GPIO.LOW)
 GPIO.output(PIN_AIN2, GPIO.HIGH)
 time.sleep(3)
 
-# 左モータ停止？
+# 右モータ停止？
 GPIO.output(PIN_AIN1, GPIO.LOW)
 GPIO.output(PIN_AIN2, GPIO.LOW)
 time.sleep(3)
 
 #----------------------------------------
-# 右モータ前進
+# 左モータ前進
 GPIO.output(PIN_BIN1, GPIO.HIGH)
 GPIO.output(PIN_BIN2, GPIO.LOW)
 time.sleep(3)
 
-# 右モータブレーキ？
+# 左モータブレーキ？
 GPIO.output(PIN_BIN1, GPIO.HIGH)
 GPIO.output(PIN_BIN2, GPIO.HIGH)
 time.sleep(1)
 
-# 右モータ後進
+# 左モータ後進
 GPIO.output(PIN_BIN1, GPIO.LOW)
 GPIO.output(PIN_BIN2, GPIO.HIGH)
 time.sleep(3)
 
-# 右モータ停止？
+# 左モータ停止？
 GPIO.output(PIN_BIN1, GPIO.LOW)
 GPIO.output(PIN_BIN2, GPIO.LOW)
 time.sleep(3)
