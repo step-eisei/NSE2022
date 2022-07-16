@@ -19,7 +19,6 @@ def rungps():
         #先頭が'$'でなければ捨てる
         if sentence[0] != '$':
             continue
-        #
         for x in sentence:
             my_gps.update(x)
 
@@ -50,4 +49,3 @@ for i in range(10):
             writer = csv.writer(f)
             writer.writerow([gps_latitude,gps_longitude]) 
     time.sleep(1.0)
-
