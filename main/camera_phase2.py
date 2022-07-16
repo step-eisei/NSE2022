@@ -9,6 +9,8 @@ image=Image
 imageo=ImageOps
 camera=picamera.PiCamera()
 
+takepic_counter=1
+
 def csv_write_f():
 
     flag = True
@@ -102,7 +104,7 @@ def scanprop(img_th):
 
 def takepic():
     # 撮影
-    camera.capture('image.jpg')
+    camera.capture("image"+str(takepic_counter)+".jpg")
 
     # 読み込み
     img= image.open ('image.jpg')
@@ -117,7 +119,9 @@ def takepic():
     # 解析
     val=vscan(img_hsv) # 画像全体の明度(Value)の平均を取得
     img_th=rgbbinary(img,val) #条件を満たす要素を255，それ以外を0とする配列
-    (image.fromarray(img_th)).save('scanth.jpg')
+    (image.fromarray(img_th)).save("scanth"+str(takepic_counter)+".jpg")
+    
+    takepic_counter += 1
     theta=scantheta(img_th)
     prop=scanprop(img_th)
 
