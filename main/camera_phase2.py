@@ -9,6 +9,37 @@ image=Image
 imageo=ImageOps
 camera=picamera.PiCamera()
 
+def csv_write_f():
+
+    flag = True
+    filename = ""
+
+    def write(x,y):
+
+        import datetime
+        import csv
+
+        nonlocal flag
+        nonlocal filename
+
+        if flag:
+            now_time = datetime.datetime.now()
+            filename = 'test_' + now_time.strftime('%Y%m%d_%H%M%S') + '.csv'
+
+            with open(filename,'a',newline='') as f: 
+                writer = csv.writer(f)
+                writer.writerow(["theta", "prop"])
+            flag = False
+
+
+        with open(filename,'a',newline='') as f: 
+                writer = csv.writer(f)
+                writer.writerow([x, y])
+
+    return write
+
+csv_write = csv_write_f()
+
 
 def rgbbinary(img,val):
     #画像のチャンネルを分ける
@@ -90,6 +121,9 @@ def takepic():
     theta=scantheta(img_th)
     prop=scanprop(img_th)
 
+    data = (theta,prop)
+    csv_write(*data)
+
     return theta,prop
 
 
@@ -100,4 +134,3 @@ prop = data[1]
 
 print("theta="+str(theta))
 print("prop="+str(prop))
-   
