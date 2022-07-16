@@ -1,15 +1,14 @@
 from xml.dom.expatbuilder import parseString
 from xmlrpc.client import NOT_WELLFORMED_ERROR
-from gpiozero import Motor
 import time
 from smbus import SMBus
 import math
-from gpiozero import Motor
 import numpy as np
-import csv
 import threading
 import time
 import timeout_decorator
+
+prop_closed=60 # この値よりも，R割合が低くなるとカプセルが展開したと判断
 
 def nchrm(): #ニクロム線加熱
     GPIO.setmode(GPIO.BCM)
@@ -208,7 +207,7 @@ print("land")
 
 #展開検知
 while True: #赤の割合が減るまで繰り返す
-    nchrm() #7s
+    nchrm()
 
     timeout_decorator.timeout(10) #タイムアウトの制限時間を10sに設定
     if __name__=='__main__':
@@ -220,13 +219,10 @@ while True: #赤の割合が減るまで繰り返す
         else:
             print("end")
 
-    red_close=80 #閉じてる時の割合(%)，今は適当
-    range=60 #開閉時の差，今は適当
-
-    if prop<red_close-range:
+    if prop<prop_closed:
         break
     else:
         print("close\n")
-        print("red:"+prop+"\n")
+        print("red:"+str(prop)+"\n")
         continue
 print("open!!")
