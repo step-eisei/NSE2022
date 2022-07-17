@@ -1,9 +1,11 @@
+from lib2to3.pgen2.token import NEWLINE
 from tkinter import W
 import serial
 import micropyGPS
 import threading
 import time
 import csv
+import pandas as pd
 
 #GPSモジュールからデータをmy_gps(GPSオブジェクト)に追加，＊引数はタイムゾーンの時差（日本は＋9時間）と，経度緯度の出力フォーマットを指定（ddm,dms,ddなどから）
 my_gps = micropyGPS.MicropyGPS(9, 'dd')
@@ -19,6 +21,7 @@ def rungps():
         #先頭が'$'でなければ捨てる
         if sentence[0] != '$':
             continue
+        #
         for x in sentence:
             my_gps.update(x)
 
@@ -48,4 +51,21 @@ for i in range(10):
         with open('goal_gps.csv',mode='a',newline='') as f:
             writer = csv.writer(f)
             writer.writerow([gps_latitude,gps_longitude]) 
-    time.sleep(1.0)
+    #time.sleep(1.0)
+    #変化した値を入れていく
+    for t in range(100000):
+        if my_gps.latitude[0] != my_gps.latitude[t] & my_gps.longitude[0] != my_gps.longitude[t]:
+            break
+
+#goal_gps.csvを読み込み平均値を算出しgoal.pyに書き込み
+df = pd.read_csv('goal_gps.csv')
+goal_la = df.mean()["goal_latitude"]
+goal_lo = df.mean()["goal_longitude"]
+
+with open('goal.csv',mode='a',newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(["goal_latitude", "goal_longitude"])
+
+with open('goal.csv',mode='a',newline='') as f:
+           writer = csv.writer(f)
+           writer.writerow([goal_la,goal_lo]) 
