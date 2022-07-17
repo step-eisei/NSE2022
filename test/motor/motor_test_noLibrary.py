@@ -28,7 +28,7 @@ GPIO.setup(PIN_BIN2, GPIO.OUT)
 
 # 右モータPWM
 GPIO.setup(PIN_PWMB, GPIO.OUT)
-pwm_right = GPIO.PWM(PIN_PWMB, 50)
+pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
 pwm_right.start(10)
 pwm_right.ChangeDutyCycle(DUTY_B)
 
