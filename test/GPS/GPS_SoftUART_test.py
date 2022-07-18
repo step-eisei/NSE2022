@@ -24,6 +24,7 @@ def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新す�
 gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行するスレッドを生成
 gpsthread.daemon = True
 gpsthread.start() # スレッドを起動
+print("thread get up")
 
 while True:
     if gps.clean_sentences > 20: # ちゃんとしたデーターがある程度たまったら出力する
