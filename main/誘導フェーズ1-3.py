@@ -1,9 +1,10 @@
 # 案3 gpsをthreadingする方法
-# 未定義：モータのピン番号，モータ制御のduty比や時間など，座標計算時の定数をループするか，スタックの条件，スタックの緯度・経度
+# 未定義：モータ制御の時間など，座標計算時の定数をループするか，スタックの条件
 # magnetは作っていません
+# 制御履歴の保存先はphase1_record.csv
 import time
 import math
-from gpiozero import Motor
+import RPi.GPIO as GPIO
 import numpy as np
 import serial
 import micropyGPS
@@ -18,11 +19,15 @@ with open ( 'goal.csv' , 'r' ) as f :
     goal_longitude = float(line[ 1 ] [ 1 ])
 
 # モータのピン割り当て(GPIO 〇〇)
-motor_right = Motor(17, 18)
-motor_left = Motor(15, 16)
-# 左右のduty比(定義域：0~1)
-duty_right = 0
-duty_left = 0
+PIN_AIN1 = 24   # 左モータ(A)
+PIN_AIN2 = 23
+PIN_PWMA = 12
+PIN_BIN1 = 16   # 右モータ(B)
+PIN_BIN2 = 26
+PIN_PWMB = 13
+# 左右のduty比(定義域：0~100)
+DUTY_A = 15 # 念のため20より上には上げないように
+DUTY_B = 15 # 念のため20より上には上げないように
 
 T_straight = 5
 final_distance = 0.5
@@ -84,46 +89,143 @@ def gps():
 
 # 機体を旋回させる関数
 def rotate(theta_relative):
-    global motor_right
-    global motor_left
-    global duty_right
-    global duty_left
+    global PIN_AIN1
+    global PIN_AIN2
+    global PIN_PWMA
+    global PIN_BIN1
+    global PIN_BIN2
+    global PIN_PWMB
+    global DUTY_A
+    global DUTY_B
     const = 0       # 単位角度における回転所要時間
-    if(theta_relative > 0):
-        motor_right.forward(duty_right)
-        motor_left.backward(duty_left)
-    if(theta_relative < 0):
-        motor_right.backward(duty_right)
-        motor_left.forward(duty_left)
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    # sleep
+    time.sleep(2)
+    
+    if(theta_relative > 0): # 左に旋回
+        # 右モータ前進
+        GPIO.output(PIN_AIN1, GPIO.LOW)
+        GPIO.output(PIN_AIN2, GPIO.HIGH)
+        # 左モータ後進
+        GPIO.output(PIN_BIN1, GPIO.LOW)
+        GPIO.output(PIN_BIN2, GPIO.HIGH)
+    if(theta_relative < 0): # 右に旋回
+        # 右モータ後進
+        GPIO.output(PIN_AIN1, GPIO.HIGH)
+        GPIO.output(PIN_AIN2, GPIO.LOW)
+        # 左モータ前進
+        GPIO.output(PIN_BIN1, GPIO.HIGH)
+        GPIO.output(PIN_BIN2, GPIO.LOW)
     time.sleep(math.fabs(theta_relative)*const)
-    motor_right.stop()
-    motor_left.stop()
+    # モータの解放
+    pwm_right.stop()
+    pwm_left.stop()
+    GPIO.cleanup()
 
 # 機体を前進させる関数
 def go_ahead():
-    global motor_right
-    global motor_left
-    global duty_right
-    global duty_left
+    global PIN_AIN1
+    global PIN_AIN2
+    global PIN_PWMA
+    global PIN_BIN1
+    global PIN_BIN2
+    global PIN_PWMB
+    global DUTY_A
+    global DUTY_B
     global T_straight
-    motor_right.forward(duty_right)
-    motor_left.forward(duty_left)
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    # sleep
+    time.sleep(2)
+    # 右モータ前進
+    GPIO.output(PIN_AIN1, GPIO.LOW)
+    GPIO.output(PIN_AIN2, GPIO.HIGH)
+    # 左モータ前進
+    GPIO.output(PIN_BIN1, GPIO.HIGH)
+    GPIO.output(PIN_BIN2, GPIO.LOW)
+    # sleep
     time.sleep(T_straight)
-    motor_right.stop()
-    motor_left.stop()
+    # モータの解放
+    pwm_right.stop()
+    pwm_left.stop()
+    GPIO.cleanup()
 
 # 機体を後進させる関数
 def go_back():
-    global motor_right
-    global motor_left
-    global duty_right
-    global duty_left
+    global PIN_AIN1
+    global PIN_AIN2
+    global PIN_PWMA
+    global PIN_BIN1
+    global PIN_BIN2
+    global PIN_PWMB
+    global DUTY_A
+    global DUTY_B
     global T_straight
-    motor_right.backward(duty_right)
-    motor_left.backward(duty_left)
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    # sleep
+    time.sleep(2)
+    # 右モータ後進
+    GPIO.output(PIN_AIN1, GPIO.HIGH)
+    GPIO.output(PIN_AIN2, GPIO.LOW)
+    # 左モータ後進
+    GPIO.output(PIN_BIN1, GPIO.LOW)
+    GPIO.output(PIN_BIN2, GPIO.HIGH)
+    # sleep
     time.sleep(T_straight)
-    motor_right.stop()
-    motor_left.stop()
+    # モータの解放
+    pwm_right.stop()
+    pwm_left.stop()
+    GPIO.cleanup()
 
 # ゴール角度，機体の角度から機体の回転角度を求める関数
 def angle(x_now, y_now, theta_absolute):
@@ -140,8 +242,6 @@ def angle(x_now, y_now, theta_absolute):
 
 # gpsからゴール基準で自己位置を求める関数(国土地理院より)
 def calc_xy(gps_latitude, gps_longitude):
-    global goal_latitude
-    global goal_longitude
     
     """ 緯度経度を平面直角座標に変換する
     - input:
@@ -263,7 +363,22 @@ def stack():
      スタックを前進により抜けたがスタック検知した場合,後進で再度スタックする危険がある
     """
 
+# 制御履歴の保存
+def record(theta,gps_latitude,gps_longitude,x_now,y_now,i):
+
+    distance = math.sqrt(x_now**2+y_now**2)
+    stacking = ["True", "False"]
+    with open('phase1_record.csv','a',newline='') as f: 
+        writer = csv.writer(f)
+        writer.writerow([theta,gps_latitude,gps_longitude,x_now,y_now,distance,stacking[i]])
+    f.close()
+
 # ここからメイン
+# 制御履歴CSVファイルの作成
+with open('phase1_record.csv','w',newline='') as f: 
+    writer = csv.writer(f)
+    writer.writerow(["theta","gps_latitude","gps_longitude","x_now","y_now","distance","stacking"])
+f.close()
 # gpsのthreading
 th_gps = threading.Thread(target=gps)
 th_gps.setDaemon(True)
@@ -280,10 +395,14 @@ while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
     if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) <= 0.1):
         # スタック処理
         stack()
+        i = 0
     else:
         # 旋回，直進
         rotate(theta_relative)
         go_ahead()
+        i = 1
+    # 履歴の保存
+    record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
     # 過去データの一時保存(移動検知のため)
     x_past = x_now
     y_past = y_now
