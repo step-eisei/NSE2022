@@ -3,6 +3,13 @@
 # reference webpage :
 # https://taku-info.com/bmx055howtouse-mag/
 
+"""
+このファイルが行っていること
+1.キャリビュレ-ション用の地磁気データを取る
+2.とれたデータからキャリビュレ-ションに必要なパラメータを計算
+3.また、地磁気を取り、パラメータで補正しながら角度算出をする。
+"""
+
 from smbus import SMBus
 import time
 import datetime
