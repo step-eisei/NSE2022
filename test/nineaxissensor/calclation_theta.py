@@ -1,3 +1,5 @@
+###基本使用しない
+
 import numpy as np
 from smbus import SMBus
 import time
