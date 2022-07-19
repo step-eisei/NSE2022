@@ -8,7 +8,6 @@ import RPi.GPIO as GPIO
 from smbus import SMBus
 import math
 from gpiozero import Motor
-import numpy as np
 import serial
 import micropyGPS
 import csv
@@ -187,6 +186,7 @@ def pressure():
 
     setup()
     get_calib_param()
+    print('pressure1 : {} hPa'.format(pressure))
 
 
     if __name__ == '__main__':
@@ -227,7 +227,6 @@ while(i<=10):
     if pressure<(land_pressure-7.84011): #５０ｍ以上になったら上がったと判断
         i+=1
         print("In the sky")
-        print('pressure1 : {} hPa'.format(pressure))
         print(i)
     else: #５０ｍ地点に上がりきるまでyetを出力
         i=0
@@ -240,7 +239,6 @@ while(i<=10):
 
     if pressure>land_pressure-0.05: #地面の値に近いとき着地
         i=i+1
-        print('pressure2 : {} hPa'.format(pressure))
         print(i)
     else: #地面での値より小さいときまだ飛んでいると判断
         i=0
