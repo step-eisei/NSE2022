@@ -8,6 +8,8 @@ import time
 import csv
 import numpy as np
 
+gps_latitude = 0
+gps_longitude = 0
 
 gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
                                     # 引数はタイムゾーンの時差と出力フォーマット
