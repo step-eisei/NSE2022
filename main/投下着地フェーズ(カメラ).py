@@ -214,6 +214,7 @@ print("land")
 while True: #赤の割合が減るまで繰り返す
     nchrm() #7s
 
+    red_open=100
     timeout_decorator.timeout(10) #タイムアウトの制限時間を10sに設定
     if __name__=='__main__':
         try:
@@ -230,7 +231,7 @@ while True: #赤の割合が減るまで繰り返す
     if red_open<red_close-range:
         break
     else:
-        print("close\n")
-        print("red:"+red_open+"\n")
+        print("close")
+        print("red:"+str(red_open))
         continue
 print("open!!")
