@@ -244,7 +244,7 @@ def csv_write_f(x,y):
 
 
 land_pressure=average_pressure() #地表での気圧を打ち上げ前に取得
-print('high : {} hPa'.format(high))
+print('land_pressure : {} hPa'.format(land_pressure))
 
 
 print("閾値: "+str(land_pressure-7.84011))
