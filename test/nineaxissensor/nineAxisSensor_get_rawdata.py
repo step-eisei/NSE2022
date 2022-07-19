@@ -3,6 +3,11 @@
 # reference webpage :
 # https://taku-info.com/bmx055howtouse-mag/
 
+"""
+キャリビュレ-ションされていない生の地磁気データを取るのみ
+データ点数はiで決定
+"""
+
 from smbus import SMBus
 import time
 import datetime
