@@ -1,4 +1,4 @@
-#データを受け取ると真球化
+#parametrデータを受け取ると取る地磁気データを真球化に補正するコード
 import numpy as np
 import matplotlib.pyplot as plt
 import os
