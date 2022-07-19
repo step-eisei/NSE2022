@@ -1,4 +1,8 @@
-#９軸データを真球化かつパラメータをparameter_folderに格納
+"""
+get-rawdataで取った生データから真球化かつパラメータ算出しparameter_folderに格納
+"""
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
