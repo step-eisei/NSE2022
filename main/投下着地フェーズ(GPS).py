@@ -28,14 +28,15 @@ def go_ahead():
     motor.forward(2)
     motor.stop()
 
-def nchrm():
+def nchrm(): #ニクロム線加熱
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(17,  GPIO.OUT)
 
     GPIO.output(17, True)
     #ここの数字は実験次第
-    time.sleep(10)
+    time.sleep(2)
     GPIO.output(17, False)
+    time.sleep(5)
 
 def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
     s = serial.Serial('/dev/ttySOFT0', 4800, timeout=20)
