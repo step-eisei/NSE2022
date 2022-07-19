@@ -2,6 +2,7 @@
 # 未定義：モータ制御の時間など，座標計算時の定数をループするか，スタックの条件
 # magnetは作っていません
 # 制御履歴の保存先はphase1_record.csv
+# 移動検知は3.5mとした．スタックの過剰検知に寄せる．後々検知幅を小さくする予定
 import time
 import math
 import RPi.GPIO as GPIO
@@ -30,7 +31,7 @@ DUTY_A = 15 # 念のため20より上には上げないように
 DUTY_B = 15 # 念のため20より上には上げないように
 
 T_straight = 5
-final_distance = 0.5
+final_distance = 3
 min_satellites_used = 10
 
 theta = 0
@@ -393,8 +394,8 @@ theta_absolute = magnet()
 theta_relative = angle(x_now, y_now, theta_absolute)
 # ループ(3mゴールまで)
 while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
-    # スタックの条件分岐(移動距離が　m以内)
-    if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) <= 0.1):
+    # スタックの条件分岐(移動距離が3.5m以内)
+    if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) <= 3.5):
         # スタック処理
         stack()
         i = 0
