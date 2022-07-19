@@ -89,8 +89,8 @@ def calc_xy(gps_latitude, gps_longitude):
     return (Y, X) # [m]，(x_now, y_now)で，軸が反転している．
 
 def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
-    # s = serial.Serial('/dev/ttySOFT0', 4800, timeout=20) # soft_uart用です
-    s = serial.Serial('/dev/serial0', 9600, timeout=10) # hard_uart用です
+    s = serial.Serial('/dev/ttySOFT0', 4800, timeout=20) # soft_uart用です
+    # s = serial.Serial('/dev/serial0', 9600, timeout=10) # hard_uart用です
     s.readline() # 最初の1行は中途半端なデーターが読めることがあるので、捨てる
     while True:
         try:
