@@ -209,6 +209,36 @@ def average_pressure():
     average_pressure=sum/20
     return average_pressure
 
+def csv_write_f(x,y):
+   
+
+    lat=x
+    long=y
+    flag = True
+
+    def write():
+
+        import datetime
+        import csv
+
+        nonlocal flag
+
+        if flag:
+            now_time = datetime.datetime.now()
+
+            with open('gps.csv','w',newline='') as f: 
+                writer = csv.writer(f)
+                writer.writerow(["GPS"])
+            flag = False
+
+
+        with open('gps.csv','a') as f: 
+                writer = csv.writer(f)
+                writer.writerow([lat,long])
+
+    return write
+
+
 #ここまでが関数の定義
 
 
@@ -260,15 +290,18 @@ while True:#展開検知
     getgps() #gpsの値取得
     past_lat=gps_latitude
     past_long=gps_longitude
+    csv_write_f(past_lat,past_long)
     nchrm() #10s
     go_ahead() #2s
     getgps()
     lat_1=gps_latitude
     long_1=gps_longitude
+    csv_write_f(lat_1,long_1)
     go_ahead() #2s
     getgps()
     lat_2=gps_latitude
     long_2=gps_longitude
+    csv_write_f(lat_2,long_2)
 
     lat_range=0.0075 #誤差，若干大きめにとってる
     long_range=0.001
