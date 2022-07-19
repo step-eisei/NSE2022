@@ -126,7 +126,7 @@ while True:
             i += 1
             gps_latitude = gps.latitude[0]
             gps_longitude = gps.longitude[0]
-            if(i == 1);
+            if(i == 1):
                 goal_latitude = gps_latitude
                 goal_longitude = gps_longitude
             x, y = calc_xy(gps_latitude, gps_longitude)
