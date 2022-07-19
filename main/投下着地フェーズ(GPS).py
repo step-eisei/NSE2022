@@ -273,8 +273,8 @@ while True:#展開検知
     lat_2=gps_latitude
     long_2=gps_longitude
 
-    lat_range=0.0075 #誤差，若干大きめにとってる
-    long_range=0.001
+    lat_range=0.000055 #定位置での誤差
+    long_range=0.000027
 
     if past_lat-lat_range<lat_1<past_lat+lat_range and past_long-long_range<long_1<past_long+long_range: 
         print("stopping")
