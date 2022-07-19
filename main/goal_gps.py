@@ -15,7 +15,7 @@ def rungps():
     ser.readline()
     while True:
         #受信したデータをバイナリデータからテキストデータへ変換
-        sentence = ser.readline().declde('utf-8')
+        sentence = ser.readline().decode('utf-8')
         #先頭が'$'でなければ捨てる
         if sentence[0] != '$':
             continue
