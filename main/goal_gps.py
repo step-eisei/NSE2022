@@ -17,7 +17,7 @@ def rungps():
     ser.readline()
     while True:
         #受信したデータをバイナリデータからテキストデータへ変換
-        sentence = ser.readline().declde('utf-8')
+        sentence = ser.readline().decode('utf-8')
         #先頭が'$'でなければ捨てる
         if sentence[0] != '$':
             continue
@@ -51,10 +51,10 @@ for i in range(10):
         with open('goal_gps.csv',mode='a',newline='') as f:
             writer = csv.writer(f)
             writer.writerow([gps_latitude,gps_longitude]) 
-    #time.sleep(1.0)
+    #time.sleep(20.0)
     #変化した値を入れていく
     for t in range(100000):
-        if my_gps.latitude[0] != my_gps.latitude[t] & my_gps.longitude[0] != my_gps.longitude[t]:
+        if(gps_latitude != my_gps.latitude[0] & gps_longitude != my_gps.longitude[0]):
             break
 
 #goal_gps.csvを読み込み平均値を算出しgoal.pyに書き込み
