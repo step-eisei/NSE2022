@@ -10,6 +10,8 @@ import numpy as np
 
 gps_latitude = 0
 gps_longitude = 0
+goal_latitude = 0
+goal_longitude = 0
 
 gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
                                     # 引数はタイムゾーンの時差と出力フォーマット
@@ -121,9 +123,12 @@ while True:
         #print('%2d:%02d:%04.1f' % (h, gps.timestamp[1], gps.timestamp[2]))
         #print('緯度経度: %2.8f, %2.8f' % (gps.latitude[0], gps.longitude[0]))
         if(gps.latitude[0] != gps_latitude):
-            i += 1 
+            i += 1
             gps_latitude = gps.latitude[0]
             gps_longitude = gps.longitude[0]
+            if(i == 1);
+                goal_latitude = gps_latitude
+                goal_longitude = gps_longitude
             x, y = calc_xy(gps_latitude, gps_longitude)
             print("サンプル数：", str(i))
             with open('gps_precision.csv','a',newline='') as f: 
