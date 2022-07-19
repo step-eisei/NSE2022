@@ -66,7 +66,7 @@ def getgps():
         time.sleep(3)
     return gps_latitude,gps_longitude
 
-def main():
+def pressure():
     bus_number  = 1
     i2c_address = 0x76
     bus = SMBus(bus_number)
@@ -198,7 +198,7 @@ def main():
 
 #　↑ここまでが気圧を測定するプログラム
 
-def start():
+def average_pressure():
     sum=0
     
     for i  in range(20):
@@ -206,27 +206,27 @@ def start():
         sum+=pressure
         time.sleep(0.1)
 
-    pressure_start=sum/20
-    return pressure_start
+    average_pressure=sum/20
+    return average_pressure
 
 #ここまでが関数の定義
 
 
 
-high=start() #地表での気圧を打ち上げ前に取得
+land_pressure=average_pressure() #地表での気圧を打ち上げ前に取得
 print('high : {} hPa'.format(high))
 
 
-print("閾値: "+str(high-7.84011))
+print("閾値: "+str(land_pressure-7.84011))
 i=0
 while(i<=10):
-    pressure=main()
+    pressure=pressure()
     time.sleep(0.1)
 
 
-    if pressure<(high-7.84011): #５０ｍ以上になったら上がったと判断
+    if pressure<(land_pressure-7.84011): #５０ｍ以上になったら上がったと判断
         i+=1
-        print("flying\n")
+        print("In the sky")
         print('pressure1 : {} hPa'.format(pressure))
         print(i)
     else: #５０ｍ地点に上がりきるまでyetを出力
@@ -236,9 +236,9 @@ print("next\n") #１０回連続５０ｍ以上の値になったら着地判定
 
 i=0
 while(i<=10):
-    pressure=main()
+    pressure=pressure()
 
-    if pressure>high-0.05: #地面の値に近いとき着地
+    if pressure>land_pressure-0.05: #地面の値に近いとき着地
         i=i+1
         print('pressure2 : {} hPa'.format(pressure))
         print(i)
@@ -248,7 +248,7 @@ while(i<=10):
 
     time.sleep(0.1)
 
-print("land")
+print("On the land")
 #着地検知
 
 #gpsの設定
