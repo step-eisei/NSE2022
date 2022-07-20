@@ -203,7 +203,7 @@ def average_pressure():
     sum=0
     
     for i  in range(20):
-        pressure=main()
+        pressure=pressure()
         sum+=pressure
         time.sleep(0.1)
 
