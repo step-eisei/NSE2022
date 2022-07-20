@@ -423,7 +423,7 @@ def magnet():
     # print(theta_absolute)
     theta_absolute_lowPass = math.atan2(-magX_mean, -magY_mean)*180/math.pi
     # print(theta_absolute_lowPass)
-    return theta_ablosute_lowPass
+    return theta_absolute_lowPass
 
 # ここからメイン
 # 制御履歴CSVファイルの作成
