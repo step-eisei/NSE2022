@@ -426,19 +426,27 @@ def magnet():
     return theta_absolute_lowPass
 
 # ここからメイン
+print("main started")
+
 # 制御履歴CSVファイルの作成
 with open('phase1_record.csv','w',newline='') as f: 
     writer = csv.writer(f)
     writer.writerow(["theta","gps_latitude","gps_longitude","x_now","y_now","distance","stacking"])
 f.close()
+print("csv created")
+
 # gpsの設定
 gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
                                      # 引数はタイムゾーンの時差と出力フォーマット
 gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行するスレッドを生成
 gpsthread.setDaemon(True)
 gpsthread.start() # スレッドを起動
+print("thread got up")
+
 # gpsから緯度・経度取得
 getgps()
+print("got gps")
+
 # calc_xyから座標取得
 calc_xy(gps_latitude, gps_longitude)
 # magnetから絶対角度取得
@@ -446,27 +454,37 @@ theta_absolute = magnet()
 # angleから回転角度取得
 theta_relative = angle(x_now, y_now, theta_absolute)
 # ループ(3mゴールまで)
+
 while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
+    print("entered while")
     # スタックの条件分岐(移動距離が3.5m以内)
     if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) <= 3.5):
         # スタック処理
         stack()
+        print("stack")
         i = 0
     else:
         # 旋回，直進
         rotate(theta_relative)
+        print("rotated")
         go_ahead()
+        print("went ahead")
         i = 1
     # 履歴の保存
     record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
+    print("recorded")
     # 過去データの一時保存(移動検知のため)
     x_past = x_now
     y_past = y_now
     # gpsから緯度・経度取得
     getgps()
+    print("got gps")
     # calc_xyから座標取得
     calc_xy(gps_latitude, gps_longitude)
+    print("calced xy")
     # magnetから絶対角度取得
     theta_absolute = magnet()
+    print("got theta_absolute")
     # angleから回転角度取得
     theta_relative = angle(x_now, y_now, theta_absolute)
+    print("got tehta_relative")
