@@ -450,10 +450,13 @@ print("got gps")
 
 # calc_xyから座標取得
 calc_xy(gps_latitude, gps_longitude)
+print("calced xy")
 # magnetから絶対角度取得
 theta_absolute = magnet()
+print("got theta_absolute")
 # angleから回転角度取得
 theta_relative = angle(x_now, y_now, theta_absolute)
+print("got theta_relative")
 # ループ(3mゴールまで)
 
 while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
@@ -488,4 +491,4 @@ while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
     print("got theta_absolute")
     # angleから回転角度取得
     theta_relative = angle(x_now, y_now, theta_absolute)
-    print("got tehta_relative")
+    print("got theta_relative")
