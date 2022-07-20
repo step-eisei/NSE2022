@@ -25,7 +25,7 @@ satellites_used = 0
 
 def go_ahead():
     motor = Motor(17, 18)
-    motor.forward(2)
+    #motor.forward(2)
     motor.stop()
 
 def nchrm(): #ニクロム線加熱
@@ -294,12 +294,14 @@ while True:#展開検知
     past_long=gps_longitude
     csv_write_f(past_lat,past_long)
     nchrm() #10s
-    go_ahead() #2s
+    #go_ahead() #2s
+    print("go")
     getgps()
     lat_1=gps_latitude
     long_1=gps_longitude
     csv_write_f(lat_1,long_1)
-    go_ahead() #2s
+    #go_ahead() #2s
+    print("go")
     getgps()
     lat_2=gps_latitude
     long_2=gps_longitude
