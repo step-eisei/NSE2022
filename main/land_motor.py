@@ -290,7 +290,9 @@ gpsthread.start()
 
 while True:#展開検知
     while True:
+        print("start")
         getgps()
+        print("get")
         past_lat=gps_latitude
         past_long=gps_longitude
         if past_lat==0 or past_long==0:
@@ -305,6 +307,7 @@ while True:#展開検知
     print("go")
     while True:
         getgps()
+        print("get")
         lat_1=gps_latitude
         long_1=gps_longitude
         if lat_1==0 or long_1==0:
@@ -318,6 +321,7 @@ while True:#展開検知
     print("go")
     while True:
         getgps()
+        print("get")
         lat_2=gps_latitude
         long_2=gps_longitude
         if lat_2==0 or long_2==0:
@@ -331,6 +335,7 @@ while True:#展開検知
     print("go")
     while True:
         getgps()
+        print("get")
         lat_3=gps_latitude
         long_3=gps_longitude
         if lat_3==0 or long_3==0:
