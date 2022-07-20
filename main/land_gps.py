@@ -200,8 +200,8 @@ def pressure():
 #　↑ここまでが気圧を測定するプログラム
 
 def average_pressure():
-    sum=0
-    pressure=0
+    sum=0.0
+    pressure=0.0
     
     for i  in range(20):
         pressure=pressure()
