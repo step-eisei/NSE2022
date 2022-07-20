@@ -294,8 +294,10 @@ while True:#展開検知
         past_lat=gps_latitude
         past_long=gps_longitude
         if past_lat==0 or past_long==0:
+            print("no gps")
             continue
         else:
+            print("gps0")
             break
     csv_write_f(past_lat,past_long)
     nchrm() #10s
@@ -306,8 +308,10 @@ while True:#展開検知
         lat_1=gps_latitude
         long_1=gps_longitude
         if lat_1==0 or long_1==0:
+            print("no gps")
             continue
         else:
+            print("gps1")
             break
     csv_write_f(lat_1,long_1)
     #go_ahead() #2s
@@ -317,8 +321,10 @@ while True:#展開検知
         lat_2=gps_latitude
         long_2=gps_longitude
         if lat_2==0 or long_2==0:
+            print("no gps")
             continue
         else:
+            print("gps2")
             break
     csv_write_f(lat_2,long_2)
     #go_ahead() #2s
@@ -328,8 +334,10 @@ while True:#展開検知
         lat_3=gps_latitude
         long_3=gps_longitude
         if lat_3==0 or long_3==0:
+            print("no gps")
             continue
         else:
+            print("gps3")
             break
     csv_write_f(lat_3,long_3)
 
