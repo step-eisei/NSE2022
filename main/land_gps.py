@@ -307,8 +307,8 @@ while True:#展開検知
     long_2=gps_longitude
     csv_write_f(lat_2,long_2)
 
-    lat_range=0.0075 #誤差，若干大きめにとってる
-    long_range=0.001
+    lat_range=0.00006 #誤差，若干大きめにとってる
+    long_range=0.00003
 
     if past_lat-lat_range<lat_1<past_lat+lat_range and past_long-long_range<long_1<past_long+long_range: 
         print("stopping")
