@@ -1,10 +1,10 @@
 import time
 import threading
 import serial
+from struct import *
 
 def subThread():
 
-    from struct import *
     COM = '/dev/ttyAMA0'
     ser_sub = serial.Serial(COM, 115200)   
     
