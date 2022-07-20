@@ -48,6 +48,8 @@ gps_latitude = 0
 gps_longitude = 0
 x_now = 0
 y_now = 0
+x_past = 0
+y_past = 0
 x_goal = 0
 y_goal = 0
 satellites_used = 0
@@ -336,6 +338,8 @@ def stack():
     global gps_longitude
     global x_now
     global y_now
+    global x_past
+    global y_past
     p = 0
     x_past = x_now
     y_past = y_now
