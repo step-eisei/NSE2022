@@ -246,7 +246,7 @@ def csv_write_f(x,y):
 
 
 land_pressure=average_pressure() #地表での気圧を打ち上げ前に取得
-print('land_pressure : {} hPa'.format(land_pressure))
+print(f'land pressure={land_pressure}')
 
 
 print("閾値: "+str(land_pressure-1.2193))
@@ -256,7 +256,7 @@ while(i<=10):
     time.sleep(0.1)
 
 
-    if pressure<(land_pressure-1.21923): #５０ｍ以上になったら上がったと判断
+    if pressure<(land_pressure-1.21923): #50m以上になったら上がったと判断
         i+=1
         print("In the sky")
         print(i)
@@ -310,12 +310,12 @@ while True:#展開検知
     lat_range=0.00006 #誤差，若干大きめにとってる
     long_range=0.00003
 
-    if past_lat-lat_range<lat_1<past_lat+lat_range and past_long-long_range<long_1<past_long+long_range: 
+    if past_lat - lat_range < lat_1 < past_lat + lat_range and past_long - long_range < long_1 < past_long + long_range: 
         print("stopping")
         print("past:"+past_lat+"/"+past_long+"\n")
         print("now:"+lat_1+"/"+long_1)
         continue
-    elif past_lat-lat_range<lat_2<past_lat+lat_range and past_long-long_range<long_2<past_long+long_range:
+    elif past_lat - lat_range < lat_2 < past_lat + lat_range and past_long - long_range< long_2 < past_long + long_range:
         print("stopping")
         print("past:"+past_lat+"/"+past_long+"\n")
         print("now:"+lat_2+"/"+long_2)
