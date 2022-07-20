@@ -201,6 +201,7 @@ def pressure():
 
 def average_pressure():
     sum=0
+    pressure=0
     
     for i  in range(20):
         pressure=pressure()
