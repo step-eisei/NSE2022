@@ -245,40 +245,40 @@ def csv_write_f(x,y):
 
 
 
-# land_pressure=average_pressure() #地表での気圧を打ち上げ前に取得
-# print('land_pressure : {} hPa'.format(land_pressure))
+land_pressure=average_pressure() #地表での気圧を打ち上げ前に取得
+print('land_pressure : {} hPa'.format(land_pressure))
 
 
-# print("閾値: "+str(land_pressure-1.2193))
-# i=0
-# while(i<=10):
-#     pressure=get_pressure()
-#     time.sleep(0.1)
+print("閾値: "+str(land_pressure-1.2193))
+i=0
+while(i<=10):
+    pressure=get_pressure()
+    time.sleep(0.1)
 
 
-#     if pressure<(land_pressure-1.21923): #50m以上になったら上がったと判断
-#         i+=1
-#         print("In the sky")
-#         print(i)
-#     else: #50m地点に上がりきるまでyetを出力
-#         i=0
-#         print("yet") 
-# print("next\n") #10回連続50m以上の値になったら着地判定へ
+    if pressure<(land_pressure-1.21923): #50m以上になったら上がったと判断
+        i+=1
+        print("In the sky")
+        print(i)
+    else: #50m地点に上がりきるまでyetを出力
+        i=0
+        print("yet") 
+print("next\n") #10回連続50m以上の値になったら着地判定へ
 
-# i=0
-# while(i<=10):
-#     pressure=get_pressure()
+i=0
+while(i<=10):
+    pressure=get_pressure()
 
-#     if pressure>land_pressure-0.05: #地面の値に近いとき着地
-#         i=i+1
-#         print(i)
-#     else: #地面での値より小さいときまだ飛んでいると判断
-#         i=0
-#         print("yet")
+    if pressure>land_pressure-0.05: #地面の値に近いとき着地
+        i=i+1
+        print(i)
+    else: #地面での値より小さいときまだ飛んでいると判断
+        i=0
+        print("yet")
 
-#     time.sleep(0.1)
+    time.sleep(0.1)
 
-# print("On the land")
+print("On the land")
 #着地検知
 
 #gpsの設定
