@@ -114,7 +114,7 @@ def rotate(theta_relative):
     global PIN_PWMB
     global DUTY_A
     global DUTY_B
-    const = 0       # 単位角度における回転所要時間
+    const = 0.05       # 単位角度における回転所要時間
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
