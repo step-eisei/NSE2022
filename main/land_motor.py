@@ -312,19 +312,19 @@ while True:#展開検知
 
     if past_lat-lat_range<lat_1<past_lat+lat_range and past_long-long_range<long_1<past_long+long_range: 
         print("stopping")
-        print("past:"+past_lat+"/"+past_long+"\n")
-        print("now:"+lat_1+"/"+long_1)
+        print("past:"+str(past_lat)+"/"+str(past_long)+"\n")
+        print("now:"+str(lat_1)+"/"+str(long_1))
         continue
     elif past_lat-lat_range<lat_2<past_lat+lat_range and past_long-long_range<long_2<past_long+long_range:
         print("stopping")
-        print("past:"+past_lat+"/"+past_long+"\n")
-        print("now:"+lat_2+"/"+long_2)
+        print("past:"+str(past_lat)+"/"+str(past_long)+"\n")
+        print("now:"+str(lat_2)+"/"+str(long_2))
         continue
            
     else: 
         print("moving")
-        print("past:"+past_lat+"/"+past_long+"\n")
-        print("now:"+lat_2+"/"+long_2+"\n")
+        print("past:"+str(past_lat)+"/"+str(past_long)+"\n")
+        print("now:"+str(lat_2)+"/"+str(long_2)+"\n")
         break
 
 print("open!")
