@@ -66,7 +66,7 @@ def getgps():
         time.sleep(3)
     return gps_latitude,gps_longitude
 
-def pressure():
+def get_pressure():
     bus_number  = 1
     i2c_address = 0x76
     bus = SMBus(bus_number)
@@ -156,7 +156,7 @@ def pressure():
 
         pressure = pressure/100
         return pressure
-        #print('pressure : {} hPa'.format(pressure/100))
+        print('pressure : {} hPa'.format(pressure))
         
 
         # print "pressure : %7.2f hPa" % (pressure/100)
@@ -204,7 +204,7 @@ def average_pressure():
     land=0.0
     
     for i in range(20):
-        land=pressure()
+        land=get_pressure()
         sum+=land
         time.sleep(0.1)
 
@@ -252,7 +252,7 @@ print('land_pressure : {} hPa'.format(land_pressure))
 print("閾値: "+str(land_pressure-7.84011))
 i=0
 while(i<=10):
-    pressure=pressure()
+    pressure=get_pressure()
     time.sleep(0.1)
 
 
@@ -267,7 +267,7 @@ print("next\n") #１０回連続５０ｍ以上の値になったら着地判定
 
 i=0
 while(i<=10):
-    pressure=pressure()
+    pressure=get_pressure()
 
     if pressure>land_pressure-0.05: #地面の値に近いとき着地
         i=i+1
