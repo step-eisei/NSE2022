@@ -12,6 +12,13 @@ import micropyGPS
 import csv
 import threading
 
+import FaBo9Axis_MPU9250
+import sys
+import datetime
+import re
+
+mpu9250 = FaBo9Axis_MPU9250.MPU9250()
+
 # ゴール座標を保存したCSVファイルの読み込み
 # with open ( 'goal.csv' , 'r' ) as f :
 #     reader = csv . reader (f)
@@ -44,6 +51,15 @@ y_now = 0
 x_goal = 0
 y_goal = 0
 satellites_used = 0
+
+# 以下，目分量で得られた最大値と最小値
+magX_max = 23.4
+magX_min = 2.1
+magY_max = 7.1
+magY_min = -18.5
+
+magXs = [0]*5
+magYs = [0]*5
 
 # threadにする関数.gpsを取得し続ける
 def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
@@ -373,6 +389,41 @@ def record(theta,gps_latitude,gps_longitude,x_now,y_now,i):
         writer = csv.writer(f)
         writer.writerow([theta,gps_latitude,gps_longitude,x_now,y_now,distance,stacking[i]])
     f.close()
+    
+# 角度取得関数
+def magnet():
+
+    mag = mpu9250.readMagnet()
+    # print(" mx = " , ( mag['x']   ), end='')
+    # print(" my = " , ( mag['y']   ), end='')
+    # print(" mz = " , ( mag['z'] ))
+    # print()
+
+    # キャリブレーション
+    magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
+    magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
+
+    # ローパスフィルタ
+    magXs[0] = magXs[1]
+    magXs[1] = magXs[2]
+    magXs[2] = magXs[3]
+    magXs[3] = magXs[4]
+    magXs[4] = magX_calibrated
+    magX_mean = sum(magXs)/5
+
+    magYs[0] = magYs[1]
+    magYs[1] = magYs[2]
+    magYs[2] = magYs[3]
+    magYs[3] = magYs[4]
+    magYs[4] = magY_calibrated
+    magY_mean = sum(magYs)/5
+
+    # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
+    theta_absolute = math.atan2(-magX_calibrated, -magY_calibrated)*180/math.pi
+    # print(theta_absolute)
+    theta_absolute_lowPass = math.atan2(-magX_mean, -magY_mean)*180/math.pi
+    # print(theta_absolute_lowPass)
+    return theta_ablosute_lowPass
 
 # ここからメイン
 # 制御履歴CSVファイルの作成
