@@ -256,7 +256,7 @@ def angle(x_now, y_now, theta_absolute):
     return theta_relative
 
 # gpsからゴール基準で自己位置を求める関数(国土地理院より)
-def calc_xy(gps_latitude, gps_longitude):
+def calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude):
     
     """ 緯度経度を平面直角座標に変換する
     - input:
@@ -449,7 +449,7 @@ getgps()
 print("got gps")
 
 # calc_xyから座標取得
-calc_xy(gps_latitude, gps_longitude)
+calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
 print("calced xy¥n")
 print(x_now, y_now)
 # magnetから絶対角度取得
@@ -485,7 +485,7 @@ while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
     getgps()
     print("got gps")
     # calc_xyから座標取得
-    calc_xy(gps_latitude, gps_longitude)
+    calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
     print("calced xy")
     # magnetから絶対角度取得
     theta_absolute = magnet()
