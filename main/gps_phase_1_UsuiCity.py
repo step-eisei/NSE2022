@@ -348,7 +348,7 @@ def stack():
         go_back()
         # 位置情報の取得と移動判定
         getgps()
-        calc_xy(gps_latitude, gps_longitude)
+        x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
         if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) > 0.1):
             p = 1
             break
@@ -359,14 +359,14 @@ def stack():
         go_back()
         # 位置情報の取得と移動判定
         getgps()
-        calc_xy(gps_latitude, gps_longitude)
+        x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
         if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) > 0.1):
             p = 1
             break
         go_ahead()
         # 位置情報の取得と移動判定
         getgps()
-        calc_xy(gps_latitude, gps_longitude)
+        x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
         if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) > 0.1):
             p = 2
             break
