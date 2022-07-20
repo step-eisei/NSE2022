@@ -449,7 +449,7 @@ getgps()
 print("got gps")
 
 # calc_xyから座標取得
-calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
+x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
 print("calced xy¥n")
 print(x_now, y_now)
 # magnetから絶対角度取得
@@ -485,7 +485,7 @@ while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
     getgps()
     print("got gps")
     # calc_xyから座標取得
-    calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
+    x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
     print("calced xy")
     # magnetから絶対角度取得
     theta_absolute = magnet()
