@@ -201,11 +201,11 @@ def pressure():
 
 def average_pressure():
     sum=0.0
-    pressure=0.0
+    land=0.0
     
     for i in range(20):
-        pressure=pressure()
-        sum+=pressure
+        land=pressure()
+        sum+=land
         time.sleep(0.1)
 
     average_pressure=sum/20
