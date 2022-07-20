@@ -21,10 +21,10 @@ import math
 mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 
 # 以下，目分量で得られた最大値と最小値
-magX_max = 40.0
-magX_min = -2.0
-magY_max = 38.0
-magY_min = -3.0
+magX_max = 23.4
+magX_min = 2.1
+magY_max = 7.1
+magY_min = -18.5
 
 magXs = [0]*5
 magYs = [0]*5
