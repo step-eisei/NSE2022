@@ -128,13 +128,13 @@ def subThread():
         time.sleep(1)
 
 
-pressure = 1
-gps_latitude = 2 
-gps_longitude = 3
-theta = 4
-x_now = 5
-y_now = 6
-prop = 7
+pressure = 1.0
+gps_latitude = 2.0 
+gps_longitude = 3.0
+theta = 4.0
+x_now = 5.0
+y_now = 6.0
+prop = 7.0
 
 
 read_data = ("land_detect",pressure) 
