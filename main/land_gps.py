@@ -348,6 +348,9 @@ while True:#展開検知
 
     lat_range=0.00006 #誤差，若干大きめにとってる
     long_range=0.00003
+    
+    lat_dif=past_lat-lat_range
+    long_dif=past_long-long_range
 
     if past_lat - lat_range < lat_1< past_lat + lat_range and past_long - long_range < long_1< past_long + long_range: 
         print("stopping")
