@@ -21,7 +21,7 @@ def subThread():
             ser_sub.write(data)
 
         elif data[0] == "guide_phase1":
-            data = pack('>bdddd',3, data[1], data[2], data[3])
+            data = pack('>bddd',3, data[1], data[2], data[3])
             data = data + b'\n'
             ser_sub.write(data)
 
