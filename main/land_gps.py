@@ -249,14 +249,14 @@ land_pressure=average_pressure() #地表での気圧を打ち上げ前に取得
 print('land_pressure : {} hPa'.format(land_pressure))
 
 
-print("閾値: "+str(land_pressure-7.84011))
+print("閾値: "+str(land_pressure-1.2193))
 i=0
 while(i<=10):
     pressure=get_pressure()
     time.sleep(0.1)
 
 
-    if pressure<(land_pressure-7.84011): #５０ｍ以上になったら上がったと判断
+    if pressure<(land_pressure-1.21923): #５０ｍ以上になったら上がったと判断
         i+=1
         print("In the sky")
         print(i)
