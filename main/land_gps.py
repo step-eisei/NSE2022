@@ -187,7 +187,7 @@ def get_pressure():
 
     setup()
     get_calib_param()
-    print('pressure1 : {} hPa'.format(pressure))
+
 
 
     if __name__ == '__main__':
