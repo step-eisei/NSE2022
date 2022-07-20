@@ -256,14 +256,14 @@ def csv_write_f(x,y):
 #     time.sleep(0.1)
 
 
-#     if pressure<(land_pressure-1.21923): #５０ｍ以上になったら上がったと判断
+#     if pressure<(land_pressure-1.21923): #50m以上になったら上がったと判断
 #         i+=1
 #         print("In the sky")
 #         print(i)
-#     else: #５０ｍ地点に上がりきるまでyetを出力
+#     else: #50m地点に上がりきるまでyetを出力
 #         i=0
 #         print("yet") 
-# print("next\n") #１０回連続５０ｍ以上の値になったら着地判定へ
+# print("next\n") #10回連続50m以上の値になったら着地判定へ
 
 # i=0
 # while(i<=10):
@@ -289,36 +289,67 @@ gpsthread.setDaemon(True)
 gpsthread.start() 
 
 while True:#展開検知
-    getgps() #gpsの値取得
-    past_lat=gps_latitude
-    past_long=gps_longitude
+    while True:
+        getgps()
+        past_lat=gps_latitude
+        past_long=gps_longitude
+        if past_lat==0 or past_long==0:
+            continue
+        else:
+            break
     csv_write_f(past_lat,past_long)
     nchrm() #10s
     #go_ahead() #2s
     print("go")
-    getgps()
-    lat_1=gps_latitude
-    long_1=gps_longitude
+    while True:
+        getgps()
+        lat_1=gps_latitude
+        long_1=gps_longitude
+        if lat_1==0 or long_1==0:
+            continue
+        else:
+            break
     csv_write_f(lat_1,long_1)
     #go_ahead() #2s
     print("go")
-    getgps()
-    lat_2=gps_latitude
-    long_2=gps_longitude
+    while True:
+        getgps()
+        lat_2=gps_latitude
+        long_2=gps_longitude
+        if lat_2==0 or long_2==0:
+            continue
+        else:
+            break
     csv_write_f(lat_2,long_2)
+    #go_ahead() #2s
+    print("go")
+    while True:
+        getgps()
+        lat_3=gps_latitude
+        long_3=gps_longitude
+        if lat_3==0 or long_3==0:
+            continue
+        else:
+            break
+    csv_write_f(lat_3,long_3)
 
-    lat_range=0.0075 #誤差，若干大きめにとってる
-    long_range=0.001
+    lat_range=0.00006 #誤差，若干大きめにとってる
+    long_range=0.00003
 
-    if past_lat-lat_range<lat_1<past_lat+lat_range and past_long-long_range<long_1<past_long+long_range: 
+    if past_lat - lat_range < lat_1< past_lat + lat_range and past_long - long_range < long_1< past_long + long_range: 
         print("stopping")
-        print("past:"+str(past_lat)+"/"+str(past_long)+"\n")
-        print("now:"+str(lat_1)+"/"+str(long_1))
+        print("past:"+str(past_lat)+"/"+str(past_long))
+        print("now1:"+str(lat_1)+"/"+str(long_1))
         continue
-    elif past_lat-lat_range<lat_2<past_lat+lat_range and past_long-long_range<long_2<past_long+long_range:
+    elif past_lat - lat_range < lat_2 < past_lat + lat_range and past_long - long_range < long_2 <past_long + long_range:
         print("stopping")
-        print("past:"+str(past_lat)+"/"+str(past_long)+"\n")
-        print("now:"+str(lat_2)+"/"+str(long_2))
+        print("past:"+str(past_lat)+"/"+str(past_long))
+        print("now2:"+str(lat_2)+"/"+str(long_2))
+        continue
+    elif past_lat - lat_range < lat_3 < past_lat + lat_range and past_long - long_range < long_3 < past_long + long_range:
+        print("stopping")
+        print("past:"+str(past_lat)+"/"+str(past_long))
+        print("now3:"+str(lat_3)+"/"+str(long_3))
         continue
            
     else: 
