@@ -65,6 +65,7 @@ magYs = [0]*5
 def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
     s = serial.Serial('/dev/ttySOFT0', 4800, timeout=20)
     s.readline() # 最初の1行は中途半端なデーターが読めることがあるので、捨てる
+    print("read gps")
     while True:
         try:
             sentence = s.readline().decode('utf-8') # GPSデーターを読み、文字列に変換する
