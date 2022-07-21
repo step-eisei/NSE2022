@@ -42,7 +42,7 @@ gps_latitude = 100
 gps_longitude = 100
 sum_latitude = 0
 sum_longitude = 0
-for i in range(10):
+while True:
     #ちゃんとしたデータがある程度たまってから出力
     if my_gps.clean_sentences > 20:
 
@@ -56,10 +56,11 @@ for i in range(10):
         with open('goal_gps.csv',mode='a',newline='') as f:
             writer = csv.writer(f)
             writer.writerow([gps_latitude,gps_longitude]) 
-    #time.sleep(20.0)
+    time.sleep(10.0)
     #変化した値を入れていく
     for t in range(100000):
         if(gps_latitude != my_gps.latitude[0] and gps_longitude != my_gps.longitude[0]):
+            print("changed")
             break
 
 #平均値を算出しgoal.pyに書き込み
