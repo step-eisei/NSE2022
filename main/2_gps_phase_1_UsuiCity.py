@@ -248,14 +248,14 @@ def go_back():
 def angle(x_now, y_now, theta_absolute):
     # ゴール角度算出
     theta_gps = math.atan2(-y_now, -x_now)
-    theta_gps = theta_gps * 360/(2*np.pi)
+    theta_gps = theta_gps * 180/math.pi
     # cansatの向き補正
     theta_cansat = theta_absolute + 90
     if(theta_cansat > 180): theta_cansat -= 360
     # 機体正面を0として，左を正，右を負とした変数(-180~180)
     theta_relative = theta_gps - theta_cansat
     if(theta_relative > 180): theta_relative -= 360
-    if(theta_relative < 180 and theta_relative > 0): theta_relative += 360
+    if(theta_relative < -180): theta_relative += 360
     return theta_relative
 
 # gpsからゴール基準で自己位置を求める関数(国土地理院より)
@@ -350,7 +350,7 @@ def stack():
         # 位置情報の取得と移動判定
         getgps()
         x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
-        if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) > 0.1):
+        if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) > 1):
             p = 1
             break
     # 3回くらい暴れてみる
@@ -361,14 +361,14 @@ def stack():
         # 位置情報の取得と移動判定
         getgps()
         x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
-        if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) > 0.1):
+        if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) > 1):
             p = 1
             break
         go_ahead()
         # 位置情報の取得と移動判定
         getgps()
         x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
-        if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) > 0.1):
+        if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) > 1):
             p = 2
             break
     # 回避した移動向きから条件分岐
