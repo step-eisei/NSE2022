@@ -25,8 +25,8 @@ mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 #     line = [row for row in reader]
 #     goal_latitude = float(line[ 1 ] [ 0 ])
 #     goal_longitude = float(line[ 1 ] [ 1 ])
-goal_latitude = 36.2012749
-goal_longitude = 140.0949895
+goal_latitude = 36.111783333333335
+goal_longitude = 140.098465
 
 # モータのピン割り当て(GPIO 〇〇)
 PIN_AIN1 = 24   # 左モータ(A)
