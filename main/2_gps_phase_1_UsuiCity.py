@@ -115,6 +115,7 @@ def rotate(theta_relative):
     global DUTY_A
     global DUTY_B
     const = 1/27       # 単位角度における回転所要時間
+    print(theta_relative)
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
@@ -466,6 +467,7 @@ print("got theta_relative")
 
 while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
     print("entered while")
+    """
     # スタックの条件分岐(移動距離が3.5m以内)
     if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) <= 3.5):
         # スタック処理
@@ -479,6 +481,14 @@ while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
         go_ahead()
         print("went ahead")
         i = 1
+    """
+    # stack無しバージョン
+    # 旋回，直進
+    rotate(theta_relative)
+    print("rotated")
+    go_ahead()
+    print("went ahead")
+    i = 1
     # 履歴の保存
     record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
     print("recorded")
