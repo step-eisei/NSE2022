@@ -1,0 +1,48 @@
+main started
+csv created
+thread got up
+read gps
+got gps
+calced xy¥n
+5.551669137977292 19.601164849940687
+got theta_absolute
+got theta_relative
+entered while
+210.14612908669946
+rotated
+went ahead
+recorded
+got gps
+calced xy
+got theta_absolute
+got theta_relative
+entered while
+249.0157291875326
+rotated
+went ahead
+recorded
+got gps
+calced xy
+got theta_absolute
+got theta_relative
+entered while
+216.83040218383488
+rotated
+went ahead
+recorded
+got gps
+calced xy
+got theta_absolute
+got theta_relative
+entered while
+230.043566411883
+rotated
+went ahead
+recorded
+got gps
+calced xy
+got theta_absolute
+got theta_relative
+entered while
+232.16459476318687
+rotated
