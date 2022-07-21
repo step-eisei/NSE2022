@@ -10,7 +10,7 @@ PIN_PWMB = 13
 DUTY_A = 5 # 念のため20より上には上げないように
 DUTY_B = 5 # 念のため20より上には上げないように
 
-GPIO.smode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 
 # 左モータ
 GPIO.setup(PIN_AIN1, GPIO.OUT)
