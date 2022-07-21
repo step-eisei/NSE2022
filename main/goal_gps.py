@@ -59,7 +59,7 @@ for i in range(10):
     #time.sleep(20.0)
     #変化した値を入れていく
     for t in range(100000):
-        if(gps_latitude != my_gps.latitude[0] & gps_longitude != my_gps.longitude[0]):
+        if(gps_latitude != my_gps.latitude[0] and gps_longitude != my_gps.longitude[0]):
             break
 
 #平均値を算出しgoal.pyに書き込み
