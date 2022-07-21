@@ -5,7 +5,6 @@ import micropyGPS
 import threading
 import time
 import csv
-import pandas as pd
 
 #GPSモジュールからデータをmy_gps(GPSオブジェクト)に追加，＊引数はタイムゾーンの時差（日本は＋9時間）と，経度緯度の出力フォーマットを指定（ddm,dms,ddなどから）
 my_gps = micropyGPS.MicropyGPS(9, 'dd')
@@ -39,12 +38,16 @@ with open('goal_gps.csv',mode='w',newline='') as f:
     writer.writerow(["goal_latitude", "goal_longitude"])
 
 #10回データを書き込めば終了
+sum_latitude = 0
+sum_longitude = 0
 for i in range(10):
     #ちゃんとしたデータがある程度たまってから出力
     if my_gps.clean_sentences > 20:
 
         gps_latitude = my_gps.latitude[0]
         gps_longitude = my_gps.longitude[0]
+        sum_latitude += gps_latitude
+        sum_longitude += gps_longitude
         #衛星数を出力
         print(my_gps.satellites_used)
         #mode='a'は追記モードでファイルを開く
@@ -57,10 +60,9 @@ for i in range(10):
         if(gps_latitude != my_gps.latitude[0] & gps_longitude != my_gps.longitude[0]):
             break
 
-#goal_gps.csvを読み込み平均値を算出しgoal.pyに書き込み
-df = pd.read_csv('goal_gps.csv')
-goal_la = df.mean()["goal_latitude"]
-goal_lo = df.mean()["goal_longitude"]
+#平均値を算出しgoal.pyに書き込み
+goal_la = sum_latitude / 10
+goal_lo = sum_longitude / 10
 
 with open('goal.csv',mode='a',newline='') as f:
     writer = csv.writer(f)
