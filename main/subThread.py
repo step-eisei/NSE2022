@@ -91,13 +91,13 @@ def subThread():
 
                     with open(filename,'a',newline='') as f: 
                         writer = csv.writer(f)
-                        writer.writerow(["theta", "gps_latitude", "gps_longitude"])
+                        writer.writerow(["theta", "gps_latitude", "gps_longitude", "x_now", "y_now", "distance", "stacking"])
                     flag3 = False
 
 
                 with open(filename,'a',newline='') as f: 
                         writer = csv.writer(f)
-                        writer.writerow([data[1], data[2], data[3]])
+                        writer.writerow([data[1], data[2], data[3], data[4], data[5], data[6], data[7])
 
             else:
                 if flag4:
@@ -148,7 +148,7 @@ th_subthread.start()
 time.sleep(7)
 read_data = ("open_detect",prop)
 time.sleep(7)
-read_data = ("guide_phase1",theta,gps_latitude,gps_longitude)
+read_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
 time.sleep(7)
 read_data = ("guide_phase2",theta,prop)
 time.sleep(7)
