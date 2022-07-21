@@ -115,7 +115,6 @@ def rotate(theta_relative):
     global DUTY_A
     global DUTY_B
     const = 1/27       # 単位角度における回転所要時間
-    print(theta_relative)
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
@@ -457,13 +456,13 @@ print("got gps")
 # calc_xyから座標取得
 x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
 print("calced xy¥n")
-print(x_now, y_now)
+print("x_now, y_now =", x_now, y_now)
 # magnetから絶対角度取得
 theta_absolute = magnet()
-print("got theta_absolute")
+print("got theta_absolute=", theta_absolute)
 # angleから回転角度取得
 theta_relative = angle(x_now, y_now, theta_absolute)
-print("got theta_relative")
+print("got theta_relative=", theta_relative)
 # ループ(3mゴールまで)
 
 while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
@@ -501,10 +500,11 @@ while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
     print("got gps")
     # calc_xyから座標取得
     x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
-    print("calced xy")
+    print("calced xy¥n")
+    print("x_now, y_now =", x_now, y_now)
     # magnetから絶対角度取得
     theta_absolute = magnet()
-    print("got theta_absolute")
+    print("got theta_absolute=", theta_absolute)
     # angleから回転角度取得
     theta_relative = angle(x_now, y_now, theta_absolute)
-    print("got theta_relative")
+    print("got theta_relative=", theta_relative)
