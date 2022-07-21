@@ -7,8 +7,8 @@ PIN_PWMA = 12
 PIN_BIN1 = 16
 PIN_BIN2 = 26
 PIN_PWMB = 13
-DUTY_A = 20 # 念のため20より上には上げないように
-DUTY_B = 20 # 念のため20より上には上げないように
+DUTY_A = 10 # 念のため20より上には上げないように
+DUTY_B = 10 # 念のため20より上には上げないように
 
 GPIO.setmode(GPIO.BCM)
 
@@ -39,17 +39,17 @@ time.sleep(2)
 # 右モータ後進
 GPIO.output(PIN_AIN1, GPIO.HIGH)
 GPIO.output(PIN_AIN2, GPIO.LOW)
-time.sleep(1)
+time.sleep(5)
 
 # 右モータブレーキ？
-GPIO.output(PIN_AIN1, GPIO.HIGH)
-GPIO.output(PIN_AIN2, GPIO.HIGH)
-time.sleep(1)
+# GPIO.output(PIN_AIN1, GPIO.HIGH)
+# GPIO.output(PIN_AIN2, GPIO.HIGH)
+# time.sleep(1)
 
 # 右モータ前進
 GPIO.output(PIN_AIN1, GPIO.LOW)
 GPIO.output(PIN_AIN2, GPIO.HIGH)
-time.sleep(1)
+time.sleep(5)
 
 # 右モータ停止？
 GPIO.output(PIN_AIN1, GPIO.LOW)
@@ -60,17 +60,17 @@ time.sleep(3)
 # 左モータ前進
 GPIO.output(PIN_BIN1, GPIO.HIGH)
 GPIO.output(PIN_BIN2, GPIO.LOW)
-time.sleep(1)
+time.sleep(5)
 
 # 左モータブレーキ？
-GPIO.output(PIN_BIN1, GPIO.HIGH)
-GPIO.output(PIN_BIN2, GPIO.HIGH)
-time.sleep(1)
+# GPIO.output(PIN_BIN1, GPIO.HIGH)
+# GPIO.output(PIN_BIN2, GPIO.HIGH)
+# time.sleep(1)
 
 # 左モータ後進
 GPIO.output(PIN_BIN1, GPIO.LOW)
 GPIO.output(PIN_BIN2, GPIO.HIGH)
-time.sleep(1)
+time.sleep(5)
 
 # 左モータ停止？
 GPIO.output(PIN_BIN1, GPIO.LOW)
