@@ -10,6 +10,8 @@ PIN_PWMB = 13
 DUTY_A = 20 # 念のため20より上には上げないように
 DUTY_B = 20 # 念のため20より上には上げないように
 
+ROT_DUR = 10 # [s]
+
 GPIO.setmode(GPIO.BCM)
 
 # 左モータ
@@ -37,33 +39,33 @@ time.sleep(2)
 
 # ----------------------------------------
 
-# 前進
-GPIO.output(PIN_AIN1, GPIO.LOW)
-GPIO.output(PIN_AIN2, GPIO.HIGH)
-GPIO.output(PIN_BIN1, GPIO.HIGH)
-GPIO.output(PIN_BIN2, GPIO.LOW)
-time.sleep(3)
+# # 前進
+# GPIO.output(PIN_AIN1, GPIO.LOW)
+# GPIO.output(PIN_AIN2, GPIO.HIGH)
+# GPIO.output(PIN_BIN1, GPIO.HIGH)
+# GPIO.output(PIN_BIN2, GPIO.LOW)
+# time.sleep(3)
 
-# 後進
-GPIO.output(PIN_AIN1, GPIO.HIGH)
-GPIO.output(PIN_AIN2, GPIO.LOW)
-GPIO.output(PIN_BIN1, GPIO.LOW)
-GPIO.output(PIN_BIN2, GPIO.HIGH)
-time.sleep(3)
+# # 後進
+# GPIO.output(PIN_AIN1, GPIO.HIGH)
+# GPIO.output(PIN_AIN2, GPIO.LOW)
+# GPIO.output(PIN_BIN1, GPIO.LOW)
+# GPIO.output(PIN_BIN2, GPIO.HIGH)
+# time.sleep(3)
 
 # 右旋回
 GPIO.output(PIN_AIN1, GPIO.HIGH)
 GPIO.output(PIN_AIN2, GPIO.LOW)
 GPIO.output(PIN_BIN1, GPIO.HIGH)
 GPIO.output(PIN_BIN2, GPIO.LOW)
-time.sleep(3)
+time.sleep(ROT_DUR)
 
 # 左旋回
 GPIO.output(PIN_AIN1, GPIO.LOW)
 GPIO.output(PIN_AIN2, GPIO.HIGH)
 GPIO.output(PIN_BIN1, GPIO.LOW)
 GPIO.output(PIN_BIN2, GPIO.HIGH)
-time.sleep(3)
+time.sleep(ROT_DUR)
 
 
 # ----------------------------------------
