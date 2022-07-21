@@ -249,13 +249,14 @@ def go_back():
 def angle(x_now, y_now, theta_absolute):
     # ゴール角度算出
     theta_gps = math.atan2(-y_now, -x_now)
+    theta_gps = theta_gps * 360/(2*np.pi)
     # cansatの向き補正
     theta_cansat = theta_absolute + 90
     if(theta_cansat > 180): theta_cansat -= 360
     # 機体正面を0として，左を正，右を負とした変数(-180~180)
     theta_relative = theta_gps - theta_cansat
     if(theta_relative > 180): theta_relative -= 360
-    if(theta_relative < 180): theta_relative += 360
+    if(theta_relative < 180 and theta_relative > 0): theta_relative += 360
     return theta_relative
 
 # gpsからゴール基準で自己位置を求める関数(国土地理院より)
