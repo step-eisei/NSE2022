@@ -38,6 +38,8 @@ with open('goal_gps.csv',mode='w',newline='') as f:
     writer.writerow(["goal_latitude", "goal_longitude"])
 
 #10回データを書き込めば終了
+gps_latitude = 100
+gps_longitude = 100
 sum_latitude = 0
 sum_longitude = 0
 for i in range(10):
