@@ -51,11 +51,12 @@ for i in range(10):
             sum_latitude += gps_latitude
             sum_longitude += gps_longitude
             #衛星数を出力
-            print(my_gps.satellites_used)
+            print("num =", my_gps.satellites_used)
             #mode='a'は追記モードでファイルを開く
             with open('goal_gps.csv',mode='a',newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow([gps_latitude,gps_longitude]) 
+            print("data add")
             break
         time.sleep(10.0)
 
