@@ -5,9 +5,172 @@ import math
 
 image=Image
 imageo=ImageOps
+import RPi.GPIO as GPIO
 camera=picamera.PiCamera()
 
 takepic_counter=1
+borderprop = 20
+theta = 0
+prop = 0
+
+-------------------------------------------------------------
+# モータのピン割り当て(GPIO 〇〇)
+PIN_AIN1 = 24   # 左モータ(A)
+PIN_AIN2 = 23
+PIN_PWMA = 12
+PIN_BIN1 = 16   # 右モータ(B)
+PIN_BIN2 = 26
+PIN_PWMB = 13
+# 左右のduty比(定義域：0~100)
+DUTY_A = 15 # 念のため20より上には上げないように
+DUTY_B = 15 # 念のため20より上には上げないように
+
+T_straight = 5
+--------------------------------------------------------------
+
+
+# 機体を旋回させる関数
+def rotate(theta_relative):
+    global PIN_AIN1
+    global PIN_AIN2
+    global PIN_PWMA
+    global PIN_BIN1
+    global PIN_BIN2
+    global PIN_PWMB
+    global DUTY_A
+    global DUTY_B
+    const = 1/27       # 単位角度における回転所要時間
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    # sleep
+    time.sleep(2)
+    
+    if(theta_relative > 0): # 左に旋回
+        # 右モータ前進
+        GPIO.output(PIN_AIN1, GPIO.LOW)
+        GPIO.output(PIN_AIN2, GPIO.HIGH)
+        # 左モータ後進
+        GPIO.output(PIN_BIN1, GPIO.LOW)
+        GPIO.output(PIN_BIN2, GPIO.HIGH)
+    if(theta_relative < 0): # 右に旋回
+        # 右モータ後進
+        GPIO.output(PIN_AIN1, GPIO.HIGH)
+        GPIO.output(PIN_AIN2, GPIO.LOW)
+        # 左モータ前進
+        GPIO.output(PIN_BIN1, GPIO.HIGH)
+        GPIO.output(PIN_BIN2, GPIO.LOW)
+    time.sleep(math.fabs(theta_relative)*const)
+    # モータの解放
+    pwm_right.stop()
+    pwm_left.stop()
+    GPIO.cleanup()
+
+# 機体を前進させる関数
+def go_ahead():
+    global PIN_AIN1
+    global PIN_AIN2
+    global PIN_PWMA
+    global PIN_BIN1
+    global PIN_BIN2
+    global PIN_PWMB
+    global DUTY_A
+    global DUTY_B
+    global T_straight
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    # sleep
+    time.sleep(2)
+    # 右モータ前進
+    GPIO.output(PIN_AIN1, GPIO.LOW)
+    GPIO.output(PIN_AIN2, GPIO.HIGH)
+    # 左モータ前進
+    GPIO.output(PIN_BIN1, GPIO.HIGH)
+    GPIO.output(PIN_BIN2, GPIO.LOW)
+    # sleep
+    time.sleep(T_straight)
+    # モータの解放
+    pwm_right.stop()
+    pwm_left.stop()
+    GPIO.cleanup()
+
+# 機体を後進させる関数
+def go_back():
+    global PIN_AIN1
+    global PIN_AIN2
+    global PIN_PWMA
+    global PIN_BIN1
+    global PIN_BIN2
+    global PIN_PWMB
+    global DUTY_A
+    global DUTY_B
+    global T_straight
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    # sleep
+    time.sleep(2)
+    # 右モータ後進
+    GPIO.output(PIN_AIN1, GPIO.HIGH)
+    GPIO.output(PIN_AIN2, GPIO.LOW)
+    # 左モータ後進
+    GPIO.output(PIN_BIN1, GPIO.LOW)
+    GPIO.output(PIN_BIN2, GPIO.HIGH)
+    # sleep
+    time.sleep(T_straight)
+    # モータの解放
+    pwm_right.stop()
+    pwm_left.stop()
+    GPIO.cleanup()
+
+
+--------------------------------------------------------------------
 
 def csv_write_f():
 
@@ -130,11 +293,16 @@ def takepic():
     return theta,prop
 
 
-data = takepic()
+while True:
+    data = takepic()
+    prop = data[1]
+    if prop > boderprop:
+        break
+    rotate(50)
 
-theta = data[0]
-prop = data[1]
-
-print("theta="+str(theta))
-print("prop="+str(prop))
+for i in range(7):
+    data = takepic()
+    theta = data[0]
+    rotate(theta)
+    go_ahead()
 
