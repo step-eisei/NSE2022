@@ -297,13 +297,17 @@ def takepic():
 while True:
     data = takepic()
     prop = data[1]
+    print(prop)
     if prop > borderprop:
         break
     rotate(50)
+    
+print("find!!")
 
 for i in range(7):
     data = takepic()
     theta = data[0]
+    print(theta)
     rotate(theta)
     go_ahead()
 
