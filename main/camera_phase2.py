@@ -2,6 +2,7 @@ from PIL import Image,ImageOps
 import numpy as np
 import picamera
 import math
+import time
 
 image=Image
 imageo=ImageOps
