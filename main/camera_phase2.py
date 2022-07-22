@@ -296,7 +296,7 @@ def takepic():
 while True:
     data = takepic()
     prop = data[1]
-    if prop > boderprop:
+    if prop > borderprop:
         break
     rotate(50)
 
