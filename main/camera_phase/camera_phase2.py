@@ -215,7 +215,7 @@ def rgbbinary(img,val):
 
     # 条件を満たしていれば1, それ以外は0に置換
     # np.where(条件, Trueの時に置換する数, Falseの時に置換する数)
-    img_r_th = np.where(im_R>val, 1, 0)
+    img_r_th = np.where(im_R>val*0.5, 1, 0)
     img_g_th = np.where(im_G<val*0.8, 1, 0)
     img_b_th = np.where(im_B<val*0.8, 1, 0)
 
