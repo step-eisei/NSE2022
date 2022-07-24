@@ -39,7 +39,7 @@ PIN_PWMB = 13
 DUTY_A = 15 # 念のため20より上には上げないように
 DUTY_B = 15 # 念のため20より上には上げないように
 
-T_straight = 5
+T_straight = 10
 final_distance = 3
 min_satellites_used = 10
 
