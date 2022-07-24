@@ -304,7 +304,7 @@ while True:
     
 print("find!!")
 
-for i in range(7):
+for i in range(25):
     data = takepic()
     theta = data[0]
     print(theta)
