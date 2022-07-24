@@ -10,7 +10,7 @@ import RPi.GPIO as GPIO
 camera=picamera.PiCamera()
 
 takepic_counter=1
-borderprop = 10
+borderprop = 1.0
 theta = 0
 prop = 0
 
