@@ -248,7 +248,7 @@ def scantheta(img_th):
 
     theta_row=np.argmax(im_thx) # 最大の要素のインデックスを取得
 
-    theta=-(theta_row/width*180-90)
+    theta=-(theta_row/width*62.2-90)
 
     return theta
 
