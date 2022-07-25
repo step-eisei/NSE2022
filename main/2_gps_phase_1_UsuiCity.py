@@ -114,7 +114,8 @@ def rotate(theta_relative):
     global PIN_PWMB
     global DUTY_A
     global DUTY_B
-    const = 1/27       # 単位角度における回転所要時間
+    freq = 300          # pwm周波数
+    const = 1/27        # 単位角度における回転所要時間
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
@@ -122,7 +123,7 @@ def rotate(theta_relative):
     GPIO.setup(PIN_AIN2, GPIO.OUT)
     # 左モータPWM
     GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left = GPIO.PWM(PIN_PWMA, freq)
     pwm_left.start(10)
     pwm_left.ChangeDutyCycle(DUTY_A)
     # 右モータ
@@ -130,7 +131,7 @@ def rotate(theta_relative):
     GPIO.setup(PIN_BIN2, GPIO.OUT)
     # 右モータPWM
     GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right = GPIO.PWM(PIN_PWMB, freq)
     pwm_right.start(10)
     pwm_right.ChangeDutyCycle(DUTY_B)
     # sleep
@@ -167,6 +168,7 @@ def go_ahead():
     global DUTY_A
     global DUTY_B
     global T_straight
+    freq = 300          # pwm周波数
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
@@ -174,7 +176,7 @@ def go_ahead():
     GPIO.setup(PIN_AIN2, GPIO.OUT)
     # 左モータPWM
     GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left = GPIO.PWM(PIN_PWMA, freq)
     pwm_left.start(10)
     pwm_left.ChangeDutyCycle(DUTY_A)
     # 右モータ
@@ -182,7 +184,7 @@ def go_ahead():
     GPIO.setup(PIN_BIN2, GPIO.OUT)
     # 右モータPWM
     GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right = GPIO.PWM(PIN_PWMB, freq)
     pwm_right.start(10)
     pwm_right.ChangeDutyCycle(DUTY_B)
     # sleep
@@ -211,6 +213,7 @@ def go_back():
     global DUTY_A
     global DUTY_B
     global T_straight
+    freq = 300          # pwm周波数
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
@@ -218,7 +221,7 @@ def go_back():
     GPIO.setup(PIN_AIN2, GPIO.OUT)
     # 左モータPWM
     GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left = GPIO.PWM(PIN_PWMA, freq)
     pwm_left.start(10)
     pwm_left.ChangeDutyCycle(DUTY_A)
     # 右モータ
@@ -226,7 +229,7 @@ def go_back():
     GPIO.setup(PIN_BIN2, GPIO.OUT)
     # 右モータPWM
     GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right = GPIO.PWM(PIN_PWMB, freq)
     pwm_right.start(10)
     pwm_right.ChangeDutyCycle(DUTY_B)
     # sleep
