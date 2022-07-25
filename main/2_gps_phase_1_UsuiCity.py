@@ -434,9 +434,9 @@ def magnet():
     magY_mean = sum(magYs)/5
 
     # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
-    theta_absolute = math.atan2(-magX_calibrated, -magY_calibrated)*180/math.pi
+    theta_absolute = math.atan2(-magY_calibrated, -magX_calibrated)*180/math.pi
     # print(theta_absolute)
-    theta_absolute_lowPass = math.atan2(-magX_mean, -magY_mean)*180/math.pi
+    theta_absolute_lowPass = math.atan2(-magY_mean, -magX_mean)*180/math.pi
     # print(theta_absolute_lowPass)
     return theta_absolute_lowPass
 
