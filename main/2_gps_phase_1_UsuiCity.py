@@ -54,10 +54,10 @@ y_goal = 0
 satellites_used = 0
 
 # 以下，目分量で得られた最大値と最小値
-magX_max = 35.5
-magX_min = -6.9
-magY_max = -385.3
-magY_min = -430.7
+magX_max = 44.0
+magX_min = -19.6
+magY_max = -366.0
+magY_min = -441.0
 
 magXs = [0]*5
 magYs = [0]*5
