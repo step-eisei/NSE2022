@@ -43,7 +43,6 @@ T_straight = 3
 final_distance = 3
 min_satellites_used = 10
 
-theta = 0
 gps_latitude = 0
 gps_longitude = 0
 x_now = 0
