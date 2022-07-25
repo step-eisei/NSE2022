@@ -25,8 +25,8 @@ mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 #     line = [row for row in reader]
 #     goal_latitude = float(line[ 1 ] [ 0 ])
 #     goal_longitude = float(line[ 1 ] [ 1 ])
-goal_latitude = 36.112001666666664
-goal_longitude = 140.09867833333334
+goal_latitude = 36.1119
+goal_longitude = 140.09862666666666
 
 # モータのピン割り当て(GPIO 〇〇)
 PIN_AIN1 = 24   # 左モータ(A)
@@ -55,10 +55,10 @@ y_goal = 0
 satellites_used = 0
 
 # 以下，目分量で得られた最大値と最小値
-magX_max = 42.2
-magX_min = -10.0
-magY_max = 20.0
-magY_min = 13.4
+magX_max = 35.5
+magX_min = -6.9
+magY_max = -385.3
+magY_min = -430.7
 
 magXs = [0]*5
 magYs = [0]*5
@@ -112,10 +112,10 @@ def rotate(theta_relative):
     global PIN_BIN1
     global PIN_BIN2
     global PIN_PWMB
-    global DUTY_A
-    global DUTY_B
+    DUTY_A = 10
+    DUTY_B = 10
     freq = 300          # pwm周波数
-    const = 1/27        # 単位角度における回転所要時間
+    const = 10/765        # 単位角度における回転所要時間
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
