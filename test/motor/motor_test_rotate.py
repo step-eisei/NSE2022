@@ -7,8 +7,8 @@ PIN_PWMA = 12
 PIN_BIN1 = 16
 PIN_BIN2 = 26
 PIN_PWMB = 13
-DUTY_A = 20 # 念のため20より上には上げないように
-DUTY_B = 20 # 念のため20より上には上げないように
+DUTY_A = 60
+DUTY_B = 60
 
 ROT_DUR = 10 # [s]
 
@@ -20,7 +20,7 @@ GPIO.setup(PIN_AIN2, GPIO.OUT)
 
 # 左モータPWM
 GPIO.setup(PIN_PWMA, GPIO.OUT)
-pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+pwm_left = GPIO.PWM(PIN_PWMA, 300)
 pwm_left.start(10)
 pwm_left.ChangeDutyCycle(DUTY_A)
 
@@ -30,7 +30,7 @@ GPIO.setup(PIN_BIN2, GPIO.OUT)
 
 # 右モータPWM
 GPIO.setup(PIN_PWMB, GPIO.OUT)
-pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+pwm_right = GPIO.PWM(PIN_PWMB, 300)
 pwm_right.start(10)
 pwm_right.ChangeDutyCycle(DUTY_B)
 
