@@ -60,6 +60,13 @@ GPIO.output(PIN_BIN1, GPIO.HIGH)
 GPIO.output(PIN_BIN2, GPIO.LOW)
 time.sleep(ROT_DUR)
 
+# 右モータ停止 左モータ停止
+GPIO.output(PIN_AIN1, GPIO.LOW)
+GPIO.output(PIN_AIN2, GPIO.LOW)
+GPIO.output(PIN_BIN1, GPIO.LOW)
+GPIO.output(PIN_BIN2, GPIO.LOW)
+time.sleep(3)
+
 # 左旋回
 GPIO.output(PIN_AIN1, GPIO.LOW)
 GPIO.output(PIN_AIN2, GPIO.HIGH)
