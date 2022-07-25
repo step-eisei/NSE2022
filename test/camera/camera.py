@@ -46,7 +46,7 @@ def scantheta(img_th):
     #ソート
     theta_row=np.argmax(im_thx)
 
-    theta=-(theta_row/width*180-90)
+    theta=-(theta_row/width*62.2-90)
 
     return theta
     

@@ -10,7 +10,7 @@ import RPi.GPIO as GPIO
 camera=picamera.PiCamera()
 
 takepic_counter=1
-borderprop = 20
+borderprop = 0.5
 theta = 0
 prop = 0
 
@@ -23,10 +23,10 @@ PIN_BIN1 = 16   # 右モータ(B)
 PIN_BIN2 = 26
 PIN_PWMB = 13
 # 左右のduty比(定義域：0~100)
-DUTY_A = 15 # 念のため20より上には上げないように
-DUTY_B = 15 # 念のため20より上には上げないように
+DUTY_A = 13 # 念のため20より上には上げないように
+DUTY_B = 13 # 念のため20より上には上げないように
 
-T_straight = 5
+T_straight = 10
 # --------------------------------------------------------------
 
 
@@ -215,7 +215,7 @@ def rgbbinary(img,val):
 
     # 条件を満たしていれば1, それ以外は0に置換
     # np.where(条件, Trueの時に置換する数, Falseの時に置換する数)
-    img_r_th = np.where(im_R>val, 1, 0)
+    img_r_th = np.where(im_R>val*0.8, 1, 0)
     img_g_th = np.where(im_G<val*0.8, 1, 0)
     img_b_th = np.where(im_B<val*0.8, 1, 0)
 
@@ -248,7 +248,7 @@ def scantheta(img_th):
 
     theta_row=np.argmax(im_thx) # 最大の要素のインデックスを取得
 
-    theta=-(theta_row/width*180-90)
+    theta=-(theta_row/width*62.2-31.1)
 
     return theta
 
@@ -304,7 +304,7 @@ while True:
     
 print("find!!")
 
-for i in range(7):
+for i in range(25):
     data = takepic()
     theta = data[0]
     print(theta)

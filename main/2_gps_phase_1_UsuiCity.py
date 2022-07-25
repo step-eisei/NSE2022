@@ -25,8 +25,8 @@ mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 #     line = [row for row in reader]
 #     goal_latitude = float(line[ 1 ] [ 0 ])
 #     goal_longitude = float(line[ 1 ] [ 1 ])
-goal_latitude = 36.111783333333335
-goal_longitude = 140.098465
+goal_latitude = 36.112001666666664
+goal_longitude = 140.09867833333334
 
 # モータのピン割り当て(GPIO 〇〇)
 PIN_AIN1 = 24   # 左モータ(A)
@@ -36,10 +36,10 @@ PIN_BIN1 = 16   # 右モータ(B)
 PIN_BIN2 = 26
 PIN_PWMB = 13
 # 左右のduty比(定義域：0~100)
-DUTY_A = 15 # 念のため20より上には上げないように
-DUTY_B = 15 # 念のため20より上には上げないように
+DUTY_A = 60 # 20~40でICが高温になります．60~70が妥当です
+DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
 
-T_straight = 5
+T_straight = 10
 final_distance = 3
 min_satellites_used = 10
 
@@ -55,10 +55,10 @@ y_goal = 0
 satellites_used = 0
 
 # 以下，目分量で得られた最大値と最小値
-magX_max = 106.0
-magX_min = 49.3
-magY_max = 241.0
-magY_min = 182.0
+magX_max = 42.2
+magX_min = -10.0
+magY_max = 20.0
+magY_min = 13.4
 
 magXs = [0]*5
 magYs = [0]*5
@@ -114,7 +114,8 @@ def rotate(theta_relative):
     global PIN_PWMB
     global DUTY_A
     global DUTY_B
-    const = 1/27       # 単位角度における回転所要時間
+    freq = 300          # pwm周波数
+    const = 1/27        # 単位角度における回転所要時間
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
@@ -122,7 +123,7 @@ def rotate(theta_relative):
     GPIO.setup(PIN_AIN2, GPIO.OUT)
     # 左モータPWM
     GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left = GPIO.PWM(PIN_PWMA, freq)
     pwm_left.start(10)
     pwm_left.ChangeDutyCycle(DUTY_A)
     # 右モータ
@@ -130,7 +131,7 @@ def rotate(theta_relative):
     GPIO.setup(PIN_BIN2, GPIO.OUT)
     # 右モータPWM
     GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right = GPIO.PWM(PIN_PWMB, freq)
     pwm_right.start(10)
     pwm_right.ChangeDutyCycle(DUTY_B)
     # sleep
@@ -167,6 +168,7 @@ def go_ahead():
     global DUTY_A
     global DUTY_B
     global T_straight
+    freq = 300          # pwm周波数
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
@@ -174,7 +176,7 @@ def go_ahead():
     GPIO.setup(PIN_AIN2, GPIO.OUT)
     # 左モータPWM
     GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left = GPIO.PWM(PIN_PWMA, freq)
     pwm_left.start(10)
     pwm_left.ChangeDutyCycle(DUTY_A)
     # 右モータ
@@ -182,7 +184,7 @@ def go_ahead():
     GPIO.setup(PIN_BIN2, GPIO.OUT)
     # 右モータPWM
     GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right = GPIO.PWM(PIN_PWMB, freq)
     pwm_right.start(10)
     pwm_right.ChangeDutyCycle(DUTY_B)
     # sleep
@@ -211,6 +213,7 @@ def go_back():
     global DUTY_A
     global DUTY_B
     global T_straight
+    freq = 300          # pwm周波数
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
@@ -218,7 +221,7 @@ def go_back():
     GPIO.setup(PIN_AIN2, GPIO.OUT)
     # 左モータPWM
     GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left = GPIO.PWM(PIN_PWMA, freq)
     pwm_left.start(10)
     pwm_left.ChangeDutyCycle(DUTY_A)
     # 右モータ
@@ -226,7 +229,7 @@ def go_back():
     GPIO.setup(PIN_BIN2, GPIO.OUT)
     # 右モータPWM
     GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right = GPIO.PWM(PIN_PWMB, freq)
     pwm_right.start(10)
     pwm_right.ChangeDutyCycle(DUTY_B)
     # sleep
@@ -247,7 +250,8 @@ def go_back():
 # ゴール角度，機体の角度から機体の回転角度を求める関数
 def angle(x_now, y_now, theta_absolute):
     # ゴール角度算出
-    theta_gps = math.atan2(-y_now, -x_now)
+    theta_gps = math.atan2(y_now, x_now)
+    theta_gps = theta_gps - math.pi
     theta_gps = theta_gps * 180/math.pi
     # cansatの向き補正
     theta_cansat = theta_absolute + 90
