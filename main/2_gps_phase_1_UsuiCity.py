@@ -39,7 +39,7 @@ PIN_PWMB = 13
 DUTY_A = 60 # 20~40でICが高温になります．60~70が妥当です
 DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
 
-T_straight = 10
+T_straight = 3
 final_distance = 3
 min_satellites_used = 10
 
@@ -112,8 +112,8 @@ def rotate(theta_relative):
     global PIN_BIN1
     global PIN_BIN2
     global PIN_PWMB
-    DUTY_A = 10
-    DUTY_B = 10
+    R_DUTY_A = 10
+    R_DUTY_B = 10
     freq = 300          # pwm周波数
     const = 10/765        # 単位角度における回転所要時間
     # モータのセッティング
@@ -125,7 +125,7 @@ def rotate(theta_relative):
     GPIO.setup(PIN_PWMA, GPIO.OUT)
     pwm_left = GPIO.PWM(PIN_PWMA, freq)
     pwm_left.start(10)
-    pwm_left.ChangeDutyCycle(DUTY_A)
+    pwm_left.ChangeDutyCycle(R_DUTY_A)
     # 右モータ
     GPIO.setup(PIN_BIN1, GPIO.OUT)
     GPIO.setup(PIN_BIN2, GPIO.OUT)
@@ -133,9 +133,10 @@ def rotate(theta_relative):
     GPIO.setup(PIN_PWMB, GPIO.OUT)
     pwm_right = GPIO.PWM(PIN_PWMB, freq)
     pwm_right.start(10)
-    pwm_right.ChangeDutyCycle(DUTY_B)
+    pwm_right.ChangeDutyCycle(R_DUTY_B)
     # sleep
     time.sleep(2)
+    print("set up finished")
     
     if(theta_relative > 0): # 左に旋回
         # 右モータ前進
