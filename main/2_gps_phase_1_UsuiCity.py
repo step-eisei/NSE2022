@@ -520,8 +520,9 @@ try:
         # stack無しバージョン
         # 旋回，直進
         while True:
-            rotate(theta_relative)
-            print("rotated")
+            if(theta_relative < 0): rotate(-10)
+            if(theta_relative > 0): rotate(10)
+            print("10 deg rotated")
             # 旋回後に角度のフィードバック
             time.sleep(2)
             theta_absolute = magnet()
