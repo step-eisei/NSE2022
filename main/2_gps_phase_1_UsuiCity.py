@@ -103,7 +103,7 @@ def getgps():
             #print(gps_longitude)
             break
         time.sleep(3)
-
+    
 # 機体を旋回させる関数
 def rotate(theta_relative):
     global PIN_AIN1
@@ -116,27 +116,27 @@ def rotate(theta_relative):
     R_DUTY_B = 10
     freq = 300          # pwm周波数
     const = 10/765        # 単位角度における回転所要時間
-    # モータのセッティング
-    GPIO.setmode(GPIO.BCM)
-    # 左モータ
-    GPIO.setup(PIN_AIN1, GPIO.OUT)
-    GPIO.setup(PIN_AIN2, GPIO.OUT)
-    # 左モータPWM
-    GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, freq)
-    pwm_left.start(10)
+#     # モータのセッティング
+#     GPIO.setmode(GPIO.BCM)
+#     # 左モータ
+#     GPIO.setup(PIN_AIN1, GPIO.OUT)
+#     GPIO.setup(PIN_AIN2, GPIO.OUT)
+#     # 左モータPWM
+#     GPIO.setup(PIN_PWMA, GPIO.OUT)
+#     pwm_left = GPIO.PWM(PIN_PWMA, freq)
+#     pwm_left.start(10)
     pwm_left.ChangeDutyCycle(R_DUTY_A)
-    # 右モータ
-    GPIO.setup(PIN_BIN1, GPIO.OUT)
-    GPIO.setup(PIN_BIN2, GPIO.OUT)
-    # 右モータPWM
-    GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, freq)
-    pwm_right.start(10)
+#     # 右モータ
+#     GPIO.setup(PIN_BIN1, GPIO.OUT)
+#     GPIO.setup(PIN_BIN2, GPIO.OUT)
+#     # 右モータPWM
+#     GPIO.setup(PIN_PWMB, GPIO.OUT)
+#     pwm_right = GPIO.PWM(PIN_PWMB, freq)
+#     pwm_right.start(10)
     pwm_right.ChangeDutyCycle(R_DUTY_B)
-    # sleep
-    time.sleep(2)
-    print("set up finished")
+#     # sleep
+#     time.sleep(2)
+#     print("set up finished")
     
     if(theta_relative > 0): # 左に旋回
         # 右モータ前進
@@ -153,10 +153,10 @@ def rotate(theta_relative):
         GPIO.output(PIN_BIN1, GPIO.HIGH)
         GPIO.output(PIN_BIN2, GPIO.LOW)
     time.sleep(math.fabs(theta_relative)*const)
-    # モータの解放
-    pwm_right.stop()
-    pwm_left.stop()
-    GPIO.cleanup()
+#     # モータの解放
+#     pwm_right.stop()
+#     pwm_left.stop()
+#     GPIO.cleanup()
 
 # 機体を前進させる関数
 def go_ahead():
@@ -170,38 +170,39 @@ def go_ahead():
     global DUTY_B
     global T_straight
     freq = 300          # pwm周波数
-    # モータのセッティング
-    GPIO.setmode(GPIO.BCM)
-    # 左モータ
-    GPIO.setup(PIN_AIN1, GPIO.OUT)
-    GPIO.setup(PIN_AIN2, GPIO.OUT)
-    # 左モータPWM
-    GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, freq)
-    pwm_left.start(10)
-    pwm_left.ChangeDutyCycle(DUTY_A)
-    # 右モータ
-    GPIO.setup(PIN_BIN1, GPIO.OUT)
-    GPIO.setup(PIN_BIN2, GPIO.OUT)
-    # 右モータPWM
-    GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, freq)
-    pwm_right.start(10)
-    pwm_right.ChangeDutyCycle(DUTY_B)
-    # sleep
-    time.sleep(2)
+#     # モータのセッティング
+#     GPIO.setmode(GPIO.BCM)
+#     # 左モータ
+#     GPIO.setup(PIN_AIN1, GPIO.OUT)
+#     GPIO.setup(PIN_AIN2, GPIO.OUT)
+#     # 左モータPWM
+#     GPIO.setup(PIN_PWMA, GPIO.OUT)
+#     pwm_left = GPIO.PWM(PIN_PWMA, freq)
+#     pwm_left.start(10)
+#     # 右モータ
+#     GPIO.setup(PIN_BIN1, GPIO.OUT)
+#     GPIO.setup(PIN_BIN2, GPIO.OUT)
+#     # 右モータPWM
+#     GPIO.setup(PIN_PWMB, GPIO.OUT)
+#     pwm_right = GPIO.PWM(PIN_PWMB, freq)
+#     pwm_right.start(10)
+#     # sleep
+#     time.sleep(2)
     # 右モータ前進
     GPIO.output(PIN_AIN1, GPIO.LOW)
     GPIO.output(PIN_AIN2, GPIO.HIGH)
     # 左モータ前進
     GPIO.output(PIN_BIN1, GPIO.HIGH)
     GPIO.output(PIN_BIN2, GPIO.LOW)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    
     # sleep
     time.sleep(T_straight)
     # モータの解放
-    pwm_right.stop()
-    pwm_left.stop()
-    GPIO.cleanup()
+#     pwm_right.stop()
+#     pwm_left.stop()
+#     GPIO.cleanup()
 
 # 機体を後進させる関数
 def go_back():
@@ -216,31 +217,31 @@ def go_back():
     global T_straight
     freq = 300          # pwm周波数
     # モータのセッティング
-    GPIO.setmode(GPIO.BCM)
-    # 左モータ
-    GPIO.setup(PIN_AIN1, GPIO.OUT)
-    GPIO.setup(PIN_AIN2, GPIO.OUT)
-    # 左モータPWM
-    GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, freq)
-    pwm_left.start(10)
-    pwm_left.ChangeDutyCycle(DUTY_A)
-    # 右モータ
-    GPIO.setup(PIN_BIN1, GPIO.OUT)
-    GPIO.setup(PIN_BIN2, GPIO.OUT)
-    # 右モータPWM
-    GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, freq)
-    pwm_right.start(10)
-    pwm_right.ChangeDutyCycle(DUTY_B)
-    # sleep
-    time.sleep(2)
+#     GPIO.setmode(GPIO.BCM)
+#     # 左モータ
+#     GPIO.setup(PIN_AIN1, GPIO.OUT)
+#     GPIO.setup(PIN_AIN2, GPIO.OUT)
+#     # 左モータPWM
+#     GPIO.setup(PIN_PWMA, GPIO.OUT)
+#     pwm_left = GPIO.PWM(PIN_PWMA, freq)
+#     pwm_left.start(10)  
+#     # 右モータ
+#     GPIO.setup(PIN_BIN1, GPIO.OUT)
+#     GPIO.setup(PIN_BIN2, GPIO.OUT)
+#     # 右モータPWM
+#     GPIO.setup(PIN_PWMB, GPIO.OUT)
+#     pwm_right = GPIO.PWM(PIN_PWMB, freq)
+#     pwm_right.start(10)
+#     # sleep
+#     time.sleep(2)
     # 右モータ後進
     GPIO.output(PIN_AIN1, GPIO.HIGH)
     GPIO.output(PIN_AIN2, GPIO.LOW)
+    pwm_left.ChangeDutyCycle(DUTY_A)
     # 左モータ後進
     GPIO.output(PIN_BIN1, GPIO.LOW)
     GPIO.output(PIN_BIN2, GPIO.HIGH)
+    pwm_right.ChangeDutyCycle(DUTY_B)
     # sleep
     time.sleep(T_straight)
     # モータの解放
@@ -445,6 +446,32 @@ with open('phase1_record.csv','w',newline='') as f:
     writer.writerow(["theta","gps_latitude","gps_longitude","x_now","y_now","distance","stacking"])
 f.close()
 print("csv created")
+
+# motorをセットアップする
+INITIAL_DUTY_A = 0
+INITIAL_DUTY_B = 0
+ini_freq = 300          # pwm周波数
+# モータのセッティング
+GPIO.setmode(GPIO.BCM)
+# 左モータ
+GPIO.setup(PIN_AIN1, GPIO.OUT)
+GPIO.setup(PIN_AIN2, GPIO.OUT)
+# 左モータPWM
+GPIO.setup(PIN_PWMA, GPIO.OUT)
+pwm_left = GPIO.PWM(PIN_PWMA, ini_freq)
+pwm_left.start(10)
+pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
+# 右モータ
+GPIO.setup(PIN_BIN1, GPIO.OUT)
+GPIO.setup(PIN_BIN2, GPIO.OUT)
+# 右モータPWM
+GPIO.setup(PIN_PWMB, GPIO.OUT)
+pwm_right = GPIO.PWM(PIN_PWMB, ini_freq)
+pwm_right.start(10)
+pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
+# sleep
+time.sleep(2)
+print("set up finished")
 
 # gpsの設定
 gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
