@@ -252,13 +252,9 @@ def go_back():
 # ゴール角度，機体の角度から機体の回転角度を求める関数
 def angle(x_now, y_now, theta_absolute):
     # ゴール角度算出
-    theta_gps = math.atan2(y_now, x_now)
-    theta_gps = theta_gps * 180/math.pi
-    # cansatの向き補正
-    theta_cansat = theta_absolute + 90
-    if(theta_cansat > 180): theta_cansat -= 360
-    # 機体正面を0として，左を正，右を負とした変数(-180~180)
-    theta_relative = theta_gps + theta_cansat
+    theta_gps = math.atan2(y_now, x_now) * 180/math.pi
+    # 機体正面を0として，左を正，右を負とした変数(-180~180)を作成
+    theta_relative = theta_gps + theta_absolute + 90
     if(theta_relative > 180): theta_relative -= 360
     if(theta_relative < -180): theta_relative += 360
     return theta_relative
