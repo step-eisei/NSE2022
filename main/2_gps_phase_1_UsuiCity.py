@@ -499,54 +499,62 @@ print("got theta_absolute=", theta_absolute)
 theta_relative = angle(x_now, y_now, theta_absolute)
 print("got theta_relative=", theta_relative)
 # ループ(3mゴールまで)
-
-while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
-    print("entered while")
-    """
-    # スタックの条件分岐(移動距離が3.5m以内)
-    if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) <= 3.5):
-        # スタック処理
-        stack()
-        print("stack")
-        i = 0
-    else:
+try:
+    while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
+        print("entered while")
+        """
+        # スタックの条件分岐(移動距離が3.5m以内)
+        if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) <= 3.5):
+            # スタック処理
+            stack()
+            print("stack")
+            i = 0
+        else:
+            # 旋回，直進
+            rotate(theta_relative)
+            print("rotated")
+            go_ahead()
+            print("went ahead")
+            i = 1
+        """
+        # stack無しバージョン
         # 旋回，直進
-        rotate(theta_relative)
-        print("rotated")
+        while True:
+            rotate(theta_relative)
+            print("rotated")
+            # 旋回後に角度のフィードバック
+            time.sleep(2)
+            theta_absolute = magnet()
+            theta_relative = angle(x_now, y_now, theta_absolute)
+            if(theta_relative > -30 and theta_relative < 30): break
         go_ahead()
         print("went ahead")
         i = 1
-    """
-    # stack無しバージョン
-    # 旋回，直進
-    while True:
-        rotate(theta_relative)
-        print("rotated")
-        # 旋回後に角度のフィードバック
-        time.sleep(2)
+        # 履歴の保存
+        record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
+        print("recorded")
+        # 過去データの一時保存(移動検知のため)
+        x_past = x_now
+        y_past = y_now
+        # gpsから緯度・経度取得
+        time.sleep(5)
+        getgps()
+        print("got gps")
+        # calc_xyから座標取得
+        x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
+        print("calced xy¥n")
+        print("x_now, y_now =", x_now, y_now)
+        # magnetから絶対角度取得
         theta_absolute = magnet()
+        print("got theta_absolute=", theta_absolute)
+        # angleから回転角度取得
         theta_relative = angle(x_now, y_now, theta_absolute)
-        if(theta_relative > -30 and theta_relative < 30): break
-    go_ahead()
-    print("went ahead")
-    i = 1
-    # 履歴の保存
-    record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
-    print("recorded")
-    # 過去データの一時保存(移動検知のため)
-    x_past = x_now
-    y_past = y_now
-    # gpsから緯度・経度取得
-    time.sleep(5)
-    getgps()
-    print("got gps")
-    # calc_xyから座標取得
-    x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
-    print("calced xy¥n")
-    print("x_now, y_now =", x_now, y_now)
-    # magnetから絶対角度取得
-    theta_absolute = magnet()
-    print("got theta_absolute=", theta_absolute)
-    # angleから回転角度取得
-    theta_relative = angle(x_now, y_now, theta_absolute)
-    print("got theta_relative=", theta_relative)
+        print("got theta_relative=", theta_relative)
+except KeyboardInterrupt:
+    pwm_left.stop()
+    pwm_right.stop()
+    GPIO.cleanup()
+pwm_left.stop()
+pwm_right.stop()
+GPIO.cleanup()
+print("3m goal")
