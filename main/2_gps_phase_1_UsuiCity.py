@@ -112,10 +112,10 @@ def rotate(theta_relative):
     global PIN_BIN1
     global PIN_BIN2
     global PIN_PWMB
-    global DUTY_A
-    global DUTY_B
+    DUTY_A = 10
+    DUTY_B = 10
     freq = 300          # pwm周波数
-    const = 1/27        # 単位角度における回転所要時間
+    const = 10/765        # 単位角度における回転所要時間
     # モータのセッティング
     GPIO.setmode(GPIO.BCM)
     # 左モータ
