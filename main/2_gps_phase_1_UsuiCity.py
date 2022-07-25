@@ -196,13 +196,18 @@ def go_ahead():
     # 左モータ前進
     GPIO.output(PIN_BIN1, GPIO.HIGH)
     GPIO.output(PIN_BIN2, GPIO.LOW)
-    pwm_left.ChangeDutyCycle(DUTY_A)
-    pwm_right.ChangeDutyCycle(DUTY_B)
-    
+    # DUTY_A = DUTY_Bという仮定の下，
+    # 0からDUTY_Aまで1ずつ上げる
+    for i in range(0, DUTY_A + 1, 1):
+        pwm_left.ChangeDutyCycle(i)
+        pwm_right.ChangeDutyCycle(i)
     # sleep
     time.sleep(T_straight)
-    pwm_left.ChangeDutyCycle(0)
-    pwm_right.ChangeDutyCycle(0)
+    # DUTY_A = DUTY_Bという仮定の下，
+    # DUTY_Aから0まで1ずつさげる
+    for i in range(0, DUTY_A + 1, 1):
+        pwm_left.ChangeDutyCycle(DUTY_A - i)
+        pwm_right.ChangeDutyCycle(DUTY_A - i)
     time.sleep(2)
     # モータの解放
 #     pwm_right.stop()
