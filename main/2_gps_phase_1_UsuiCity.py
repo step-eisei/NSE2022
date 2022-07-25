@@ -519,8 +519,14 @@ while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
     """
     # stack無しバージョン
     # 旋回，直進
-    rotate(theta_relative)
-    print("rotated")
+    while True:
+        rotate(theta_relative)
+        print("rotated")
+        # 旋回後に角度のフィードバック
+        time.sleep(2)
+        theta_absolute = magnet()
+        theta_relative = angle(x_now, y_now, theta_absolute)
+        if(theta_relative > -30 and theta_relative < 30): break
     go_ahead()
     print("went ahead")
     i = 1
