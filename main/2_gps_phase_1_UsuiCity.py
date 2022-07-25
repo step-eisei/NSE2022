@@ -153,6 +153,9 @@ def rotate(theta_relative):
         GPIO.output(PIN_BIN1, GPIO.HIGH)
         GPIO.output(PIN_BIN2, GPIO.LOW)
     time.sleep(math.fabs(theta_relative)*const)
+    pwm_left.ChangeDutyCycle(0)
+    pwm_right.ChangeDutyCycle(0)
+    time.sleep(2)
 #     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
@@ -199,6 +202,9 @@ def go_ahead():
     
     # sleep
     time.sleep(T_straight)
+    pwm_left.ChangeDutyCycle(0)
+    pwm_right.ChangeDutyCycle(0)
+    time.sleep(2)
     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
@@ -244,6 +250,9 @@ def go_back():
     pwm_right.ChangeDutyCycle(DUTY_B)
     # sleep
     time.sleep(T_straight)
+    pwm_left.ChangeDutyCycle(0)
+    pwm_right.ChangeDutyCycle(0)
+    time.sleep(2)
     # モータの解放
     pwm_right.stop()
     pwm_left.stop()
@@ -483,7 +492,7 @@ print("got gps")
 # calc_xyから座標取得
 x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
 print("calced xy¥n")
-print("x_now, y_now =", x_now, y_now)
+print("x_now, y_now = ", x_now, y_now)
 # magnetから絶対角度取得
 theta_absolute = magnet()
 print("got theta_absolute=", theta_absolute)
@@ -523,6 +532,7 @@ while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
     x_past = x_now
     y_past = y_now
     # gpsから緯度・経度取得
+    time.sleep(5)
     getgps()
     print("got gps")
     # calc_xyから座標取得
