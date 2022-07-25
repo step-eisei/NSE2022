@@ -201,6 +201,7 @@ def go_ahead():
     for i in range(0, DUTY_A + 1, 1):
         pwm_left.ChangeDutyCycle(i)
         pwm_right.ChangeDutyCycle(i)
+        time.sleep(0.1)
     # sleep
     time.sleep(T_straight)
     # DUTY_A = DUTY_Bという仮定の下，
@@ -208,6 +209,7 @@ def go_ahead():
     for i in range(0, DUTY_A + 1, 1):
         pwm_left.ChangeDutyCycle(DUTY_A - i)
         pwm_right.ChangeDutyCycle(DUTY_A - i)
+        time.sleep(0.1)
     time.sleep(2)
     # モータの解放
 #     pwm_right.stop()
