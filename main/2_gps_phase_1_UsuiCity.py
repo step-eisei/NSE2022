@@ -37,10 +37,10 @@ PIN_BIN2 = 26
 PIN_PWMB = 13
 # 左右のduty比(定義域：0~100)
 DUTY_A = 60 # 20~40でICが高温になります．60~70が妥当です
-DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
+DUTY_B = 62 # 20~40でICが高温になります．60~70が妥当です
 freq = 300 # PWMの周波数
 
-T_straight = 3
+T_straight = 0
 final_distance = 3
 min_satellites_used = 10
 
@@ -185,17 +185,17 @@ def go_ahead():
     GPIO.output(PIN_BIN2, GPIO.LOW)
     # DUTY_A = DUTY_Bという仮定の下，
     # 0からDUTY_Aまで1ずつ上げる
-    for i in range(0, DUTY_A + 1, 1):
-        pwm_left.ChangeDutyCycle(i)
-        pwm_right.ChangeDutyCycle(i)
+    for i in range(0, 101, 2):
+        pwm_left.ChangeDutyCycle(i*DUTY_A/100)
+        pwm_right.ChangeDutyCycle(i*DUTY_B/100)
         time.sleep(0.1)
     # sleep
     time.sleep(T_straight)
     # DUTY_A = DUTY_Bという仮定の下，
     # DUTY_Aから0まで1ずつさげる
-    for i in range(0, DUTY_A + 1, 1):
-        pwm_left.ChangeDutyCycle(DUTY_A - i)
-        pwm_right.ChangeDutyCycle(DUTY_A - i)
+    for i in range(0, 101, 2):
+        pwm_left.ChangeDutyCycle((100-i)*DUTY_A/100)
+        pwm_right.ChangeDutyCycle((100-i)*DUTY_B/100)
         time.sleep(0.1)
     time.sleep(2)
     # モータの解放
