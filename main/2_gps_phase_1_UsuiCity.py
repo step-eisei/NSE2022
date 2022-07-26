@@ -20,8 +20,8 @@ import re
 mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 
 # ゴール座標を保存したCSVファイルの読み込み
-# with open ( 'goal.csv' , 'r' ) as f :
-#     reader = csv . reader (f)
+# with open ('goal.csv', 'r') as f :
+#     reader = csv.reader(f)
 #     line = [row for row in reader]
 #     goal_latitude = float(line[ 1 ] [ 0 ])
 #     goal_longitude = float(line[ 1 ] [ 1 ])
@@ -38,6 +38,7 @@ PIN_PWMB = 13
 # 左右のduty比(定義域：0~100)
 DUTY_A = 60 # 20~40でICが高温になります．60~70が妥当です
 DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
+freq = 300 # PWMの周波数
 
 T_straight = 3
 final_distance = 3
@@ -53,7 +54,16 @@ x_goal = 0
 y_goal = 0
 satellites_used = 0
 
-# 以下，目分量で得られた最大値と最小値
+# 以下，キャリブレーションにより計算した最大値と最小値
+"""
+with open ('test/MPU9250/kantan_filter/result/mag_record_calib_mebunryo_max_min.csv', 'r' ) as f :
+    reader = csv.reader(f)
+    line = [row for row in reader]
+    magX_max = float(line[1][0])
+    magX_min = float(line[1][1])
+    magY_max = float(line[1][2])
+    magY_min = float(line[1][3])
+"""
 magX_max = 50.9
 magX_min = -7.8
 magY_max = -365.1
@@ -105,15 +115,8 @@ def getgps():
     
 # 機体を旋回させる関数
 def rotate(theta_relative):
-    global PIN_AIN1
-    global PIN_AIN2
-    global PIN_PWMA
-    global PIN_BIN1
-    global PIN_BIN2
-    global PIN_PWMB
     R_DUTY_A = 10
     R_DUTY_B = 10
-    freq = 300          # pwm周波数
     const = 10/765        # 単位角度における回転所要時間
 #     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
@@ -162,16 +165,6 @@ def rotate(theta_relative):
 
 # 機体を前進させる関数
 def go_ahead():
-    global PIN_AIN1
-    global PIN_AIN2
-    global PIN_PWMA
-    global PIN_BIN1
-    global PIN_BIN2
-    global PIN_PWMB
-    global DUTY_A
-    global DUTY_B
-    global T_straight
-    freq = 300          # pwm周波数
 #     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
 #     # 左モータ
@@ -218,16 +211,6 @@ def go_ahead():
 
 # 機体を後進させる関数
 def go_back():
-    global PIN_AIN1
-    global PIN_AIN2
-    global PIN_PWMA
-    global PIN_BIN1
-    global PIN_BIN2
-    global PIN_PWMB
-    global DUTY_A
-    global DUTY_B
-    global T_straight
-    freq = 300          # pwm周波数
     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
 #     # 左モータ
@@ -534,6 +517,7 @@ try:
             time.sleep(2)
             theta_absolute = magnet()
             theta_relative = angle(x_now, y_now, theta_absolute)
+            print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
             if(theta_relative > -30 and theta_relative < 30): break
         go_ahead()
         print("went ahead")
