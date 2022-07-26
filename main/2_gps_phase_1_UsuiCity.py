@@ -157,8 +157,8 @@ def rotate(theta_relative):
      print("set up finished")
 """
     
-    pwm_left.ChangeDutyCycle(0)
-    pwm_right.ChangeDutyCycle(0)
+    pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
+    pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
     time.sleep(2)
 #     # モータの解放
 #     pwm_right.stop()
