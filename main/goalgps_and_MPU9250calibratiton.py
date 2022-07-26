@@ -127,6 +127,14 @@ try:
     magX_save = []
     magY_save = []
     # duty比1でモータを旋回
+    # モータのピン割り当て(GPIO 〇〇)
+    PIN_AIN1 = 24   # 右モータ(A)
+    PIN_AIN2 = 23
+    PIN_PWMA = 12
+    PIN_BIN1 = 16   # 左モータ(B)
+    PIN_BIN2 = 26
+    PIN_PWMB = 13
+    freq = 300 # PWMの周波数
     while True:
 #         accel = mpu9250.readAccel()
 #         print(" ax = " , ( accel['x'] ))
