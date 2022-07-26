@@ -135,7 +135,7 @@ def rotate(theta_relative):
         time.sleep(math.fabs(theta_relative)*const/20)
     pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
     pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
-    time.sleep(2)
+    time.sleep(3)
 """
      # モータのセッティング
      GPIO.setmode(GPIO.BCM)
