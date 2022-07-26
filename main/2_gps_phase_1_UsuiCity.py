@@ -512,7 +512,7 @@ try:
             theta_absolute = magnet()
             theta_relative = angle(x_now, y_now, theta_absolute)
             print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
-            if(theta_relative > -30 and theta_relative < 30): break
+            if(theta_relative > -10 and theta_relative < 10): break
         go_ahead()
         print("went ahead")
         i = 1
@@ -528,7 +528,7 @@ try:
         print("got gps")
         # calc_xyから座標取得
         x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
-        print("calced xy¥n")
+        print("calced xy\n")
         print("x_now, y_now =", x_now, y_now)
         # magnetから絶対角度取得
         theta_absolute = magnet()
