@@ -110,6 +110,7 @@ try:
          
         time.sleep(0.3)
     
+except KeyboardInterrupt:
     # 最大値，最小値の算出
     magX_max = max(magX_save)
     magX_min = min(magX_save)
@@ -120,6 +121,4 @@ try:
         writer.writerow(['magX_max', 'magX_min', 'magY_max', 'magY_min'])
         writer.writerow([magX_max, magX_min, magY_max, magY_min])
         f.close()
-        
-except KeyboardInterrupt:
     sys.exit()
