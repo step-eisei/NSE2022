@@ -55,19 +55,13 @@ y_goal = 0
 satellites_used = 0
 
 # 以下，キャリブレーションにより計算した最大値と最小値
-"""
-with open ('test/MPU9250/kantan_filter/result/mag_record_calib_mebunryo_max_min.csv', 'r' ) as f :
+with open ('main/mag_record_calib_mebunryo_max_min.csv', 'r' ) as f :
     reader = csv.reader(f)
     line = [row for row in reader]
     magX_max = float(line[1][0])
     magX_min = float(line[1][1])
     magY_max = float(line[1][2])
     magY_min = float(line[1][3])
-"""
-magX_max = 50.9
-magX_min = -7.8
-magY_max = -365.1
-magY_min = -428.3
 
 magXs = [0]*5
 magYs = [0]*5
