@@ -1,4 +1,4 @@
-# 結果のcsvをresultフォルダに格納するように設定しています．
+# 結果のcsvをmainフォルダに格納するように設定しています．
 # 名前は'mag_record_calib_mebunryo_max_min.csv'
 
 # coding: utf-8
