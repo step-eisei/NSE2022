@@ -29,15 +29,15 @@ goal_latitude = 36.1119
 goal_longitude = 140.09862666666666
 
 # モータのピン割り当て(GPIO 〇〇)
-PIN_AIN1 = 24   # 左モータ(A)
+PIN_AIN1 = 24   # 右モータ(A)
 PIN_AIN2 = 23
 PIN_PWMA = 12
-PIN_BIN1 = 16   # 右モータ(B)
+PIN_BIN1 = 16   # 左モータ(B)
 PIN_BIN2 = 26
 PIN_PWMB = 13
 # 左右のduty比(定義域：0~100)
-DUTY_A = 60 # 20~40でICが高温になります．60~70が妥当です
-DUTY_B = 62 # 20~40でICが高温になります．60~70が妥当です
+DUTY_A = 62 # 20~40でICが高温になります．60~70が妥当です
+DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
 freq = 300 # PWMの周波数
 
 T_straight = 0
@@ -504,8 +504,8 @@ try:
         # stack無しバージョン
         # 旋回，直進
         while True:
-            if(theta_relative < 0): rotate(-10)
-            if(theta_relative > 0): rotate(10)
+            if(theta_relative < 0): rotate(-15)
+            if(theta_relative > 0): rotate(15)
             print("10 deg rotated")
             # 旋回後に角度のフィードバック
             time.sleep(2)
