@@ -29,8 +29,8 @@ magX_min = -6.9
 magY_max = -385.3
 magY_min = -430.7
 
-magXs = [0]*5
-magYs = [0]*5
+magXs = [0]*4
+magYs = [0]*4
 
 '''
 以下3行に渡ってcsvファイル名を作成している．
@@ -77,20 +77,14 @@ try:
         magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
         
         # ローパスフィルタ
-        magXs[0] = magXs[1]
-        magXs[1] = magXs[2]
-        magXs[2] = magXs[3]
-        magXs[3] = magXs[4]
-        magXs[4] = magX_calibrated
+        magXs.append(magX_calibrated)
         magX_mean = sum(magXs)/5
+        del magXs[0]
         
-        magYs[0] = magYs[1]
-        magYs[1] = magYs[2]
-        magYs[2] = magYs[3]
-        magYs[3] = magYs[4]
-        magYs[4] = magY_calibrated
+        
+        magYs.append(magY_calibrated)
         magY_mean = sum(magYs)/5
-        
+        del magYs[0]
  
         
         # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
