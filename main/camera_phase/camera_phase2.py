@@ -3,6 +3,7 @@ import numpy as np
 import picamera
 import math
 import time
+import datetime
 
 image=Image
 imageo=ImageOps
@@ -23,10 +24,10 @@ PIN_BIN1 = 16   # 右モータ(B)
 PIN_BIN2 = 26
 PIN_PWMB = 13
 # 左右のduty比(定義域：0~100)
-DUTY_A = 60 # 20~40でICが高温になります．60~70が妥当です
-DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
+DUTY_A = 13 # 念のため20より上には上げないように
+DUTY_B = 13 # 念のため20より上には上げないように
 
-T_straight = 3
+T_straight = 10
 # --------------------------------------------------------------
 
 
@@ -38,13 +39,29 @@ def rotate(theta_relative):
     global PIN_BIN1
     global PIN_BIN2
     global PIN_PWMB
-    R_DUTY_A = 10
-    R_DUTY_B = 10
-    freq = 300          # pwm周波数
-    const = 10/765        # 単位角度における回転所要時間
-    
-    pwm_left.ChangeDutyCycle(R_DUTY_A)
-    pwm_right.ChangeDutyCycle(R_DUTY_B)
+    global DUTY_A
+    global DUTY_B
+    const = 1/27       # 単位角度における回転所要時間
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    # sleep
+    time.sleep(2)
     
     if(theta_relative > 0): # 左に旋回
         # 右モータ前進
@@ -61,10 +78,10 @@ def rotate(theta_relative):
         GPIO.output(PIN_BIN1, GPIO.HIGH)
         GPIO.output(PIN_BIN2, GPIO.LOW)
     time.sleep(math.fabs(theta_relative)*const)
-    pwm_left.ChangeDutyCycle(0)
-    pwm_right.ChangeDutyCycle(0)
-    time.sleep(2)
-
+    # モータの解放
+    pwm_right.stop()
+    pwm_left.stop()
+    GPIO.cleanup()
 
 # 機体を前進させる関数
 def go_ahead():
@@ -77,31 +94,41 @@ def go_ahead():
     global DUTY_A
     global DUTY_B
     global T_straight
-    freq = 300          # pwm周波数
-
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    # sleep
+    time.sleep(2)
+    # 右モータ前進
     GPIO.output(PIN_AIN1, GPIO.LOW)
     GPIO.output(PIN_AIN2, GPIO.HIGH)
     # 左モータ前進
     GPIO.output(PIN_BIN1, GPIO.HIGH)
     GPIO.output(PIN_BIN2, GPIO.LOW)
-    # DUTY_A = DUTY_Bという仮定の下，
-    # 0からDUTY_Aまで1ずつ上げる
-    for i in range(0, DUTY_A + 1, 1):
-        pwm_left.ChangeDutyCycle(i)
-        pwm_right.ChangeDutyCycle(i)
-        time.sleep(0.1)
     # sleep
     time.sleep(T_straight)
-    # DUTY_A = DUTY_Bという仮定の下，
-    # DUTY_Aから0まで1ずつさげる
-    for i in range(0, DUTY_A + 1, 1):
-        pwm_left.ChangeDutyCycle(DUTY_A - i)
-        pwm_right.ChangeDutyCycle(DUTY_A - i)
-        time.sleep(0.1)
-    time.sleep(2)
- 
+    # モータの解放
+    pwm_right.stop()
+    pwm_left.stop()
+    GPIO.cleanup()
 
 # 機体を後進させる関数
+def go_back():
     global PIN_AIN1
     global PIN_AIN2
     global PIN_PWMA
@@ -111,21 +138,38 @@ def go_ahead():
     global DUTY_A
     global DUTY_B
     global T_straight
-    freq = 300          # pwm周波数
-
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, DUTY_A)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, DUTY_B)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(DUTY_B)
+    # sleep
+    time.sleep(2)
     # 右モータ後進
     GPIO.output(PIN_AIN1, GPIO.HIGH)
     GPIO.output(PIN_AIN2, GPIO.LOW)
-    pwm_left.ChangeDutyCycle(DUTY_A)
     # 左モータ後進
     GPIO.output(PIN_BIN1, GPIO.LOW)
     GPIO.output(PIN_BIN2, GPIO.HIGH)
-    pwm_right.ChangeDutyCycle(DUTY_B)
     # sleep
     time.sleep(T_straight)
-    pwm_left.ChangeDutyCycle(0)
-    pwm_right.ChangeDutyCycle(0)
-    time.sleep(2)
+    # モータの解放
+    pwm_right.stop()
+    pwm_left.stop()
+    GPIO.cleanup()
 
 
 # --------------------------------------------------------------------
@@ -137,7 +181,6 @@ def csv_write_f():
 
     def write(x,y):
 
-        import datetime
         import csv
 
         nonlocal flag
@@ -224,12 +267,14 @@ def scanprop(img_th):
 def takepic():
     # 撮影
     global takepic_counter
-    camera.capture("image"+str(takepic_counter)+".jpg")
+    now_time_camera = datetime.datetime.now()
+    filename_camera = now_time_camera.strftime('%m月%d日:%H時%M分:')+str(takepic_counter)+"枚目"
+    camera.capture("image"+filename_camera+".jpg")
 
     # 読み込み
-    img= image.open ("image"+str(takepic_counter)+".jpg")
+    img = image.open ("image"+filename_camera+"jpg")
     #hsv空間に変換 「色相(Hue)」「彩度(Saturation)」「明度(Value)」
-    img_hsv=image.open("image"+str(takepic_counter)+".jpg").convert('HSV')
+    img_hsv = image.open("image"+filename_camera+"jpg").convert('HSV')
     #それぞれ上下左右反転し，Pillow → Numpyへ変換
     # 上下反転メソッド　flip()
     # 左右反転メソッド　mirror()
@@ -239,7 +284,7 @@ def takepic():
     # 解析
     val=vscan(img_hsv) # 画像全体の明度(Value)の平均を取得
     img_th=rgbbinary(img,val) #条件を満たす要素を255，それ以外を0とする配列
-    (image.fromarray(img_th)).save("scanth"+str(takepic_counter)+".jpg")
+    (image.fromarray(img_th)).save("scanth"+filename_camera+".jpg")
     
     takepic_counter += 1
     theta=scantheta(img_th)
@@ -251,55 +296,20 @@ def takepic():
     return theta,prop
 
 
+while True:
+    data = takepic()
+    prop = data[1]
+    print(prop)
+    if prop > borderprop:
+        break
+    rotate(50)
+    
+print("find!!")
 
-# motorをセットアップする
-INITIAL_DUTY_A = 0
-INITIAL_DUTY_B = 0
-ini_freq = 300          # pwm周波数
-# モータのセッティング
-GPIO.setmode(GPIO.BCM)
-# 左モータ
-GPIO.setup(PIN_AIN1, GPIO.OUT)
-GPIO.setup(PIN_AIN2, GPIO.OUT)
-# 左モータPWM
-GPIO.setup(PIN_PWMA, GPIO.OUT)
-pwm_left = GPIO.PWM(PIN_PWMA, ini_freq)
-pwm_left.start(10)
-pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
-# 右モータ
-GPIO.setup(PIN_BIN1, GPIO.OUT)
-GPIO.setup(PIN_BIN2, GPIO.OUT)
-# 右モータPWM
-GPIO.setup(PIN_PWMB, GPIO.OUT)
-pwm_right = GPIO.PWM(PIN_PWMB, ini_freq)
-pwm_right.start(10)
-pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
-# sleep
-time.sleep(2)
-print("set up finished")
+for i in range(25):
+    data = takepic()
+    theta = data[0]
+    print(theta)
+    rotate(theta)
+    go_ahead()
 
-try:
-    while True:
-        data = takepic()
-        prop = data[1]
-        print(prop)
-        if prop > borderprop:
-            break
-        rotate(50)
-
-    print("find!!")
-
-    for i in range(25):
-        data = takepic()
-        theta = data[0]
-        print(theta)
-        rotate(theta)
-        go_ahead()
-
-except KeyboardInterrupt:
-    pwm_left.stop()
-    pwm_right.stop()
-    GPIO.cleanup()
-pwm_left.stop()
-pwm_right.stop()
-GPIO.cleanup()
