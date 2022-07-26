@@ -133,6 +133,9 @@ def rotate(theta_relative):
         pwm_left.ChangeDutyCycle(R_DUTY_A*(100-i)/100)
         pwm_right.ChangeDutyCycle(R_DUTY_B*(100-i)/100)
         time.sleep(const/20)
+    pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
+    pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
+    time.sleep(2)
 """
      # モータのセッティング
      GPIO.setmode(GPIO.BCM)
@@ -156,10 +159,6 @@ def rotate(theta_relative):
      time.sleep(2)
      print("set up finished")
 """
-    
-    pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
-    pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
-    time.sleep(2)
 #     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
