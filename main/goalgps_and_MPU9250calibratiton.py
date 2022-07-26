@@ -24,6 +24,7 @@ import sys
 import datetime
 import re
 import math
+import RPi.GPIO as GPIO
 
 #GPSモジュールからデータをmy_gps(GPSオブジェクト)に追加，＊引数はタイムゾーンの時差（日本は＋9時間）と，経度緯度の出力フォーマットを指定（ddm,dms,ddなどから）
 my_gps = micropyGPS.MicropyGPS(9, 'dd')
@@ -134,7 +135,40 @@ try:
     PIN_BIN1 = 16   # 左モータ(B)
     PIN_BIN2 = 26
     PIN_PWMB = 13
-    freq = 300 # PWMの周波数
+    # motorをセットアップする
+    INITIAL_DUTY_A = 0
+    INITIAL_DUTY_B = 0
+    ini_freq = 300          # pwm周波数
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, ini_freq)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, ini_freq)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
+    # sleep
+    time.sleep(2)
+    print("set up finished")
+    pwm_left.ChangeDutyCycle(1)
+    pwm_right.ChangeDutyCycle(1)
+    # 左に旋回
+    # 右モータ前進
+    GPIO.output(PIN_AIN1, GPIO.LOW)
+    GPIO.output(PIN_AIN2, GPIO.HIGH)
+    # 左モータ後進
+    GPIO.output(PIN_BIN1, GPIO.LOW)
+    GPIO.output(PIN_BIN2, GPIO.HIGH)
     while True:
 #         accel = mpu9250.readAccel()
 #         print(" ax = " , ( accel['x'] ))
@@ -185,6 +219,9 @@ try:
         time.sleep(0.3)
     
 except KeyboardInterrupt:
+    pwm_left.stop()
+    pwm_right.stop()
+    GPIO.cleanup()
     # 最大値，最小値の算出
     magX_max = max(magX_save)
     magX_min = min(magX_save)
