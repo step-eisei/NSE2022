@@ -1,3 +1,6 @@
+# 結果のcsvをresultフォルダに格納するように設定しています．
+# 名前は'mag_record_calib_mebunryo_max_min.csv'
+
 # coding: utf-8
 ## @package faboMPU9250
 #  This is a library for the FaBo 9AXIS I2C Brick.
@@ -50,6 +53,8 @@ with open('result/' + csv_name,'w',newline='') as f:
 f.close()
 
 try:
+    magX_save = []
+    magY_save = []
     while True:
 #         accel = mpu9250.readAccel()
 #         print(" ax = " , ( accel['x'] ))
@@ -93,13 +98,28 @@ try:
         # print(theta_absolute)
         theta_absolute_lowPass = math.atan2(-magY_mean, -magX_mean)*180/math.pi
         print(theta_absolute_lowPass)
-
+        
+        # dataの抜き出し
+        magX_save.append(float(mag['x']))
+        magY_save.append(float(mag['y']))
+      
         with open('result/' + csv_name,'a',newline='') as f: 
             writer = csv.writer(f)
             writer.writerow([mag['x'], mag['y'], mag['z'], magX_calibrated, magY_calibrated, theta_absolute, magX_mean, magY_mean, theta_absolute_lowPass])
         f.close()
          
         time.sleep(0.3)
-
+    
+    # 最大値，最小値の計算
+    magX_max = max(magX_save)
+    magX_min = min(magX_save)
+    magY_max = max(magY_save)
+    magY_min = min(magY_save)
+    with open('result/mag_record_calib_mebunryo_max_min.csv', 'a', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['magX_max', 'magX_min', 'magY_max', 'magY_min'])
+        writer.writerow([magX_max, magX_min, magY_max, magY_min])
+        f.close()
+        
 except KeyboardInterrupt:
     sys.exit()
