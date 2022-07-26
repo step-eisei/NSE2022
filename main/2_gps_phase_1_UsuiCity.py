@@ -55,7 +55,7 @@ y_goal = 0
 satellites_used = 0
 
 # 以下，キャリブレーションにより計算した最大値と最小値
-with open ('main/9axis_rawdata/mag_record_calib_mebunryo_max_min.csv', 'r' ) as f :
+with open ('9axis_rawdata/mag_record_calib_mebunryo_max_min.csv', 'r' ) as f :
     reader = csv.reader(f)
     line = [row for row in reader]
     magX_max = float(line[1][0])
