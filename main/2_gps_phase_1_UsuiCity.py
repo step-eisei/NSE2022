@@ -20,13 +20,11 @@ import re
 mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 
 # ゴール座標を保存したCSVファイルの読み込み
-# with open ('goal.csv', 'r') as f :
-#     reader = csv.reader(f)
-#     line = [row for row in reader]
-#     goal_latitude = float(line[ 1 ] [ 0 ])
-#     goal_longitude = float(line[ 1 ] [ 1 ])
-goal_latitude = 36.11184166666666
-goal_longitude = 140.09862166666667
+with open ('goal.csv', 'r') as f :
+    reader = csv.reader(f)
+    line = [row for row in reader]
+    goal_latitude = float(line[ 1 ] [ 0 ])
+    goal_longitude = float(line[ 1 ] [ 1 ])
 
 
 # モータのピン割り当て(GPIO 〇〇)
@@ -184,20 +182,28 @@ def go_ahead():
     # 左モータ前進
     GPIO.output(PIN_BIN1, GPIO.HIGH)
     GPIO.output(PIN_BIN2, GPIO.LOW)
-    # DUTY_A = DUTY_Bという仮定の下，
-    # 0からDUTY_Aまで1ずつ上げる
+    # 0からDUTYまで数秒かけて上げる
     for i in range(0, 101, 2):
-        pwm_left.ChangeDutyCycle(i*DUTY_A/100)
-        pwm_right.ChangeDutyCycle(i*DUTY_B/100)
-        time.sleep(0.1)
+        if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/100)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/100)
+            time.sleep(0.1)
+        else: 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/200)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/200)
+            time.sleep(0.05)
     # sleep
     time.sleep(T_straight)
-    # DUTY_A = DUTY_Bという仮定の下，
-    # DUTY_Aから0まで1ずつさげる
+    # DUTYから0まで数秒かけて下げる
     for i in range(0, 101, 2):
-        pwm_left.ChangeDutyCycle((100-i)*DUTY_A/100)
-        pwm_right.ChangeDutyCycle((100-i)*DUTY_B/100)
-        time.sleep(0.1)
+        if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/100)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/100)
+            time.sleep(0.1)
+        else: 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/200)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/200)
+            time.sleep(0.05)
     time.sleep(2)
     # モータの解放
 #     pwm_right.stop()
@@ -232,15 +238,33 @@ def go_back():
     GPIO.output(PIN_BIN1, GPIO.LOW)
     GPIO.output(PIN_BIN2, GPIO.HIGH)
     pwm_right.ChangeDutyCycle(DUTY_B)
+    # 0からDUTYまで数秒かけて上げる
+    for i in range(0, 101, 2):
+        if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/100)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/100)
+            time.sleep(0.1)
+        else: 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/200)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/200)
+            time.sleep(0.05)
     # sleep
     time.sleep(T_straight)
-    pwm_left.ChangeDutyCycle(0)
-    pwm_right.ChangeDutyCycle(0)
+    # DUTYから0まで数秒かけて下げる
+    for i in range(0, 101, 2):
+        if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/100)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/100)
+            time.sleep(0.1)
+        else: 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/200)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/200)
+            time.sleep(0.05)
     time.sleep(2)
     # モータの解放
-    pwm_right.stop()
-    pwm_left.stop()
-    GPIO.cleanup()
+#     pwm_right.stop()
+#     pwm_left.stop()
+#     GPIO.cleanup()
 
 # ゴール角度，機体の角度から機体の回転角度を求める関数
 def angle(x_now, y_now, theta_absolute):
@@ -505,9 +529,8 @@ try:
         # stack無しバージョン
         # 旋回，直進
         while True:
-            if(theta_relative < 0): rotate(-15)
-            if(theta_relative > 0): rotate(15)
-            print("10 deg rotated")
+            rotate(theta_relative/2)
+            print(f"{theta_relative/2} deg rotated")
             # 旋回後に角度のフィードバック
             time.sleep(2)
             theta_absolute = magnet()
@@ -537,10 +560,6 @@ try:
         # angleから回転角度取得
         theta_relative = angle(x_now, y_now, theta_absolute)
         print("got theta_relative=", theta_relative)
-except KeyboardInterrupt:
-    pwm_left.stop()
-    pwm_right.stop()
-    GPIO.cleanup()
 pwm_left.stop()
 pwm_right.stop()
 GPIO.cleanup()
