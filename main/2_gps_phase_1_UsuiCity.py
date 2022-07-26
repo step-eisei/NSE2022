@@ -125,6 +125,12 @@ def rotate(theta_relative):
         # 左モータ前進
         GPIO.output(PIN_BIN1, GPIO.HIGH)
         GPIO.output(PIN_BIN2, GPIO.LOW)
+    # カクカクver.
+    pwm_left.ChangeDutyCycle(R_DUTY_A)
+    pwm_right.ChangeDutyCycle(R_DUTY_B)
+    time.sleep(math.fabs(theta_relative)*const)
+    """
+    # なめらかver.
     for i in range(0, 101, 5):
         pwm_left.ChangeDutyCycle(R_DUTY_A*i/100)
         pwm_right.ChangeDutyCycle(R_DUTY_B*i/100)
@@ -133,10 +139,11 @@ def rotate(theta_relative):
         pwm_left.ChangeDutyCycle(R_DUTY_A*(100-i)/100)
         pwm_right.ChangeDutyCycle(R_DUTY_B*(100-i)/100)
         time.sleep(math.fabs(theta_relative)*const/20)
+    """
     pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
     pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
     time.sleep(3)
-"""
+    """
      # モータのセッティング
      GPIO.setmode(GPIO.BCM)
      # 左モータ
@@ -158,7 +165,7 @@ def rotate(theta_relative):
      # sleep
      time.sleep(2)
      print("set up finished")
-"""
+    """
 #     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
@@ -537,8 +544,14 @@ try:
         # stack無しバージョン
         # 旋回，直進
         while True:
-            rotate(theta_relative/2)
-            print(f"{theta_relative/2} deg rotated")
+            # 10°固定
+            rotate(10)
+            print("10 deg rotated")
+            """
+            # 必要角度に応じて回転角を算出
+            rotate(theta_relative/1.5)
+            print(f"{theta_relative/1.5} deg rotated")
+            """
             # 旋回後に角度のフィードバック
             time.sleep(2)
             theta_absolute = magnet()
