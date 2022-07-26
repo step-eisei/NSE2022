@@ -111,27 +111,37 @@ def rotate(theta_relative):
     R_DUTY_A = 10
     R_DUTY_B = 10
     const = 10/765        # 単位角度における回転所要時間
-#     # モータのセッティング
-#     GPIO.setmode(GPIO.BCM)
-#     # 左モータ
-#     GPIO.setup(PIN_AIN1, GPIO.OUT)
-#     GPIO.setup(PIN_AIN2, GPIO.OUT)
-#     # 左モータPWM
-#     GPIO.setup(PIN_PWMA, GPIO.OUT)
-#     pwm_left = GPIO.PWM(PIN_PWMA, freq)
-#     pwm_left.start(10)
+    for i in range(0, 101, 5):
+        pwm_left.ChangeDutyCycle(R_DUTY_A*i/100)
+        pwm_right.ChangeDutyCycle(R_DUTY_B*i/100)
+        time.sleep(const/20)
+    for i in range(0, 101, 5):
+        pwm_left.ChangeDutyCycle(R_DUTY_A*(100-i)/100)
+        pwm_right.ChangeDutyCycle(R_DUTY_B*(100-i)/100)
+        time.sleep(const/20)
+"""
+     # モータのセッティング
+     GPIO.setmode(GPIO.BCM)
+     # 左モータ
+     GPIO.setup(PIN_AIN1, GPIO.OUT)
+     GPIO.setup(PIN_AIN2, GPIO.OUT)
+     # 左モータPWM
+     GPIO.setup(PIN_PWMA, GPIO.OUT)
+     pwm_left = GPIO.PWM(PIN_PWMA, freq)
+     pwm_left.start(10)
     pwm_left.ChangeDutyCycle(R_DUTY_A)
-#     # 右モータ
-#     GPIO.setup(PIN_BIN1, GPIO.OUT)
-#     GPIO.setup(PIN_BIN2, GPIO.OUT)
-#     # 右モータPWM
-#     GPIO.setup(PIN_PWMB, GPIO.OUT)
-#     pwm_right = GPIO.PWM(PIN_PWMB, freq)
-#     pwm_right.start(10)
+     # 右モータ
+     GPIO.setup(PIN_BIN1, GPIO.OUT)
+     GPIO.setup(PIN_BIN2, GPIO.OUT)
+     # 右モータPWM
+     GPIO.setup(PIN_PWMB, GPIO.OUT)
+     pwm_right = GPIO.PWM(PIN_PWMB, freq)
+     pwm_right.start(10)
     pwm_right.ChangeDutyCycle(R_DUTY_B)
-#     # sleep
-#     time.sleep(2)
-#     print("set up finished")
+     # sleep
+     time.sleep(2)
+     print("set up finished")
+"""
     
     if(theta_relative > 0): # 左に旋回
         # 右モータ前進
