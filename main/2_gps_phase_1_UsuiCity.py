@@ -205,12 +205,12 @@ def go_ahead():
     # DUTYから0まで数秒かけて下げる
     for i in range(0, 101, 2):
         if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
-            pwm_left.ChangeDutyCycle(i*DUTY_A/100)
-            pwm_right.ChangeDutyCycle(i*DUTY_B/100)
+            pwm_left.ChangeDutyCycle((100-i)*DUTY_A/100)
+            pwm_right.ChangeDutyCycle((100-i)*DUTY_B/100)
             time.sleep(0.1)
         else: 
-            pwm_left.ChangeDutyCycle(i*DUTY_A/200)
-            pwm_right.ChangeDutyCycle(i*DUTY_B/200)
+            pwm_left.ChangeDutyCycle((100-i)*DUTY_A/200)
+            pwm_right.ChangeDutyCycle((100-i)*DUTY_B/200)
             time.sleep(0.05)
     time.sleep(2)
     # モータの解放
@@ -261,12 +261,12 @@ def go_back():
     # DUTYから0まで数秒かけて下げる
     for i in range(0, 101, 2):
         if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
-            pwm_left.ChangeDutyCycle(i*DUTY_A/100)
-            pwm_right.ChangeDutyCycle(i*DUTY_B/100)
+            pwm_left.ChangeDutyCycle((100-i)*DUTY_A/100)
+            pwm_right.ChangeDutyCycle((100-i)*DUTY_B/100)
             time.sleep(0.1)
         else: 
-            pwm_left.ChangeDutyCycle(i*DUTY_A/200)
-            pwm_right.ChangeDutyCycle(i*DUTY_B/200)
+            pwm_left.ChangeDutyCycle((100-i)*DUTY_A/200)
+            pwm_right.ChangeDutyCycle((100-i)*DUTY_B/200)
             time.sleep(0.05)
     time.sleep(2)
     # モータの解放
