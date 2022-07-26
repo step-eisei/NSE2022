@@ -268,7 +268,7 @@ def takepic():
     # 撮影
     global takepic_counter
     now_time_camera = datetime.datetime.now()
-    filename_camera = now_time_camera.strftime('%m月%d日:%H時%M分:')+str(takepic_counter)+"枚目"
+    filename_camera = now_time_camera.strftime('%m%d_%H%M_')+str(takepic_counter)
     camera.capture("image"+filename_camera+".jpg")
 
     # 読み込み
