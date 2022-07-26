@@ -23,7 +23,7 @@ y_goal = 0
 satellites_used = 0
 
 
-def go_ahead():
+def motor_setup():
     PIN_AIN1 = 24
     PIN_AIN2 = 23
     PIN_PWMA = 12
@@ -56,6 +56,7 @@ def go_ahead():
     pwm_right.start(10)
     pwm_right.ChangeDutyCycle(DUTY_B)   
     
+def go_ahead():
     #前進
     GPIO.output(PIN_AIN1, GPIO.LOW)
     GPIO.output(PIN_AIN2, GPIO.HIGH)
@@ -333,6 +334,8 @@ gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する
 gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行するスレッドを生成
 gpsthread.setDaemon(True)
 gpsthread.start() 
+
+motor_setup()
 
 while True:#展開検知
     while True:
