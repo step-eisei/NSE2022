@@ -101,33 +101,6 @@ def go_ahead():
     time.sleep(2)
  
 
-# 機体を後進させる関数
-    global PIN_AIN1
-    global PIN_AIN2
-    global PIN_PWMA
-    global PIN_BIN1
-    global PIN_BIN2
-    global PIN_PWMB
-    global DUTY_A
-    global DUTY_B
-    global T_straight
-    freq = 300          # pwm周波数
-
-    # 右モータ後進
-    GPIO.output(PIN_AIN1, GPIO.HIGH)
-    GPIO.output(PIN_AIN2, GPIO.LOW)
-    pwm_left.ChangeDutyCycle(DUTY_A)
-    # 左モータ後進
-    GPIO.output(PIN_BIN1, GPIO.LOW)
-    GPIO.output(PIN_BIN2, GPIO.HIGH)
-    pwm_right.ChangeDutyCycle(DUTY_B)
-    # sleep
-    time.sleep(T_straight)
-    pwm_left.ChangeDutyCycle(0)
-    pwm_right.ChangeDutyCycle(0)
-    time.sleep(2)
-
-
 # --------------------------------------------------------------------
 
 def csv_write_f():
