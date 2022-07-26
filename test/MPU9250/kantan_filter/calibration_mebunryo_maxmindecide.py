@@ -97,8 +97,8 @@ try:
         print(theta_absolute_lowPass)
         
         # 最大値，最小値を抜き出す
-        magX_save.append(mag['x'])
-        magY_save.append(mag['y'])
+        magX_save.append(float(mag['x']))
+        magY_save.append(float(mag['y']))
         magX_max = max(magX_save)
         magX_min = min(magX_save)
         magY_max = max(magY_save)
