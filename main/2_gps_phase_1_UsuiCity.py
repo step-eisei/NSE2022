@@ -111,6 +111,20 @@ def rotate(theta_relative):
     R_DUTY_A = 10
     R_DUTY_B = 10
     const = 10/765        # 単位角度における回転所要時間
+    if(theta_relative > 0): # 左に旋回
+        # 右モータ前進
+        GPIO.output(PIN_AIN1, GPIO.LOW)
+        GPIO.output(PIN_AIN2, GPIO.HIGH)
+        # 左モータ後進
+        GPIO.output(PIN_BIN1, GPIO.LOW)
+        GPIO.output(PIN_BIN2, GPIO.HIGH)
+    if(theta_relative < 0): # 右に旋回
+        # 右モータ後進
+        GPIO.output(PIN_AIN1, GPIO.HIGH)
+        GPIO.output(PIN_AIN2, GPIO.LOW)
+        # 左モータ前進
+        GPIO.output(PIN_BIN1, GPIO.HIGH)
+        GPIO.output(PIN_BIN2, GPIO.LOW)
     for i in range(0, 101, 5):
         pwm_left.ChangeDutyCycle(R_DUTY_A*i/100)
         pwm_right.ChangeDutyCycle(R_DUTY_B*i/100)
@@ -143,21 +157,6 @@ def rotate(theta_relative):
      print("set up finished")
 """
     
-    if(theta_relative > 0): # 左に旋回
-        # 右モータ前進
-        GPIO.output(PIN_AIN1, GPIO.LOW)
-        GPIO.output(PIN_AIN2, GPIO.HIGH)
-        # 左モータ後進
-        GPIO.output(PIN_BIN1, GPIO.LOW)
-        GPIO.output(PIN_BIN2, GPIO.HIGH)
-    if(theta_relative < 0): # 右に旋回
-        # 右モータ後進
-        GPIO.output(PIN_AIN1, GPIO.HIGH)
-        GPIO.output(PIN_AIN2, GPIO.LOW)
-        # 左モータ前進
-        GPIO.output(PIN_BIN1, GPIO.HIGH)
-        GPIO.output(PIN_BIN2, GPIO.LOW)
-    time.sleep(math.fabs(theta_relative)*const)
     pwm_left.ChangeDutyCycle(0)
     pwm_right.ChangeDutyCycle(0)
     time.sleep(2)
