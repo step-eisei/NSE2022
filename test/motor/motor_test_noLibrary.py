@@ -52,7 +52,7 @@ time.sleep(5)
 print("motorA starts going backward")
 GPIO.output(PIN_AIN1, GPIO.LOW)
 GPIO.output(PIN_AIN2, GPIO.HIGH)
-#time.sleep(1)
+time.sleep(1)
 
 """
 # 右モータ停止？
