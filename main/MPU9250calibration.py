@@ -47,7 +47,7 @@ csv_name = 'mag_record_calib_mebunryo_' + str(jp_time).replace(' ', '_').replace
 # print(csv_name)
 # >> mag_record_2022-07-07_13-28-32_197156
 
-with open('main/9axis_rawdata/' + csv_name,'w',newline='') as f: 
+with open('9axis_rawdata/' + csv_name,'w',newline='') as f: 
     writer = csv.writer(f)
     writer.writerow(["magX", "magY", "magZ", "magX_calibrated", "magY_calibrated", "theta_absolute", "magX_mean", "magY_mean", "theta_absolute_lowPass"])
 f.close()
@@ -97,7 +97,7 @@ try:
         magX_save.append(float(mag['x']))
         magY_save.append(float(mag['y']))
       
-        with open('main/9axis_rawdata/' + csv_name,'a',newline='') as f: 
+        with open('9axis_rawdata/' + csv_name,'a',newline='') as f: 
             writer = csv.writer(f)
             writer.writerow([mag['x'], mag['y'], mag['z'], magX_calibrated, magY_calibrated, theta_absolute, magX_mean, magY_mean, theta_absolute_lowPass])
         f.close()
@@ -110,7 +110,7 @@ except KeyboardInterrupt:
     magX_min = min(magX_save)
     magY_max = max(magY_save)
     magY_min = min(magY_save)
-    with open('main/9axis_rawdata/mag_record_calib_mebunryo_max_min.csv', 'a', newline='') as f:
+    with open('9axis_rawdata/mag_record_calib_mebunryo_max_min.csv', 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['magX_max', 'magX_min', 'magY_max', 'magY_min'])
         writer.writerow([magX_max, magX_min, magY_max, magY_min])
