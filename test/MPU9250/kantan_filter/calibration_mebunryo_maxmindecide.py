@@ -96,13 +96,9 @@ try:
         theta_absolute_lowPass = math.atan2(-magY_mean, -magX_mean)*180/math.pi
         print(theta_absolute_lowPass)
         
-        # 最大値，最小値を抜き出す
+        # dataの抜き出し
         magX_save.append(float(mag['x']))
         magY_save.append(float(mag['y']))
-        magX_max = max(magX_save)
-        magX_min = min(magX_save)
-        magY_max = max(magY_save)
-        magY_min = min(magY_save)
       
         with open('result/' + csv_name,'a',newline='') as f: 
             writer = csv.writer(f)
@@ -110,7 +106,12 @@ try:
         f.close()
          
         time.sleep(0.3)
-    name = 'result/' + str(csv_name)
+    
+    # 最大値，最小値の計算
+    magX_max = max(magX_save)
+    magX_min = min(magX_save)
+    magY_max = max(magY_save)
+    magY_min = min(magY_save)
     with open('result/mag_record_calib_mebunryo_max_min.csv', 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['magX_max', 'magX_min', 'magY_max', 'magY_min'])
