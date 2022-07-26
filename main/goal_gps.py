@@ -46,18 +46,19 @@ for i in range(10):
     while True:
         #ちゃんとしたデータがある程度たまってから出力
         if my_gps.clean_sentences > 20:
-            gps_latitude = my_gps.latitude[0]
-            gps_longitude = my_gps.longitude[0]
-            sum_latitude += gps_latitude
-            sum_longitude += gps_longitude
-            #衛星数を出力
-            print("num =", my_gps.satellites_used)
-            #mode='a'は追記モードでファイルを開く
-            with open('goal_gps.csv',mode='a',newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([gps_latitude,gps_longitude]) 
-            print("data add")
-            break
+            if(gps_latitude != my_gps.latitude[0]):
+                gps_latitude = my_gps.latitude[0]
+                gps_longitude = my_gps.longitude[0]
+                sum_latitude += gps_latitude
+                sum_longitude += gps_longitude
+                #衛星数を出力
+                print("num =", my_gps.satellites_used)
+                #mode='a'は追記モードでファイルを開く
+                with open('goal_gps.csv',mode='a',newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([gps_latitude,gps_longitude]) 
+                print("data add")
+                break
         time.sleep(10.0)
 
 #平均値を算出しgoal.pyに書き込み
