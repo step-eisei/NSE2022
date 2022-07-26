@@ -128,11 +128,11 @@ def rotate(theta_relative):
     for i in range(0, 101, 5):
         pwm_left.ChangeDutyCycle(R_DUTY_A*i/100)
         pwm_right.ChangeDutyCycle(R_DUTY_B*i/100)
-        time.sleep(theta_relative*const/20)
+        time.sleep(math.fabs(theta_relative)*const/20)
     for i in range(0, 101, 5):
         pwm_left.ChangeDutyCycle(R_DUTY_A*(100-i)/100)
         pwm_right.ChangeDutyCycle(R_DUTY_B*(100-i)/100)
-        time.sleep(theta_relative*const/20)
+        time.sleep(math.fabs(theta_relative)*const/20)
     pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
     pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
     time.sleep(2)
