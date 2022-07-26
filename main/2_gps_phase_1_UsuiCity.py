@@ -574,6 +574,8 @@ try:
     GPIO.cleanup()
     print("3m goal")
 except KeyboardInterrupt:
+    pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
+    pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
     pwm_left.stop()
     pwm_right.stop()
     GPIO.cleanup()
