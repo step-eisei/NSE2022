@@ -27,6 +27,13 @@ with open ('9axis_rawdata/mag_record_calib_mebunryo_max_min.csv', 'r' ) as f :
 magXs = [0]*5
 magYs = [0]*5
 
+# ゴール座標を保存したCSVファイルの読み込み
+with open ('goal.csv', 'r') as f :
+    reader = csv.reader(f)
+    line = [row for row in reader]
+    goal_latitude = float(line[ 1 ] [ 0 ])
+    goal_longitude = float(line[ 1 ] [ 1 ])
+
 # threadにする関数.gpsを取得し続ける
 def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
     s = serial.Serial('/dev/ttySOFT0', 4800, timeout=20)
@@ -199,16 +206,17 @@ try:
     gpsthread.start() # スレッドを起動
     print("thread got up")
 
-    # gpsから緯度・経度取得
-    getgps()
-    print("got gps")
+    while True:
+        # gpsから緯度・経度取得
+        getgps()
+        # calc_xyから座標取得
+        x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
+        # magnetから絶対角度取得
+        theta_absolute = magnet()
+        # angleから回転角度取得
+        theta_relative = angle(x_now, y_now, theta_absolute)
+        print(f"x_now = {x_now}, y_now = {y_now}\ntheta_absolute = {theta_absolute}, theta_relative = {theta_relative}")
+        time.sleep(3)
 
-    # calc_xyから座標取得
-    x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
-    print("calced xy¥n")
-    print("x_now, y_now = ", x_now, y_now)
-    # magnetから絶対角度取得
-    theta_absolute = magnet()
-    print("got theta_absolute=", theta_absolute)
-    # angleから回転角度取得
-    theta_relative = angle(x_now, y_now, theta_absolute)
+except KeyboardInterrupt:
+    sys.exit()
