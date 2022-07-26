@@ -349,8 +349,7 @@ while True:#展開検知
             break
     csv_write_f(past_lat,past_long)
     nchrm() #10s
-    #go_ahead() #2s
-    print("go")
+    go_ahead() 
     while True:
         getgps()
         print("get")
@@ -363,8 +362,7 @@ while True:#展開検知
             print("gps1")
             break
     csv_write_f(lat_1,long_1)
-    #go_ahead() #2s
-    print("go")
+    go_ahead() 
     while True:
         getgps()
         print("get")
@@ -377,8 +375,7 @@ while True:#展開検知
             print("gps2")
             break
     csv_write_f(lat_2,long_2)
-    #go_ahead() #2s
-    print("go")
+    go_ahead() 
     while True:
         getgps()
         print("get")
