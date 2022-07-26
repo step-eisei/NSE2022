@@ -289,7 +289,7 @@ try:
 
     print("find!!")
 
-    for i in range(25):
+    for i in range(5):
         data = takepic()
         theta = data[0]
         print(theta)
