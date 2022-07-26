@@ -110,7 +110,7 @@ except KeyboardInterrupt:
     magX_min = min(magX_save)
     magY_max = max(magY_save)
     magY_min = min(magY_save)
-    with open('9axis_rawdata/mag_record_calib_mebunryo_max_min.csv', 'a', newline='') as f:
+    with open('9axis_rawdata/mag_record_calib_mebunryo_max_min.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['magX_max', 'magX_min', 'magY_max', 'magY_min'])
         writer.writerow([magX_max, magX_min, magY_max, magY_min])
