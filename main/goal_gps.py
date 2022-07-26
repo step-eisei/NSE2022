@@ -59,7 +59,6 @@ for i in range(10):
                     writer.writerow([gps_latitude,gps_longitude]) 
                 print("data add")
                 break
-        time.sleep(10.0)
 
 #平均値を算出しgoal.pyに書き込み
 goal_la = sum_latitude / 10
