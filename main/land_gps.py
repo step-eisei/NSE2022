@@ -1,5 +1,3 @@
-#気圧⇒GPS⇒ニクロム⇒前進⇒GPS（⇒ニクロム…）
-
 from xml.dom.expatbuilder import parseString
 from xmlrpc.client import NOT_WELLFORMED_ERROR
 from gpiozero import Motor
@@ -23,38 +21,38 @@ y_goal = 0
 satellites_used = 0
 
 
-def motor_setup():
-    PIN_AIN1 = 24
-    PIN_AIN2 = 23
-    PIN_PWMA = 12
-    PIN_BIN1 = 16
-    PIN_BIN2 = 26
-    PIN_PWMB = 13
-    DUTY_A = 10
-    DUTY_B = 10
-    
-    GPIO.setmode(GPIO.BCM)
 
-    ROT_DUR = 10 # [s]
-    # 左モータ
-    GPIO.setup(PIN_AIN1, GPIO.OUT) 
-    GPIO.setup(PIN_AIN2, GPIO.OUT)
+PIN_AIN1 = 24
+PIN_AIN2 = 23
+PIN_PWMA = 12
+PIN_BIN1 = 16
+PIN_BIN2 = 26
+PIN_PWMB = 13
+DUTY_A = 10
+DUTY_B = 10
 
-    # 左モータPWM
-    GPIO.setup(PIN_PWMA, GPIO.OUT)
-    pwm_left = GPIO.PWM(PIN_PWMA, 300)
-    pwm_left.start(10)
-    pwm_left.ChangeDutyCycle(DUTY_A)
+GPIO.setmode(GPIO.BCM)
 
-    # 右モータ
-    GPIO.setup(PIN_BIN1, GPIO.OUT)
-    GPIO.setup(PIN_BIN2, GPIO.OUT)
+ROT_DUR = 10 # [s]
+# 左モータ
+GPIO.setup(PIN_AIN1, GPIO.OUT) 
+GPIO.setup(PIN_AIN2, GPIO.OUT)
 
-    # 右モータPWM
-    GPIO.setup(PIN_PWMB, GPIO.OUT)
-    pwm_right = GPIO.PWM(PIN_PWMB, 300)
-    pwm_right.start(10)
-    pwm_right.ChangeDutyCycle(DUTY_B)   
+# 左モータPWM
+GPIO.setup(PIN_PWMA, GPIO.OUT)
+pwm_left = GPIO.PWM(PIN_PWMA, 300)
+pwm_left.start(10)
+pwm_left.ChangeDutyCycle(DUTY_A)
+
+# 右モータ
+GPIO.setup(PIN_BIN1, GPIO.OUT)
+GPIO.setup(PIN_BIN2, GPIO.OUT)
+
+# 右モータPWM
+GPIO.setup(PIN_PWMB, GPIO.OUT)
+pwm_right = GPIO.PWM(PIN_PWMB, 300)
+pwm_right.start(10)
+pwm_right.ChangeDutyCycle(DUTY_B)   
     
 def go_ahead():
     #前進
@@ -335,7 +333,7 @@ gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行す�
 gpsthread.setDaemon(True)
 gpsthread.start() 
 
-motor_setup()
+
 
 while True:#展開検知
     while True:
