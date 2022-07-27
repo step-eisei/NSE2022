@@ -137,9 +137,9 @@ csv_write = csv_write_f()
 def hsv_binary(img_hsv,sat_avg,val_avg):
     #画像のチャンネルを分ける
     #画像のチャンネルを分ける img[縦，横，[h,s,v]]　この行程でグレースケールになる
-    im_h= img[:, :, 0] + 0*img[:, :, 1] + 0*img[:, :, 2] # h以外の情報を消去してim_hに格納
-    im_s= 0*img[:, :, 0] + img[:, :, 1] + 0*img[:, :, 2] # s以外の情報を消去してim_sに格納
-    im_v= 0*img[:, :, 0] + 0*img[:, :, 1] + img[:, :, 2] # v以外の情報を消去してim_vに格納
+    im_h= img_hsv[:, :, 0] + 0*img_hsv[:, :, 1] + 0*img_hsv[:, :, 2] # h以外の情報を消去してim_hに格納
+    im_s= 0*img_hsv[:, :, 0] + img_hsv[:, :, 1] + 0*img_hsv[:, :, 2] # s以外の情報を消去してim_sに格納
+    im_v= 0*img_hsv[:, :, 0] + 0*img_hsv[:, :, 1] + img_hsv[:, :, 2] # v以外の情報を消去してim_vに格納
 
 
     # 条件を満たしていれば1, それ以外は0に置換
