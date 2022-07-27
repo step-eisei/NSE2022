@@ -121,7 +121,7 @@ if __name__=="__main__":
     now_time = datetime.datetime.now()
     filename = now_time.strftime('%m%d_%H%M') + '.csv'
     # ファイル，1行目(カラム)の作成
-    with open(gen_raw_foldername/filename, 'a') as f:
+    with open(os.path.join(gen_raw_foldername,filename), 'a') as f:
         writer = csv.writer(f)
         writer.writerow(["acc1","acc2","acc3","gyro1","gyro2","gyro3","mag1","mag2","mag3"])
     f.close()
@@ -140,7 +140,7 @@ if __name__=="__main__":
         print("\n")
         time.sleep(0.1)
 
-        with open(filename, 'a', newline="") as f:
+        with open(os.path.join(gen_raw_foldername,filename), 'a', newline="") as f:
             writer = csv.writer(f)
             writer.writerow([acc[0],acc[1],acc[2],gyro[0],gyro[1],gyro[2],mag[0],mag[1],mag[2]])
         f.close()
