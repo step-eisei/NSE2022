@@ -151,7 +151,7 @@ def hsv_binary(img_hsv,sat_avg,val_avg):
 
     #行列の掛け算ではなく各要素の掛け算をする 上記の条件で一つでも満たしていないものがあれば，0となる．
     #検出された物を白にするために最後に255を掛ける(この時点で2値化)
-    img_th = img_r_th * img_g_th * img_b_th * 255 # 条件を満たした要素は255，それ以外は0
+    img_th = img_h_th * img_s_th * img_v_th * 255 # 条件を満たした要素は255，それ以外は0
 
     img_th = np.uint8(img_th) # np.uint8 unsigned int (0 ～ 255)
 
