@@ -27,7 +27,7 @@ PIN_PWMB = 13
 DUTY_A = 60 # 20~40でICが高温になります．60~70が妥当です
 DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
 
-T_straight = 3
+T_straight = 1
 # --------------------------------------------------------------
 
 # 機体を旋回させる関数
@@ -97,7 +97,7 @@ def go_ahead():
     for i in range(0, DUTY_A + 1, 1):
         pwm_left.ChangeDutyCycle(DUTY_A - i)
         pwm_right.ChangeDutyCycle(DUTY_A - i)
-        time.sleep(0.1)
+        time.sleep(0.05)
     time.sleep(2)
  
 
