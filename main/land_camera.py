@@ -150,7 +150,7 @@ def nchrm(): #ニクロム線加熱
     time.sleep(5)
 
 
-def pressure():
+def get_pressure():
     bus_number  = 1
     i2c_address = 0x76
     bus = SMBus(bus_number)
@@ -282,12 +282,13 @@ def pressure():
             pass
 
 
-def average_pressure(): #投下前に地上での気圧の値を取得，閾値とする
-    sum=0
+def average_pressure():
+    sum=0.0
+    land=0.0
     
-    for i  in range(20):
-        pressure=pressure()
-        sum+=pressure
+    for i in range(20):
+        land=get_pressure()
+        sum+=land
         time.sleep(0.1)
 
     average_pressure=sum/20
@@ -295,27 +296,34 @@ def average_pressure(): #投下前に地上での気圧の値を取得，閾値�
 
 
 land_pressure=average_pressure() #基準となる地表での気圧を取得
+print('land_pressure : {} hPa'.format(land_pressure))
 
 i=0
 while(i<=10): #上昇したかを判断
-    pressure=pressure()
+    pressure=get_pressure()
     time.sleep(0.1)
     
-    if pressure<(land_pressure-7.84011):
+    if pressure<(land_pressure-1.21923): #3階用 
+    #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
         i+=1
-    else:
-        i=0 
-print("In the sky")
+        print("In the sky")
+        print(i)
+    else: #50m地点に上がりきるまでyetを出力
+        i=0
+        print("yet") 
+print("next\n") #10回連続50m以上の値になったら着地判定へ
 
 
 i=0
 while(i<=10): #着地したかを判断
-    pressure=pressure()
+    pressure=get_pressure()
 
     if pressure>(land_pressure-0.05): 
         i=i+1
+        print(i)
     else: 
         i=0
+        print("yet")
     time.sleep(0.1)
 print("On the land")
 
@@ -328,5 +336,9 @@ while True: #赤の割合が一定以下になるまで繰り返す
     prop=data[1] #Rの割合取得
     
 
-    if prop　<　prop_closed:
+    if prop　<　prop_closed: #red_closeは具体的な値入れる
         break
+    else:
+        print("yet")
+        continue
+print("succeed")
