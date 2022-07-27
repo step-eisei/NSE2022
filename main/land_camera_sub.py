@@ -6,10 +6,17 @@ import math
 import numpy as np
 import threading
 import time
+<<<<<<< HEAD
 import timeout_decorator
 from PIL import Image,ImageOps
 import picamera
 
+=======
+import datetime 
+from PIL import Image,ImageOps
+import picamera
+import RPi.GPIO as GPIO
+>>>>>>> land_detect2
 prop_closed=60 # この値よりも，Rの割合が低くなるとカプセルが展開したと判断
 
 image=Image
@@ -51,16 +58,26 @@ def csv_write_f():
 csv_write = csv_write_f()
 
 
+<<<<<<< HEAD
 def rgbbinary(img,val):
     #画像のチャンネルを分ける
     #画像のチャンネルを分ける img[縦，横，[R,G,B]]　この行程でグレースケールになる
     im_R= img[:, :, 0] + 0*img[:, :, 1] + 0*img[:, :, 2] # R以外の情報を消去してim_Rに格納
     im_G= 0*img[:, :, 0] + img[:, :, 1] + 0*img[:, :, 2] # G以外の情報を消去してim_Gに格納
     im_B= 0*img[:, :, 0] + 0*img[:, :, 1] + img[:, :, 2] # B以外の情報を消去してim_Bに格納
+=======
+def hsv_binary(img_hsv,sat_avg,val_avg):
+    #画像のチャンネルを分ける
+    #画像のチャンネルを分ける img[縦，横，[h,s,v]]　この行程でグレースケールになる
+    im_h= img_hsv[:, :, 0] + 0*img_hsv[:, :, 1] + 0*img_hsv[:, :, 2] # h以外の情報を消去してim_hに格納
+    im_s= 0*img_hsv[:, :, 0] + img_hsv[:, :, 1] + 0*img_hsv[:, :, 2] # s以外の情報を消去してim_sに格納
+    im_v= 0*img_hsv[:, :, 0] + 0*img_hsv[:, :, 1] + img_hsv[:, :, 2] # v以外の情報を消去してim_vに格納
+>>>>>>> land_detect2
 
 
     # 条件を満たしていれば1, それ以外は0に置換
     # np.where(条件, Trueの時に置換する数, Falseの時に置換する数)
+<<<<<<< HEAD
     img_r_th = np.where(im_R>val, 1, 0)
     img_g_th = np.where(im_G<val*0.8, 1, 0)
     img_b_th = np.where(im_B<val*0.8, 1, 0)
@@ -68,11 +85,23 @@ def rgbbinary(img,val):
     #行列の掛け算ではなく各要素の掛け算をする 上記の条件で一つでも満たしていないものがあれば，0となる．
     #検出された物を白にするために最後に255を掛ける(この時点で2値化)
     img_th = img_r_th * img_g_th * img_b_th * 255 # 条件を満たした要素は255，それ以外は0
+=======
+    #色相環は360度→0～255に変換
+    #色相環の内、赤色は0度と360度をまたぐ
+    img_h_th = np.where((im_h < 15/360*255) | (im_h > 175/360*255), 1, 0)
+    img_s_th = np.where(im_s > sat_avg*0.9, 1, 0)
+    img_v_th = np.where(im_v > val_avg*0.9, 1, 0)
+
+    #行列の掛け算ではなく各要素の掛け算をする 上記の条件で一つでも満たしていないものがあれば，0となる．
+    #検出された物を白にするために最後に255を掛ける(この時点で2値化)
+    img_th = img_h_th * img_s_th * img_v_th * 255 # 条件を満たした要素は255，それ以外は0
+>>>>>>> land_detect2
 
     img_th = np.uint8(img_th) # np.uint8 unsigned int (0 ～ 255)
 
     return img_th
 
+<<<<<<< HEAD
 def vscan(img):
     # img[:,:,0]　色相(Hue)
     # img[:,:,1]　彩度(Saturation)
@@ -81,6 +110,20 @@ def vscan(img):
 
     val=np.average(im_v) # 画像の明度の平均を求める
     return val
+=======
+def sv_scan(img_hsv):
+    # img[:,:,0]　色相(Hue)
+    # img[:,:,1]　彩度(Saturation)
+    # img[:,:,2]　明度(Value)
+    
+    im_s = 0*img_hsv[:, :, 0] + img_hsv[:, :, 1] + 0*img_hsv[:, :, 2] #彩度以外の情報を消去して、im_sに格納
+    sat_avg = np.average(im_s) #画像の彩度の平均を求める
+    
+    im_v = 0*img_hsv[:, :, 0] + 0*img_hsv[:, :, 1] + img_hsv[:, :, 2]
+    val_avg = np.average(im_v)
+    
+    return sat_avg,val_avg
+>>>>>>> land_detect2
 
 def scantheta(img_th):
 
@@ -94,7 +137,11 @@ def scantheta(img_th):
 
     theta_row=np.argmax(im_thx) # 最大の要素のインデックスを取得
 
+<<<<<<< HEAD
     theta=-(theta_row/width*180-90)
+=======
+    theta=-(theta_row/width*62.2-31.1)
+>>>>>>> land_detect2
 
     return theta
 
@@ -113,12 +160,23 @@ def scanprop(img_th):
 def takepic():
     # 撮影
     global takepic_counter
+<<<<<<< HEAD
     camera.capture("image"+str(takepic_counter)+".jpg")
 
     # 読み込み
     img= image.open ("image"+str(takepic_counter)+".jpg")
     #hsv空間に変換 「色相(Hue)」「彩度(Saturation)」「明度(Value)」
     img_hsv=image.open("image"+str(takepic_counter)+".jpg").convert('HSV')
+=======
+    now_time_camera = datetime.datetime.now()
+    filename_camera = now_time_camera.strftime('%m%d_%H%M_')+str(takepic_counter)
+    camera.capture("image"+filename_camera+".jpg")
+
+    # 読み込み
+    img = image.open ("image"+filename_camera+".jpg")
+    #hsv空間に変換 「色相(Hue)」「彩度(Saturation)」「明度(Value)」
+    img_hsv = image.open("image"+filename_camera+".jpg").convert('HSV')
+>>>>>>> land_detect2
     #それぞれ上下左右反転し，Pillow → Numpyへ変換
     # 上下反転メソッド　flip()
     # 左右反転メソッド　mirror()
@@ -126,9 +184,18 @@ def takepic():
     img_hsv=np.array(imageo.mirror(imageo.flip(img_hsv)))
 
     # 解析
+<<<<<<< HEAD
     val=vscan(img_hsv) # 画像全体の明度(Value)の平均を取得
     img_th=rgbbinary(img,val) #条件を満たす要素を255，それ以外を0とする配列
     (image.fromarray(img_th)).save("scanth"+str(takepic_counter)+".jpg")
+=======
+    sv_avg = sv_scan(img_hsv) # 画像全体の彩度(Saturation),明度(Value)の平均を取得
+    sat_avg = sv_avg[0]
+    val_avg = sv_avg[1]
+    
+    img_th = hsv_binary(img_hsv,sat_avg,val_avg) #条件を満たす要素を255，それ以外を0とする配列
+    (image.fromarray(img_th)).save("scanth"+filename_camera+".jpg")
+>>>>>>> land_detect2
     
     takepic_counter += 1
     theta=scantheta(img_th)
@@ -138,7 +205,10 @@ def takepic():
     csv_write(*data)
 
     return theta,prop
+<<<<<<< HEAD
 
+=======
+>>>>>>> land_detect2
 def nchrm(): #ニクロム線加熱
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(17,  GPIO.OUT)
@@ -276,7 +346,11 @@ def get_pressure():
     if __name__ == '__main__':
         try:
             x=readData() #気圧の値読み取り
+<<<<<<< HEAD
             print(x)
+=======
+            
+>>>>>>> land_detect2
             return x #pressure関数が呼び出されたら渡す
         except KeyboardInterrupt:
             pass
@@ -295,6 +369,7 @@ def average_pressure():
     return average_pressure
 
 
+<<<<<<< HEAD
 # land_pressure=average_pressure() #基準となる地表での気圧を取得
 # print('land_pressure : {} hPa'.format(land_pressure))
 
@@ -326,20 +401,69 @@ def average_pressure():
 #         print("yet")
 #     time.sleep(0.1)
 # print("On the land")
+=======
+land_pressure=average_pressure() #基準となる地表での気圧を取得
+print('land_pressure : {} hPa'.format(land_pressure))
+
+i=0
+while(i<=10): #上昇したかを判断
+    pressure=get_pressure()
+    time.sleep(0.1)
+    
+    if pressure<(land_pressure-1.21923): #3階用 
+    #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
+        i+=1
+        print("In the sky")
+        print(i)
+    else: #50m地点に上がりきるまでyetを出力
+        i=0
+        print("yet") 
+print("next\n") #10回連続50m以上の値になったら着地判定へ
+
+
+i=0
+while(i<=10): #着地したかを判断
+    pressure=get_pressure()
+
+    if pressure>(land_pressure-0.05): 
+        i=i+1
+        print(i)
+    else: 
+        i=0
+        print("yet")
+    time.sleep(0.1)
+print("On the land")
+>>>>>>> land_detect2
 
 
 #展開検知
 while True: #赤の割合が一定以下になるまで繰り返す
+<<<<<<< HEAD
     nchrm()
+=======
+    #nchrm()
+>>>>>>> land_detect2
     print("nhrm")
 
     data=takepic()
     prop=data[1] #Rの割合取得
     
     
+<<<<<<< HEAD
     if prop　<　80: #red_closeは具体的な値入れる
         break
     else:
         print("yet")
         continue
+=======
+    if prop<60: 
+       print(prop)
+       break 
+
+    else:
+        print("yet")
+        print(prop) 
+        continue
+   
+>>>>>>> land_detect2
 print("succeed")

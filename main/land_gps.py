@@ -1,5 +1,3 @@
-#気圧⇒GPS⇒ニクロム⇒前進⇒GPS（⇒ニクロム…）
-
 from xml.dom.expatbuilder import parseString
 from xmlrpc.client import NOT_WELLFORMED_ERROR
 from gpiozero import Motor
@@ -8,7 +6,6 @@ import RPi.GPIO as GPIO
 from smbus import SMBus
 import math
 from gpiozero import Motor
-import numpy as np
 import serial
 import micropyGPS
 import csv
@@ -24,10 +21,57 @@ y_goal = 0
 satellites_used = 0
 
 
+
+PIN_AIN1 = 24
+PIN_AIN2 = 23
+PIN_PWMA = 12
+PIN_BIN1 = 16
+PIN_BIN2 = 26
+PIN_PWMB = 13
+DUTY_A = 10
+DUTY_B = 10
+
+GPIO.setmode(GPIO.BCM)
+
+ROT_DUR = 10 # [s]
+# 左モータ
+GPIO.setup(PIN_AIN1, GPIO.OUT) 
+GPIO.setup(PIN_AIN2, GPIO.OUT)
+
+# 左モータPWM
+GPIO.setup(PIN_PWMA, GPIO.OUT)
+pwm_left = GPIO.PWM(PIN_PWMA, 300)
+pwm_left.start(10)
+pwm_left.ChangeDutyCycle(DUTY_A)
+
+# 右モータ
+GPIO.setup(PIN_BIN1, GPIO.OUT)
+GPIO.setup(PIN_BIN2, GPIO.OUT)
+
+# 右モータPWM
+GPIO.setup(PIN_PWMB, GPIO.OUT)
+pwm_right = GPIO.PWM(PIN_PWMB, 300)
+pwm_right.start(10)
+pwm_right.ChangeDutyCycle(DUTY_B)   
+    
 def go_ahead():
-    motor = Motor(17, 18)
-    motor.forward(2)
-    motor.stop()
+    #前進
+    GPIO.output(PIN_AIN1, GPIO.LOW)
+    GPIO.output(PIN_AIN2, GPIO.HIGH)
+    GPIO.output(PIN_BIN1, GPIO.HIGH)
+    GPIO.output(PIN_BIN2, GPIO.LOW)
+    time.sleep(3)
+
+    #stop
+    GPIO.output(PIN_AIN1, GPIO.LOW)
+    GPIO.output(PIN_AIN2, GPIO.LOW)
+    GPIO.output(PIN_BIN1, GPIO.LOW)
+    GPIO.output(PIN_BIN2, GPIO.LOW)
+    time.sleep(3)
+    
+    pwm_left.stop()
+    pwm_right.stop()
+    GPIO.cleanup()
 
 def nchrm(): #ニクロム線加熱
     GPIO.setmode(GPIO.BCM)
@@ -67,7 +111,7 @@ def getgps():
         time.sleep(3)
     return gps_latitude,gps_longitude
 
-def main():
+def get_pressure():
     bus_number  = 1
     i2c_address = 0x76
     bus = SMBus(bus_number)
@@ -157,7 +201,7 @@ def main():
 
         pressure = pressure/100
         return pressure
-        #print('pressure : {} hPa'.format(pressure/100))
+        print('pressure : {} hPa'.format(pressure))
         
 
         # print "pressure : %7.2f hPa" % (pressure/100)
@@ -190,6 +234,7 @@ def main():
     get_calib_param()
 
 
+
     if __name__ == '__main__':
         try:
             x=readData() #気圧の値読み取り
@@ -199,49 +244,78 @@ def main():
 
 #　↑ここまでが気圧を測定するプログラム
 
-def start():
-    sum=0
+def average_pressure():
+    sum=0.0
+    land=0.0
     
-    for i  in range(20):
-        pressure=main()
-        sum+=pressure
+    for i in range(20):
+        land=get_pressure()
+        sum+=land
         time.sleep(0.1)
 
-    pressure_start=sum/20
-    return pressure_start
+    average_pressure=sum/20
+    return average_pressure
+
+def csv_write_f(x,y):
+   
+
+    lat=x
+    long=y
+    flag = True
+
+    def write():
+
+        import datetime
+        import csv
+
+        nonlocal flag
+
+        if flag:
+            now_time = datetime.datetime.now()
+
+            with open('gps.csv','w',newline='') as f: 
+                writer = csv.writer(f)
+                writer.writerow(["GPS"])
+            flag = False
+
+
+        with open('gps.csv','a') as f: 
+                writer = csv.writer(f)
+                writer.writerow([lat,long])
+
+    return write
+
 
 #ここまでが関数の定義
 
 
 
-high=start() #地表での気圧を打ち上げ前に取得
-print('high : {} hPa'.format(high))
+land_pressure=average_pressure() #地表での気圧を打ち上げ前に取得
+print('land_pressure : {} hPa'.format(land_pressure))
 
 
-print("閾値: "+str(high-7.84011))
+print("閾値: "+str(land_pressure-1.2193))
 i=0
 while(i<=10):
-    pressure=main()
+    pressure=get_pressure()
     time.sleep(0.1)
 
-
-    if pressure<(high-7.84011): #５０ｍ以上になったら上がったと判断
+    if pressure<(land_pressure-1.21923): #3階用 
+    #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
         i+=1
-        print("flying\n")
-        print('pressure1 : {} hPa'.format(pressure))
+        print("In the sky")
         print(i)
-    else: #５０ｍ地点に上がりきるまでyetを出力
+    else: #50m地点に上がりきるまでyetを出力
         i=0
         print("yet") 
-print("next\n") #１０回連続５０ｍ以上の値になったら着地判定へ
+print("next\n") #10回連続50m以上の値になったら着地判定へ
 
 i=0
 while(i<=10):
-    pressure=main()
+    pressure=get_pressure()
 
-    if pressure>high-0.05: #地面の値に近いとき着地
+    if pressure>land_pressure-0.05: #地面の値に近いとき着地
         i=i+1
-        print('pressure2 : {} hPa'.format(pressure))
         print(i)
     else: #地面での値より小さいときまだ飛んでいると判断
         i=0
@@ -249,7 +323,7 @@ while(i<=10):
 
     time.sleep(0.1)
 
-print("land")
+print("On the land")
 #着地検知
 
 #gpsの設定
@@ -259,11 +333,24 @@ gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行す�
 gpsthread.setDaemon(True)
 gpsthread.start() 
 
+
+
 while True:#展開検知
-    getgps() #gpsの値取得
-    past_lat=gps_latitude
-    past_long=gps_longitude
+    while True:
+        print("start")
+        getgps()
+        print("get")
+        past_lat=gps_latitude
+        past_long=gps_longitude
+        if past_lat==0 or past_long==0:
+            print("no gps")
+            continue
+        else:
+            print("gps0")
+            break
+    csv_write_f(past_lat,past_long)
     nchrm() #10s
+<<<<<<< HEAD:main/投下着地フェーズ(GPS).py
     go_ahead() #2s
     getgps()
     lat_1=gps_latitude
@@ -277,20 +364,71 @@ while True:#展開検知
     long_range=0.000027
 
     if past_lat-lat_range<lat_1<past_lat+lat_range and past_long-long_range<long_1<past_long+long_range: 
+=======
+    go_ahead() 
+    while True:
+        getgps()
+        print("get")
+        lat_1=gps_latitude
+        long_1=gps_longitude
+        if lat_1==0 or long_1==0:
+            print("no gps")
+            continue
+        else:
+            print("gps1")
+            break
+    csv_write_f(lat_1,long_1)
+    go_ahead() 
+    while True:
+        getgps()
+        print("get")
+        lat_2=gps_latitude
+        long_2=gps_longitude
+        if lat_2==0 or long_2==0:
+            print("no gps")
+            continue
+        else:
+            print("gps2")
+            break
+    csv_write_f(lat_2,long_2)
+    go_ahead() 
+    while True:
+        getgps()
+        print("get")
+        lat_3=gps_latitude
+        long_3=gps_longitude
+        if lat_3==0 or long_3==0:
+            print("no gps")
+            continue
+        else:
+            print("gps3")
+            break
+    csv_write_f(lat_3,long_3)
+
+    lat_range=0.00006 #誤差，若干大きめにとってる
+    long_range=0.00003
+
+    if past_lat - lat_range < lat_1< past_lat + lat_range and past_long - long_range < long_1< past_long + long_range: 
         print("stopping")
-        print("past:"+past_lat+"/"+past_long+"\n")
-        print("now:"+lat_1+"/"+long_1)
+        print("past:"+str(past_lat)+"/"+str(past_long))
+        print("now1:"+str(lat_1)+"/"+str(long_1))
         continue
-    elif past_lat-lat_range<lat_2<past_lat+lat_range and past_long-long_range<long_2<past_long+long_range:
+    elif past_lat - lat_range < lat_2 < past_lat + lat_range and past_long - long_range < long_2 <past_long + long_range:
+>>>>>>> land_detect2:main/land_gps.py
         print("stopping")
-        print("past:"+past_lat+"/"+past_long+"\n")
-        print("now:"+lat_2+"/"+long_2)
+        print("past:"+str(past_lat)+"/"+str(past_long))
+        print("now2:"+str(lat_2)+"/"+str(long_2))
+        continue
+    elif past_lat - lat_range < lat_3 < past_lat + lat_range and past_long - long_range < long_3 < past_long + long_range:
+        print("stopping")
+        print("past:"+str(past_lat)+"/"+str(past_long))
+        print("now3:"+str(lat_3)+"/"+str(long_3))
         continue
            
     else: 
         print("moving")
-        print("past:"+past_lat+"/"+past_long+"\n")
-        print("now:"+lat_2+"/"+long_2+"\n")
+        print("past:"+str(past_lat)+"/"+str(past_long))
+        print("now:"+str(lat_2)+"/"+str(long_2))
         break
 
 print("open!")
