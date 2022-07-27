@@ -267,7 +267,7 @@ try:
         print(prop)
         if prop > borderprop:
             break
-        rotate(50)
+        rotate(30)
 
     print("find!!")
 
