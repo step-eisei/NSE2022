@@ -6,7 +6,7 @@ import math
 import numpy as np
 import threading
 import time
-import timeout_decorator
+import datetime
 from PIL import Image,ImageOps
 import picamera
 
@@ -286,7 +286,6 @@ def get_pressure():
     if __name__ == '__main__':
         try:
             x=readData() #気圧の値読み取り
-            print(x)
             return x #pressure関数が呼び出されたら渡す
         except KeyboardInterrupt:
             pass
@@ -340,16 +339,18 @@ print("On the land")
 
 #展開検知
 while True: #赤の割合が一定以下になるまで繰り返す
-    nchrm()
+    #nchrm() #試験用にニクロム線飛ばしてる
     print("nhrm")
 
     data=takepic()
     prop=data[1] #Rの割合取得
     
     
-    if prop　<　80: #red_closeは具体的な値入れる
+    if prop<60: #red_closeは具体的な値入れる
+        print(prop)
         break
     else:
         print("yet")
+        print(prop)
         continue
 print("succeed")
