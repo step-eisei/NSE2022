@@ -145,5 +145,5 @@ if __name__=="__main__":
             writer.writerow([acc[0],acc[1],acc[2],gyro[0],gyro[1],gyro[2],mag[0],mag[1],mag[2]])
         f.close()
         
-        if i==600:
+        if i==1500:
             loop=False
