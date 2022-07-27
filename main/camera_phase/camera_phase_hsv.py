@@ -10,8 +10,8 @@ imageo=ImageOps
 import RPi.GPIO as GPIO
 camera=picamera.PiCamera()
 
-takepic_counter=1
-borderprop = 0.5
+takepic_counter = 1
+borderprop = 10
 theta = 0
 prop = 0
 
