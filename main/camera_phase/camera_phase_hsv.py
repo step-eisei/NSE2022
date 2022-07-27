@@ -11,7 +11,7 @@ import RPi.GPIO as GPIO
 camera=picamera.PiCamera()
 
 takepic_counter = 1
-borderprop = 10
+borderprop = 3
 theta = 0
 prop = 0
 
@@ -27,7 +27,7 @@ PIN_PWMB = 13
 DUTY_A = 60 # 20~40でICが高温になります．60~70が妥当です
 DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
 
-T_straight = 1
+T_straight = 0
 # --------------------------------------------------------------
 
 # 機体を旋回させる関数
@@ -259,6 +259,10 @@ pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
 # sleep
 time.sleep(2)
 print("set up finished")
+
+DUTY_A = 30
+DUTY_B = 30
+
 
 try:
     while True:
