@@ -295,48 +295,49 @@ def average_pressure():
     return average_pressure
 
 
-land_pressure=average_pressure() #基準となる地表での気圧を取得
-print('land_pressure : {} hPa'.format(land_pressure))
+# land_pressure=average_pressure() #基準となる地表での気圧を取得
+# print('land_pressure : {} hPa'.format(land_pressure))
 
-i=0
-while(i<=10): #上昇したかを判断
-    pressure=get_pressure()
-    time.sleep(0.1)
+# i=0
+# while(i<=10): #上昇したかを判断
+#     pressure=get_pressure()
+#     time.sleep(0.1)
     
-    if pressure<(land_pressure-1.21923): #3階用 
-    #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
-        i+=1
-        print("In the sky")
-        print(i)
-    else: #50m地点に上がりきるまでyetを出力
-        i=0
-        print("yet") 
-print("next\n") #10回連続50m以上の値になったら着地判定へ
+#     if pressure<(land_pressure-1.21923): #3階用 
+#     #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
+#         i+=1
+#         print("In the sky")
+#         print(i)
+#     else: #50m地点に上がりきるまでyetを出力
+#         i=0
+#         print("yet") 
+# print("next\n") #10回連続50m以上の値になったら着地判定へ
 
 
-i=0
-while(i<=10): #着地したかを判断
-    pressure=get_pressure()
+# i=0
+# while(i<=10): #着地したかを判断
+#     pressure=get_pressure()
 
-    if pressure>(land_pressure-0.05): 
-        i=i+1
-        print(i)
-    else: 
-        i=0
-        print("yet")
-    time.sleep(0.1)
-print("On the land")
+#     if pressure>(land_pressure-0.05): 
+#         i=i+1
+#         print(i)
+#     else: 
+#         i=0
+#         print("yet")
+#     time.sleep(0.1)
+# print("On the land")
 
 
 #展開検知
 while True: #赤の割合が一定以下になるまで繰り返す
     nchrm()
+    print("nhrm")
 
     data=takepic()
     prop=data[1] #Rの割合取得
     
-
-    if prop　<　prop_closed: #red_closeは具体的な値入れる
+    
+    if prop　<　80: #red_closeは具体的な値入れる
         break
     else:
         print("yet")
