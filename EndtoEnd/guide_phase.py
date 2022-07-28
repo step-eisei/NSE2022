@@ -823,9 +823,9 @@ print("On the land")
 
 
 #展開検知
-for j in range(4): #赤の割合が一定以下になるまで繰り返す
+for j in range(5): #赤の割合が一定以下になるまで繰り返す
     nchrm()
-    print("nchrm")
+    print("nchrm "+str(j))
 
     data=takepic()
     prop=data[1] #Rの割合取得
