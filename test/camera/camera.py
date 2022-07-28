@@ -127,9 +127,9 @@ def takepic2():
 
 
 
-#data=takepic()
-#theta=data[0]
-#dis=data[1]
+data=takepic1()
+theta=data[0]
+dis=data[1]
    
-#print("theta="+str(theta)+", dis="+str(dis))
+print("theta="+str(theta)+", dis="+str(dis))
    
