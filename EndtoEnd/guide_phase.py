@@ -699,7 +699,8 @@ try:
         # 旋回，直進
         while True:
             # 10°固定
-            rotate(10)
+            if(theta_relative > 0): rotate(10)
+            if(theta_relative < 0): rotate(-10)
             print("10 deg rotated")
             """
             # 必要角度に応じて回転角を算出
@@ -707,7 +708,7 @@ try:
             print(f"{theta_relative/1.5} deg rotated")
             """
             # 旋回後に角度のフィードバック
-            time.sleep(2)
+            time.sleep(3)
             theta_absolute = magnet()
             theta_relative = angle(x_now, y_now, theta_absolute)
             print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
