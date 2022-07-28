@@ -16,6 +16,7 @@ import FaBo9Axis_MPU9250
 import sys
 import datetime
 import re
+import os
 
 from PIL import Image,ImageOps
 import picamera
@@ -26,7 +27,10 @@ import RPi.GPIO as GPIO
 camera=picamera.PiCamera()
 
 mpu9250 = FaBo9Axis_MPU9250.MPU9250()
-
+image_folder="image_jpg_folder"
+scanth_folder="scanth_jpg_folder"
+os.makedirs(image_folder, exist_ok=True)
+os.makedirs(scanth_folder, exist_ok=True)
 # ゴール座標を保存したCSVファイルの読み込み
 with open ('goal.csv', 'r') as f :
     reader = csv.reader(f)
@@ -577,7 +581,7 @@ def takepic():
     global takepic_counter
     now_time_camera = datetime.datetime.now()
     filename_camera = now_time_camera.strftime('%m%d_%H%M_')+str(takepic_counter)
-    camera.capture("image"+filename_camera+".jpg")
+    camera.capture(os.path.join(image_folder,"image"+filename_camera+".jpg"))
 
     # 読み込み
     img = image.open ("image"+filename_camera+".jpg")
@@ -595,7 +599,7 @@ def takepic():
     val_avg = sv_avg[1]
     
     img_th = hsv_binary(img_hsv,sat_avg,val_avg) #条件を満たす要素を255，それ以外を0とする配列
-    (image.fromarray(img_th)).save("scanth"+filename_camera+".jpg")
+    (image.fromarray(img_th)).save(os.path.join(scanth_folder,"scanth"+filename_camera+".jpg"))
     
     takepic_counter += 1
     theta=scantheta(img_th)
