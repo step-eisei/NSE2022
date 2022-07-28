@@ -37,29 +37,25 @@ time.sleep(2)
 
 # ----------------------------------------
 # 右モータ後進
-"""
 print("motorA starts going forward")
 GPIO.output(PIN_AIN1, GPIO.HIGH)
 GPIO.output(PIN_AIN2, GPIO.LOW)
-time.sleep(5)
-"""
+time.sleep(2)
 # 右モータブレーキ？
-# GPIO.output(PIN_AIN1, GPIO.HIGH)
-# GPIO.output(PIN_AIN2, GPIO.HIGH)
-# time.sleep(1)
+GPIO.output(PIN_AIN1, GPIO.HIGH)
+GPIO.output(PIN_AIN2, GPIO.HIGH)
+time.sleep(1)
 
 # 右モータ前進
 print("motorA starts going backward")
 GPIO.output(PIN_AIN1, GPIO.LOW)
 GPIO.output(PIN_AIN2, GPIO.HIGH)
-time.sleep(1)
+time.sleep(2)
 
-"""
 # 右モータ停止？
 GPIO.output(PIN_AIN1, GPIO.LOW)
 GPIO.output(PIN_AIN2, GPIO.LOW)
 time.sleep(3)
-"""
 #----------------------------------------
 # 左モータ前進
 print("motorB starts going forward")
@@ -68,23 +64,21 @@ GPIO.output(PIN_BIN2, GPIO.LOW)
 time.sleep(1)
 
 # 左モータブレーキ？
-# GPIO.output(PIN_BIN1, GPIO.HIGH)
-# GPIO.output(PIN_BIN2, GPIO.HIGH)
-# time.sleep(1)
+GPIO.output(PIN_BIN1, GPIO.HIGH)
+GPIO.output(PIN_BIN2, GPIO.HIGH)
+time.sleep(1)
 
-"""
 # 左モータ後進
 print("motorB starts going backward")
 GPIO.output(PIN_BIN1, GPIO.LOW)
 GPIO.output(PIN_BIN2, GPIO.HIGH)
-time.sleep(5)
-"""
-"""
+time.sleep(2)
+
 # 左モータ停止？
 GPIO.output(PIN_BIN1, GPIO.LOW)
 GPIO.output(PIN_BIN2, GPIO.LOW)
 time.sleep(3)
-"""
+
 #----------------------------------------
 pwm_left.stop()
 pwm_right.stop()
