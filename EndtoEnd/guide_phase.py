@@ -844,6 +844,7 @@ GPIO.cleanup()
 # ---ここまで着地・展開検知---
 
 # ---ここからGPSフェーズ---
+print("enter GPS phase")
 # motorをセットアップする
 INITIAL_DUTY_A = 0
 INITIAL_DUTY_B = 0
