@@ -84,7 +84,7 @@ for i in range(10):
 goal_la = sum_latitude / 10
 goal_lo = sum_longitude / 10
 
-with open('goal.csv',mode='a',newline='') as f:
+with open('goal.csv',mode='w',newline='') as f:
     writer = csv.writer(f)
     writer.writerow(["goal_latitude", "goal_longitude"])
 
