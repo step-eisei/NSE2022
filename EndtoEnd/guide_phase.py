@@ -17,6 +17,14 @@ import sys
 import datetime
 import re
 
+from PIL import Image,ImageOps
+import picamera
+
+image=Image
+imageo=ImageOps
+import RPi.GPIO as GPIO
+camera=picamera.PiCamera()
+
 mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 
 # ゴール座標を保存したCSVファイルの読み込み
@@ -52,6 +60,12 @@ y_past = 0
 x_goal = 0
 y_goal = 0
 satellites_used = 0
+
+takepic_counter = 1
+borderprop = 3
+theta_relative = 0
+prop = 0
+
 
 # 以下，キャリブレーションにより計算した最大値と最小値
 with open ('9axis_rawdata/mag_record_calib_mebunryo_max_min.csv', 'r' ) as f :
@@ -687,39 +701,35 @@ try:
         print("got theta_absolute=", theta_absolute)
         # angleから回転角度取得
         theta_relative = angle(x_now, y_now, theta_absolute)
-        print("got theta_relative=", theta_relative)
-       
-        pwm_left.stop()
-        pwm_right.stop()
-        GPIO.cleanup()
-        print("3m goal")
+        print("got theta_relative=", theta_relative)     
+    pwm_left.stop()
+    pwm_right.stop()
+    GPIO.cleanup()
+    print("3m goal")
         
-        DUTY_A = 30
-        DUTY_B = 30
-        
-        # 赤コーン探索フェーズ
-        while True:
-            data = takepic()
-            prop = data[1]
-            print(prop)
-            if prop > borderprop:
-                break
-            rotate(20)
-        
-        print("find!!")
-        
-        # 赤コーン接近フェーズ 
-        for i in range(5):
-            data = takepic()
-            theta = data[0]
-            print(theta)
-            rotate(theta)
-            go_ahead()
-        
-        pwm_left.stop()
-        pwm_right.stop()
-        GPIO.cleanup()
-        print("goal!")
+    # 赤コーン探索フェーズ
+    while True:
+        data = takepic()
+        prop = data[1]
+        print(f"prop={prop}")
+        if prop > borderprop:
+            break
+        rotate(20)
+    print("find!!")
+
+    # 赤コーン接近フェーズ 
+    DUTY_A = 31
+    DUTY_B = 30   
+    for i in range(5):
+        data = takepic()
+        theta = data[0]
+        print(f"theta={theta}")
+        rotate(theta_relative)
+        go_ahead()
+    pwm_left.stop()
+    pwm_right.stop()
+    GPIO.cleanup()
+    print("goal!")
         
 except KeyboardInterrupt:
     pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
