@@ -684,7 +684,7 @@ try:
         print("went ahead")
 #         stack = False
         # 履歴の保存
-        record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, stack)
+        record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, 1)
         print("recorded")
         # 過去データの一時保存(移動検知のため)
         x_past = x_now
