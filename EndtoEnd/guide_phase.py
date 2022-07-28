@@ -734,9 +734,7 @@ try:
         # angleから回転角度取得
         theta_relative = angle(x_now, y_now, theta_absolute)
         print("got theta_relative=", theta_relative)     
-    pwm_left.stop()
-    pwm_right.stop()
-    GPIO.cleanup()
+
     print("3m goal")
         
     # 赤コーン探索フェーズ
