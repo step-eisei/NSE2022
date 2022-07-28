@@ -131,7 +131,7 @@ def subThread():
 pressure = 1.0
 gps_latitude = 2.0 
 gps_longitude = 3.0
-theta = 4.0
+theta_relative = 4.0
 x_now = 5.0
 y_now = 6.0
 distance = 6.0
