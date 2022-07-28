@@ -12,8 +12,8 @@ camera=picamera.PiCamera()
 
 takepic_counter = 1
 borderprop = 3
-theta = 0
-prop = 0
+theta_relative = 0
+prop_past = 0
 
 # -------------------------------------------------------------
 # モータのピン割り当て(GPIO 〇〇)
@@ -260,28 +260,45 @@ pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
 time.sleep(2)
 print("set up finished")
 
-DUTY_A = 30
+DUTY_A = 31
 DUTY_B = 30
 
 
 try:
     while True:
         data = takepic()
-        prop = data[1]
-        print(prop)
-        if prop > borderprop:
+        prop_now = data[1]
+        print(f"prop={prop_now}")
+        if prop_now > borderprop:
             break
         rotate(30)
 
     print("find!!")
 
     for i in range(5):
+        flag = True
         data = takepic()
-        theta = data[0]
-        print(theta)
-        rotate(theta)
+        prop_now = data[1]
+        theta_relative = data[0]
+        
+        if prop_now > 60:
+            break
+            
+        if prop_now - prop_past < 0:
+            break
+        
+        print(f"theta={theta_relative},prop ={prop_now}")
+        rotate(theta_relative)
         go_ahead()
-
+        
+        if flag:
+            if prop_now > 10:
+                DUTY_A = 21
+                DUTY_B = 20
+                flag = False
+            
+    print("goal!!")
+    
 except KeyboardInterrupt:
     pwm_left.stop()
     pwm_right.stop()
