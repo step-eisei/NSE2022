@@ -134,7 +134,9 @@ gps_longitude = 3.0
 theta = 4.0
 x_now = 5.0
 y_now = 6.0
-prop = 7.0
+distance = 6.0
+prop = 8.0
+stack = False
 
 
 write_data = ("land_detect",pressure) 
@@ -148,7 +150,7 @@ th_subthread.start()
 time.sleep(7)
 write_data = ("open_detect",prop)
 time.sleep(7)
-write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
+write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
 time.sleep(7)
 write_data = ("guide_phase2",theta,prop)
 time.sleep(7)
