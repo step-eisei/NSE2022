@@ -84,7 +84,7 @@ def enddecision(img_th):
 
 def takepic1():
     # 撮影
-    # camera.capture('image1.jpg')
+    camera.capture('image1.jpg')
 
     # 読み込み
     img= image.open ('image1.jpg')
@@ -106,7 +106,7 @@ def takepic1():
 
 def takepic2():
     # 撮影
-    # camera.capture('image1.jpg')
+    camera.capture('image1.jpg')
 
     # 読み込み
     img= image.open ('image1.jpg')
