@@ -122,8 +122,8 @@ def subThread():
 
     while True:
 
-        csv_write(*read_data)
-        send_data(*read_data)
+        csv_write(*write_data)
+        send_data(*write_data)
 
         time.sleep(1)
 
