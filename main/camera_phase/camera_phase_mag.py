@@ -45,35 +45,6 @@ borderprop = 3
 theta_relative = 0
 prop = 0
 
-
-# 以下，キャリブレーションにより計算した最大値と最小値
-with open ('mag.csv', 'r' ) as f :
-    reader = csv.reader(f)
-    line = [row for row in reader]
-    magX_max = float(line[1][0])
-    magX_min = float(line[1][1])
-    magY_max = float(line[1][2])
-    magY_min = float(line[1][3])
-
-magXs = [0]*5
-magYs = [0]*5
-
-# threadにする関数.gpsを取得し続ける
-def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
-    s = serial.Serial('/dev/ttySOFT0', 4800, timeout=20)
-    s.readline() # 最初の1行は中途半端なデーターが読めることがあるので、捨てる
-    print("read gps")
-    while True:
-        try:
-            sentence = s.readline().decode('utf-8') # GPSデーターを読み、文字列に変換する
-            if sentence[0] != '$': # 先頭が'$'でなければ捨てる
-                continue
-            for x in sentence: # 読んだ文字列を解析してGPSオブジェクトにデーターを追加、更新する
-                gps.update(x)
-        except:
-            print("GPS error, but ignored")
-
-
     
 # 機体を旋回させる関数
 def rotate(theta_relative):
@@ -253,7 +224,6 @@ def go_back():
     
 # 角度取得関数
 def magnet():
-
     mag = mpu9250.readMagnet()
     # print(" mx = " , ( mag['x']   ), end='')
     # print(" my = " , ( mag['y']   ), end='')
