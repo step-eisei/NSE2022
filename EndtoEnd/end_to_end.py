@@ -86,9 +86,6 @@ with open ('mag.csv', 'r' ) as f :
     magY_max = float(line[1][2])
     magY_min = float(line[1][3])
 
-magXs = [0]*5
-magYs = [0]*5
-
 def nchrm(): #ニクロム線加熱
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(22,  GPIO.OUT)
