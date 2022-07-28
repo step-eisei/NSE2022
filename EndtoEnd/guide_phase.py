@@ -824,7 +824,7 @@ print("On the land")
 
 #展開検知
 for j in range(4): #赤の割合が一定以下になるまで繰り返す
-    #nchrm()
+    nchrm()
     print("nchrm")
 
     data=takepic()
