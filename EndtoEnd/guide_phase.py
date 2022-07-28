@@ -60,6 +60,7 @@ y_past = 0
 x_goal = 0
 y_goal = 0
 satellites_used = 0
+stack = False
 
 takepic_counter = 1
 borderprop = 3
@@ -591,7 +592,7 @@ print("main started")
 # 制御履歴CSVファイルの作成
 with open('phase1_record.csv','w',newline='') as f: 
     writer = csv.writer(f)
-    writer.writerow(["theta","gps_latitude","gps_longitude","x_now","y_now","distance","stacking"])
+    writer.writerow(["theta","gps_latitude","gps_longitude","x_now","y_now","distance","stack"])
 f.close()
 print("csv created")
 
@@ -653,14 +654,14 @@ try:
             # スタック処理
             stack()
             print("stack")
-            i = 0
+            stack = True
         else:
             # 旋回，直進
             rotate(theta_relative)
             print("rotated")
             go_ahead()
             print("went ahead")
-            i = 1
+            stack = False
         """
         # stack無しバージョン
         # 旋回，直進
@@ -681,9 +682,9 @@ try:
             if(theta_relative > -10 and theta_relative < 10): break
         go_ahead()
         print("went ahead")
-        i = 1
+#         stack = False
         # 履歴の保存
-        record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
+        record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, stack)
         print("recorded")
         # 過去データの一時保存(移動検知のため)
         x_past = x_now
@@ -720,7 +721,7 @@ try:
     # 赤コーン接近フェーズ 
     DUTY_A = 31
     DUTY_B = 30   
-    for i in range(5):
+    for i in range(4):
         data = takepic()
         theta = data[0]
         print(f"theta={theta}")
