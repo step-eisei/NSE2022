@@ -77,9 +77,6 @@ with open ('mag.csv', 'r' ) as f :
     magY_max = float(line[1][2])
     magY_min = float(line[1][3])
 
-magXs = [0]*5
-magYs = [0]*5
-
 # threadにする関数.gpsを取得し続ける
 def rungps(): # GPSモジュールを読み、GPSオブジェクトを更新する
     s = serial.Serial('/dev/ttySOFT0', 4800, timeout=20)
@@ -446,38 +443,33 @@ def record(theta,gps_latitude,gps_longitude,x_now,y_now,i):
     
 # 角度取得関数
 def magnet():
+    magXs=[]
+    magYs=[]
+    for i in range(5)
+        mag = mpu9250.readMagnet()
+        # print(" mx = " , ( mag['x']   ), end='')
+        # print(" my = " , ( mag['y']   ), end='')
+        # print(" mz = " , ( mag['z'] ))
+        # print()
 
-    mag = mpu9250.readMagnet()
-    # print(" mx = " , ( mag['x']   ), end='')
-    # print(" my = " , ( mag['y']   ), end='')
-    # print(" mz = " , ( mag['z'] ))
-    # print()
+        # キャリブレーション
+        magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
+        magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
+        
+        #リスト追加
+        magXs.append(magX_calibrated)
+        magYs.append(magY_calibrated)
+        
+        # ローパスフィルタ
+        magX_mean = sum(magXs)/len(magXs)
+        magY_mean = sum(magYs)/len(magYs)
 
-    # キャリブレーション
-    magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
-    magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
-
-    # ローパスフィルタ
-    magXs[0] = magXs[1]
-    magXs[1] = magXs[2]
-    magXs[2] = magXs[3]
-    magXs[3] = magXs[4]
-    magXs[4] = magX_calibrated
-    magX_mean = sum(magXs)/5
-
-    magYs[0] = magYs[1]
-    magYs[1] = magYs[2]
-    magYs[2] = magYs[3]
-    magYs[3] = magYs[4]
-    magYs[4] = magY_calibrated
-    magY_mean = sum(magYs)/5
-
-    # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
-    theta_absolute = math.atan2(-magY_calibrated, -magX_calibrated)*180/math.pi
-    # print(theta_absolute)
-    theta_absolute_lowPass = math.atan2(-magY_mean, -magX_mean)*180/math.pi
-    # print(theta_absolute_lowPass)
-    # ローパスが悪さをしている可能性があったので，未ローパスの値を使っている
+        # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
+        theta_absolute = math.atan2(-magY_calibrated, -magX_calibrated)*180/math.pi
+        # print(theta_absolute)
+        theta_absolute_lowPass = math.atan2(-magY_mean, -magX_mean)*180/math.pi
+        # print(theta_absolute_lowPass)
+        # ローパスが悪さをしている可能性があったので，未ローパスの値を使っている
     return theta_absolute
 
 
