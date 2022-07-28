@@ -483,6 +483,37 @@ def magnet():
 # 以下カメラ用関数
 # ----------------------------------------------------------------------------------------------
 
+def csv_write_f():
+
+    flag = True
+    filename = ""
+
+    def write(x,y):
+
+        import csv
+
+        nonlocal flag
+        nonlocal filename
+
+        if flag:
+            now_time = datetime.datetime.now()
+            filename = 'test_' + now_time.strftime('%Y%m%d_%H%M%S') + '.csv'
+
+            with open(filename,'a',newline='') as f: 
+                writer = csv.writer(f)
+                writer.writerow(["theta", "prop"])
+            flag = False
+
+
+        with open(filename,'a',newline='') as f: 
+                writer = csv.writer(f)
+                writer.writerow([x, y])
+
+    return write
+
+csv_write = csv_write_f()
+
+
 def hsv_binary(img_hsv,sat_avg,val_avg):
     #画像のチャンネルを分ける
     #画像のチャンネルを分ける img[縦，横，[h,s,v]]　この行程でグレースケールになる
