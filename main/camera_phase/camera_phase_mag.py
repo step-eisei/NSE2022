@@ -394,14 +394,25 @@ print("set up finished")
 
 try:
     # 赤コーン探索フェーズ
-    while True:
+    max_prop_mag = magnet()
+    max_prop = 0
+    
+    if i in range(15):
         data = takepic()
         prop = data[1]
+        
         print(f"prop={prop}")
-        if prop > borderprop:
-            break
-        rotate(20)
-    print("find!!")
+        if prop > max_prop:
+            max_prop_mag = magnet()
+            max_prop = prop
+        
+        rotate(30)
+        
+    mag = magnet()
+    rotate(mag)
+    rotate(-max_prop_mag)
+    
+
 
     # 赤コーン接近フェーズ 
     DUTY_A = 31
