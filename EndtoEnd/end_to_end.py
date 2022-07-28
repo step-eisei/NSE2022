@@ -772,214 +772,214 @@ def takepic():
 
 # -----------------------------------------------------------------------------------------------
 
+if __name__=="__main__":
+
+    # ここからメイン
+    print("main started")
+
+    # 制御履歴CSVファイルの作成
+    with open('phase1_record.csv','w',newline='') as f: 
+        writer = csv.writer(f)
+        writer.writerow(["theta","gps_latitude","gps_longitude","x_now","y_now","distance","stack"])
+    f.close()
+    print("csv created")
+
+    # ---ここから着地・展開検知---
+    land_pressure=average_pressure() #基準となる地表での気圧を取得
+    print('land_pressure : {} hPa'.format(land_pressure))
+
+    i=0
+    while(i<=10): #上昇したかを判断
+        pressure=get_pressure()
+        time.sleep(0.1)
+
+        if pressure<(land_pressure-1.21923): #3階用 
+        #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
+            i+=1
+            print("In the sky")
+            print(i)
+        else: #50m地点に上がりきるまでyetを出力
+            i=0
+            print("yet") 
+    print("next\n") #10回連続50m以上の値になったら着地判定へ
 
 
-# ここからメイン
-print("main started")
+    i=0
+    while(i<=10): #着地したかを判断
+        pressure=get_pressure()
 
-# 制御履歴CSVファイルの作成
-with open('phase1_record.csv','w',newline='') as f: 
-    writer = csv.writer(f)
-    writer.writerow(["theta","gps_latitude","gps_longitude","x_now","y_now","distance","stack"])
-f.close()
-print("csv created")
-
-# ---ここから着地・展開検知---
-land_pressure=average_pressure() #基準となる地表での気圧を取得
-print('land_pressure : {} hPa'.format(land_pressure))
-
-i=0
-while(i<=10): #上昇したかを判断
-    pressure=get_pressure()
-    time.sleep(0.1)
-    
-    if pressure<(land_pressure-1.21923): #3階用 
-    #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
-        i+=1
-        print("In the sky")
-        print(i)
-    else: #50m地点に上がりきるまでyetを出力
-        i=0
-        print("yet") 
-print("next\n") #10回連続50m以上の値になったら着地判定へ
+        if pressure>(land_pressure-0.05): 
+            i=i+1
+            print(i)
+        else: 
+            i=0
+            print("yet")
+        time.sleep(0.1)
+    print("On the land")
 
 
-i=0
-while(i<=10): #着地したかを判断
-    pressure=get_pressure()
+    #展開検知
+    for j in range(5): #赤の割合が一定以下になるまで繰り返す
+        nchrm()
+        print("nchrm "+str(j))
 
-    if pressure>(land_pressure-0.05): 
-        i=i+1
-        print(i)
-    else: 
-        i=0
-        print("yet")
-    time.sleep(0.1)
-print("On the land")
+        data=takepic()
+        prop=data[1] #Rの割合取得
 
 
-#展開検知
-for j in range(5): #赤の割合が一定以下になるまで繰り返す
-    nchrm()
-    print("nchrm "+str(j))
+        if prop<60: 
+           print(prop)
+           break 
 
-    data=takepic()
-    prop=data[1] #Rの割合取得
-    
-    
-    if prop<60: 
-       print(prop)
-       break 
-
-    else:
-        print("yet")
-        print(prop) 
-        continue
-   
-print("open!")
-GPIO.cleanup()
-# ---ここまで着地・展開検知---
-
-# ---ここからGPSフェーズ---
-print("enter GPS phase")
-# motorをセットアップする
-INITIAL_DUTY_A = 0
-INITIAL_DUTY_B = 0
-ini_freq = 300          # pwm周波数
-# モータのセッティング
-GPIO.setmode(GPIO.BCM)
-# 左モータ
-GPIO.setup(PIN_AIN1, GPIO.OUT)
-GPIO.setup(PIN_AIN2, GPIO.OUT)
-# 左モータPWM
-GPIO.setup(PIN_PWMA, GPIO.OUT)
-pwm_left = GPIO.PWM(PIN_PWMA, ini_freq)
-pwm_left.start(10)
-pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
-# 右モータ
-GPIO.setup(PIN_BIN1, GPIO.OUT)
-GPIO.setup(PIN_BIN2, GPIO.OUT)
-# 右モータPWM
-GPIO.setup(PIN_PWMB, GPIO.OUT)
-pwm_right = GPIO.PWM(PIN_PWMB, ini_freq)
-pwm_right.start(10)
-pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
-# sleep
-time.sleep(2)
-print("set up finished")
-
-# gpsの設定
-gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
-                                     # 引数はタイムゾーンの時差と出力フォーマット
-gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行するスレッドを生成
-gpsthread.setDaemon(True)
-gpsthread.start() # スレッドを起動
-print("thread got up")
-
-# gpsから緯度・経度取得
-getgps()
-print("got gps")
-
-# calc_xyから座標取得
-x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
-print("calced xy¥n")
-print("x_now, y_now = ", x_now, y_now)
-# magnetから絶対角度取得
-theta_absolute = magnet()
-print("got theta_absolute=", theta_absolute)
-# angleから回転角度取得
-theta_relative = angle(x_now, y_now, theta_absolute)
-print("got theta_relative=", theta_relative)
-# ループ(3mゴールまで)
-try:
-    while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
-        print("entered while")
-        """
-        # スタックの条件分岐(移動距離が3.5m以内)
-        if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) <= 3.5):
-            # スタック処理
-            stack()
-            print("stack")
-            stack = True
         else:
+            print("yet")
+            print(prop) 
+            continue
+
+    print("open!")
+    GPIO.cleanup()
+    # ---ここまで着地・展開検知---
+
+    # ---ここからGPSフェーズ---
+    print("enter GPS phase")
+    # motorをセットアップする
+    INITIAL_DUTY_A = 0
+    INITIAL_DUTY_B = 0
+    ini_freq = 300          # pwm周波数
+    # モータのセッティング
+    GPIO.setmode(GPIO.BCM)
+    # 左モータ
+    GPIO.setup(PIN_AIN1, GPIO.OUT)
+    GPIO.setup(PIN_AIN2, GPIO.OUT)
+    # 左モータPWM
+    GPIO.setup(PIN_PWMA, GPIO.OUT)
+    pwm_left = GPIO.PWM(PIN_PWMA, ini_freq)
+    pwm_left.start(10)
+    pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
+    # 右モータ
+    GPIO.setup(PIN_BIN1, GPIO.OUT)
+    GPIO.setup(PIN_BIN2, GPIO.OUT)
+    # 右モータPWM
+    GPIO.setup(PIN_PWMB, GPIO.OUT)
+    pwm_right = GPIO.PWM(PIN_PWMB, ini_freq)
+    pwm_right.start(10)
+    pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
+    # sleep
+    time.sleep(2)
+    print("set up finished")
+
+    # gpsの設定
+    gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
+                                         # 引数はタイムゾーンの時差と出力フォーマット
+    gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行するスレッドを生成
+    gpsthread.setDaemon(True)
+    gpsthread.start() # スレッドを起動
+    print("thread got up")
+
+    # gpsから緯度・経度取得
+    getgps()
+    print("got gps")
+
+    # calc_xyから座標取得
+    x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
+    print("calced xy¥n")
+    print("x_now, y_now = ", x_now, y_now)
+    # magnetから絶対角度取得
+    theta_absolute = magnet()
+    print("got theta_absolute=", theta_absolute)
+    # angleから回転角度取得
+    theta_relative = angle(x_now, y_now, theta_absolute)
+    print("got theta_relative=", theta_relative)
+    # ループ(3mゴールまで)
+    try:
+        while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
+            print("entered while")
+            """
+            # スタックの条件分岐(移動距離が3.5m以内)
+            if(math.sqrt((x_now - x_past)**2 + (y_now - y_past)**2) <= 3.5):
+                # スタック処理
+                stack()
+                print("stack")
+                stack = True
+            else:
+                # 旋回，直進
+                rotate(theta_relative)
+                print("rotated")
+                go_ahead()
+                print("went ahead")
+                stack = False
+            """
+            # stack無しバージョン
             # 旋回，直進
-            rotate(theta_relative)
-            print("rotated")
+            while True:
+                # 10°固定
+                if(theta_relative > 0): rotate(10)
+                if(theta_relative < 0): rotate(-10)
+                print("10 deg rotated")
+                """
+                # 必要角度に応じて回転角を算出
+                rotate(theta_relative/1.5)
+                print(f"{theta_relative/1.5} deg rotated")
+                """
+                # 旋回後に角度のフィードバック
+                time.sleep(3)
+                theta_absolute = magnet()
+                theta_relative = angle(x_now, y_now, theta_absolute)
+                print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
+                if(theta_relative > -10 and theta_relative < 10): break
             go_ahead()
             print("went ahead")
-            stack = False
-        """
-        # stack無しバージョン
-        # 旋回，直進
-        while True:
-            # 10°固定
-            if(theta_relative > 0): rotate(10)
-            if(theta_relative < 0): rotate(-10)
-            print("10 deg rotated")
-            """
-            # 必要角度に応じて回転角を算出
-            rotate(theta_relative/1.5)
-            print(f"{theta_relative/1.5} deg rotated")
-            """
-            # 旋回後に角度のフィードバック
-            time.sleep(3)
+    #         stack = False
+            # 履歴の保存
+            record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, 1)
+            print("recorded")
+            # 過去データの一時保存(移動検知のため)
+            x_past = x_now
+            y_past = y_now
+            # gpsから緯度・経度取得
+            time.sleep(5)
+            getgps()
+            print("got gps")
+            # calc_xyから座標取得
+            x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
+            print("calced xy\n")
+            print("x_now, y_now =", x_now, y_now)
+            # magnetから絶対角度取得
             theta_absolute = magnet()
+            print("got theta_absolute=", theta_absolute)
+            # angleから回転角度取得
             theta_relative = angle(x_now, y_now, theta_absolute)
-            print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
-            if(theta_relative > -10 and theta_relative < 10): break
-        go_ahead()
-        print("went ahead")
-#         stack = False
-        # 履歴の保存
-        record(theta_relative, gps_latitude, gps_longitude, x_now, y_now, 1)
-        print("recorded")
-        # 過去データの一時保存(移動検知のため)
-        x_past = x_now
-        y_past = y_now
-        # gpsから緯度・経度取得
-        time.sleep(5)
-        getgps()
-        print("got gps")
-        # calc_xyから座標取得
-        x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
-        print("calced xy\n")
-        print("x_now, y_now =", x_now, y_now)
-        # magnetから絶対角度取得
-        theta_absolute = magnet()
-        print("got theta_absolute=", theta_absolute)
-        # angleから回転角度取得
-        theta_relative = angle(x_now, y_now, theta_absolute)
-        print("got theta_relative=", theta_relative)     
+            print("got theta_relative=", theta_relative)     
 
-    print("3m goal")
-        
-    # 赤コーン探索フェーズ
-    while True:
-        data = takepic()
-        prop = data[1]
-        print(f"prop={prop}")
-        if prop > borderprop:
-            break
-        rotate(20)
-    print("find!!")
+        print("3m goal")
 
-    # 赤コーン接近フェーズ 
-    DUTY_A = 31
-    DUTY_B = 30   
-    for i in range(4):
-        data = takepic()
-        theta = data[0]
-        print(f"theta={theta}")
-        rotate(theta_relative)
-        go_ahead()
-    pwm_left.stop()
-    pwm_right.stop()
-    GPIO.cleanup()
-    print("goal!")
-        
-except KeyboardInterrupt:
-    pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
-    pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
-    pwm_left.stop()
-    pwm_right.stop()
-    GPIO.cleanup()
+        # 赤コーン探索フェーズ
+        while True:
+            data = takepic()
+            prop = data[1]
+            print(f"prop={prop}")
+            if prop > borderprop:
+                break
+            rotate(20)
+        print("find!!")
+
+        # 赤コーン接近フェーズ 
+        DUTY_A = 31
+        DUTY_B = 30   
+        for i in range(4):
+            data = takepic()
+            theta = data[0]
+            print(f"theta={theta}")
+            rotate(theta_relative)
+            go_ahead()
+        pwm_left.stop()
+        pwm_right.stop()
+        GPIO.cleanup()
+        print("goal!")
+
+    except KeyboardInterrupt:
+        pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
+        pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
+        pwm_left.stop()
+        pwm_right.stop()
+        GPIO.cleanup()
