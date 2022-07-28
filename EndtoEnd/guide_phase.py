@@ -28,7 +28,6 @@ import picamera
 
 image=Image
 imageo=ImageOps
-import RPi.GPIO as GPIO
 camera=picamera.PiCamera()
 
 mpu9250 = FaBo9Axis_MPU9250.MPU9250()
@@ -841,6 +840,7 @@ for j in range(5): #赤の割合が一定以下になるまで繰り返す
         continue
    
 print("open!")
+GPIO.cleanup()
 # ---ここまで着地・展開検知---
 
 # ---ここからGPSフェーズ---
