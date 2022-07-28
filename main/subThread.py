@@ -137,7 +137,7 @@ y_now = 6.0
 prop = 7.0
 
 
-read_data = ("land_detect",pressure) 
+write_data = ("land_detect",pressure) 
 
 th_subthread = threading.Thread(target=subThread)
 
@@ -146,9 +146,9 @@ th_subthread.setDaemon(True)
 th_subthread.start()
 
 time.sleep(7)
-read_data = ("open_detect",prop)
+write_data = ("open_detect",prop)
 time.sleep(7)
-read_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
+write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, i)
 time.sleep(7)
-read_data = ("guide_phase2",theta,prop)
+write_data = ("guide_phase2",theta,prop)
 time.sleep(7)
