@@ -24,6 +24,8 @@ import os
 
 from PIL import Image,ImageOps
 import picamera
+
+from struct import *
 #####################################
 image=Image
 imageo=ImageOps
@@ -41,6 +43,8 @@ with open ('goal.csv', 'r') as f :
     goal_latitude = float(line[ 1 ] [ 0 ])
     goal_longitude = float(line[ 1 ] [ 1 ])
 
+COM = '/dev/ttyAMA0'
+ser = serial.Serial(COM, 115200)
 
 # モータのピン割り当て(GPIO 〇〇)
 PIN_AIN1 = 24   # 右モータ(A)
@@ -58,8 +62,8 @@ T_straight = 0
 final_distance = 3
 min_satellites_used = 10
 
-gps_latitude = 0
-gps_longitude = 0
+gps_latitude = 0.0
+gps_longitude = 0.0
 x_now = 0
 y_now = 0
 x_past = 0
@@ -71,8 +75,11 @@ stack = False
 
 takepic_counter = 1
 borderprop = 3
-theta_relative = 0
+theta_relative = 0.0
 prop = 0
+
+data = pack('>ddd', theta_relative, gps_latitude, gps_logitude)
+data = data + b'\n'
 
 with open ('mag.csv', 'r' ) as f :
     reader = csv.reader(f)
@@ -145,5 +152,7 @@ if __name__=="__main__":
         mag = mpu9250.readMagnet()
         print(f"magx={mag['x']}")
         print(f"magy={mag['y']}")
+        
+        ser.write(data)
 
     GPIO.cleanup()
