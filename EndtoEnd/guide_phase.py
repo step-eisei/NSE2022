@@ -445,7 +445,7 @@ def record(theta,gps_latitude,gps_longitude,x_now,y_now,i):
 def magnet():
     magXs=[]
     magYs=[]
-    for i in range(5):
+    for lowpass_dulation in range(5):
         mag = mpu9250.readMagnet()
         # print(" mx = " , ( mag['x']   ), end='')
         # print(" my = " , ( mag['y']   ), end='')
