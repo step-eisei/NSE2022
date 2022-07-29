@@ -72,7 +72,7 @@ borderprop = 3
 theta_relative = 0.0
 prop = 0
 
-data = pack('>ddd', theta_relative, gps_latitude, gps_longitude)
+data = pack('>ddd', float(theta_relative), float(gps_latitude), float(gps_longitude))
 data = data + b'\n'
 
 with open ('mag.csv', 'r' ) as f :
