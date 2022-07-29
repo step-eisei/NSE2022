@@ -128,6 +128,7 @@ if __name__=="__main__":
         data=end_to_end.takepic()
         prop=data[1] #Rの割合取得
         print(f"camera_R_prop={prop}")
+        time.sleep(2)
     
     print("camera_got_data") 
     print()
