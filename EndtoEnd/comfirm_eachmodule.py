@@ -1,5 +1,5 @@
 import end_to_end
-gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する
+
 
 #各モジュール
 ######################
@@ -38,7 +38,7 @@ with open ('goal.csv', 'r') as f :
     line = [row for row in reader]
     goal_latitude = float(line[ 1 ] [ 0 ])
     goal_longitude = float(line[ 1 ] [ 1 ])
-
+gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する
 
 # モータのピン割り当て(GPIO 〇〇)
 PIN_AIN1 = 24   # 右モータ(A)
