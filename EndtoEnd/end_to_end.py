@@ -766,7 +766,7 @@ def takepic():
     csv_write(*data)
 
     return theta,prop
-
+gps = micropyGPS.MicropyGPS(9, 'dd')
 # -----------------------------------------------------------------------------------------------
 
 if __name__=="__main__":
@@ -871,7 +871,7 @@ if __name__=="__main__":
     print("set up finished")
 
     # gpsの設定
-    gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
+     # MicroGPSオブジェクトを生成する。
                                          # 引数はタイムゾーンの時差と出力フォーマット
     gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行するスレッドを生成
     gpsthread.setDaemon(True)
