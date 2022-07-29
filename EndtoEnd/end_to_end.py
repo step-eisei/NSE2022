@@ -731,6 +731,9 @@ def scanprop(img_th):
 
 def takepic():
     # 撮影
+    image=Image
+    imageo=ImageOps
+    camera=picamera.PiCamera()
     global takepic_counter
     now_time_camera = datetime.datetime.now()
     filename_camera = now_time_camera.strftime('%m%d_%H%M_')+str(takepic_counter)
@@ -767,9 +770,9 @@ def takepic():
 
 if __name__=="__main__":
     
-    image=Image
-    imageo=ImageOps
-    camera=picamera.PiCamera()
+#     image=Image
+#     imageo=ImageOps
+#     camera=picamera.PiCamera()
 
     mpu9250 = FaBo9Axis_MPU9250.MPU9250()
     # ここからメイン
