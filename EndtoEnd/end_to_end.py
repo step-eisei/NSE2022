@@ -27,11 +27,6 @@ import os
 from PIL import Image,ImageOps
 import picamera
 
-image=Image
-imageo=ImageOps
-camera=picamera.PiCamera()
-
-mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 image_folder="image_jpg_folder"
 scanth_folder="scanth_jpg_folder"
 os.makedirs(image_folder, exist_ok=True)
@@ -773,7 +768,12 @@ def takepic():
 # -----------------------------------------------------------------------------------------------
 
 if __name__=="__main__":
+    
+    image=Image
+    imageo=ImageOps
+    camera=picamera.PiCamera()
 
+    mpu9250 = FaBo9Axis_MPU9250.MPU9250()
     # ここからメイン
     print("main started")
 
