@@ -147,6 +147,7 @@ if __name__=="__main__":
 
     for times in range(3):
         ser.write(data)
+        print("send_data")
         # gpsから緯度・経度取得
         end_to_end.getgps()
         print(f"got gps[lat,long]={gps_latitude},{gps_longitude}")
