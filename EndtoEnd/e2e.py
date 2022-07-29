@@ -909,6 +909,8 @@ theta_relative = angle(x_now, y_now, theta_absolute)
 print("got theta_relative=", theta_relative)
 # ループ(3mゴールまで)
 try:
+    go_ahead()
+    print("went ahead")
     while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
         print("entered while")
         """
