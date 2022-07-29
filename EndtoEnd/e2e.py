@@ -832,7 +832,7 @@ while(i<=10): #着地したかを判断
     time.sleep(0.1)
 print("On the land")
 
-time.sleep(300)
+time.sleep(240)
 
 #展開検知
 for j in range(5): #赤の割合が一定以下になるまで繰り返す
