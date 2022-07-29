@@ -790,7 +790,7 @@ with open('phase1_record.csv','w',newline='') as f:
     writer.writerow(["theta","gps_latitude","gps_longitude","x_now","y_now","distance","stack"])
 f.close()
 print("csv created")
-
+'''
 # ---ここから着地・展開検知---
 land_pressure=average_pressure() #基準となる地表での気圧を取得
 print('land_pressure : {} hPa'.format(land_pressure))
@@ -845,6 +845,7 @@ for j in range(5): #赤の割合が一定以下になるまで繰り返す
    
 print("open!")
 GPIO.cleanup()
+'''
 # ---ここまで着地・展開検知---
 
 # ---ここからGPSフェーズ---
