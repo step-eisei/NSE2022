@@ -80,13 +80,19 @@ val_rate = 0.6
 
 
 # 以下，キャリブレーションにより計算した最大値と最小値
-with open ('mag.csv', 'r' ) as f :
-    reader = csv.reader(f)
-    line = [row for row in reader]
-    magX_max = float(line[1][0])
-    magX_min = float(line[1][1])
-    magY_max = float(line[1][2])
-    magY_min = float(line[1][3])
+# with open ('mag.csv', 'r' ) as f :
+#     reader = csv.reader(f)
+#     line = [row for row in reader]
+#     magX_max = float(line[1][0])
+#     magX_min = float(line[1][1])
+#     magY_max = float(line[1][2])
+#     magY_min = float(line[1][3])
+    
+magX_max = 90.3
+magX_min = 30.9
+magY_max = -68.9
+magY_min = -126.7
+
 
 magXs = [0]*5
 magYs = [0]*5
