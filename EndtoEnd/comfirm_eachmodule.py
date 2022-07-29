@@ -84,9 +84,9 @@ with open ('mag.csv', 'r' ) as f :
 
 
 if __name__=="__main__":
-    image=Image
-    imageo=ImageOps
-    camera=picamera.PiCamera()
+#     image=Image
+#     imageo=ImageOps
+#     camera=picamera.PiCamera()
     
     mpu9250 = FaBo9Axis_MPU9250.MPU9250()
     
