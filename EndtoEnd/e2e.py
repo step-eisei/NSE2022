@@ -72,7 +72,7 @@ satellites_used = 0
 stack = False
 
 takepic_counter = 1
-borderprop = 3
+borderprop = 5
 theta_relative = 0
 prop = 0
 
@@ -990,9 +990,16 @@ try:
     for i in range(5):
         data = takepic()
         theta = data[0]
+        prop = data[1]
         print(f"theta={theta}")
         rotate(theta_relative)
         go_ahead()
+        if prop > 60:
+            break
+        if prop > 10:
+            DUTY_A = 21
+            DUTY_B = 20   
+            
     pwm_left.stop()
     pwm_right.stop()
     GPIO.cleanup()
