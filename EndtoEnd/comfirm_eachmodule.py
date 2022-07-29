@@ -148,6 +148,9 @@ if __name__=="__main__":
     for times in range(3):
         print(data)
         print(type(data))
+        print(theta_relative)
+        print(gps_latitude)
+        print(gps_longitude)
         ser.write(data)
         # gpsから緯度・経度取得
         end_to_end.getgps()
