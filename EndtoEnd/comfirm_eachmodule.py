@@ -72,9 +72,6 @@ borderprop = 3
 theta_relative = 0.0
 prop = 0
 
-data = pack('>ddd', float(theta_relative), float(gps_latitude), float(gps_longitude))
-data = data + b'\n'
-
 with open ('mag.csv', 'r' ) as f :
     reader = csv.reader(f)
     line = [row for row in reader]
@@ -144,13 +141,11 @@ if __name__=="__main__":
     gpsthread.setDaemon(True)
     gpsthread.start() # スレッドを起動
     print("thread got up")
+    
+    data = pack('>ddd', 1.3, 2.4, 3.3)
+    data = data + b'\n'
 
     for times in range(3):
-        print(data)
-        print(type(data))
-        print(theta_relative)
-        print(gps_latitude)
-        print(gps_longitude)
         ser.write(data)
         # gpsから緯度・経度取得
         end_to_end.getgps()
