@@ -139,8 +139,6 @@ if __name__=="__main__":
 
     # ---ここからGPSフェーズ---
     
-
-    。
                                         # 引数はタイムゾーンの時差と出力フォーマット
     gpsthread = threading.Thread(target=end_to_end.rungps, args=()) # 上の関数を実行するスレッドを生成
     gpsthread.setDaemon(True)
