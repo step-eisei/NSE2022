@@ -15,6 +15,7 @@ import RPi.GPIO as GPIO
 import numpy as np
 import serial
 import micropyGPS
+gps = micropyGPS.MicropyGPS(9, 'dd')
 import csv
 import threading
 
@@ -766,7 +767,7 @@ def takepic():
     csv_write(*data)
 
     return theta,prop
-gps = micropyGPS.MicropyGPS(9, 'dd')
+
 # -----------------------------------------------------------------------------------------------
 
 if __name__=="__main__":
