@@ -48,8 +48,8 @@ with open ('goal.csv', 'r') as f :
 PIN_AIN1 = 24   # 右モータ(A)
 PIN_AIN2 = 23
 PIN_PWMA = 12
-PIN_BIN1 = 16   # 左モータ(B)
-PIN_BIN2 = 26
+PIN_BIN1 = 26   # 左モータ(B)
+PIN_BIN2 = 16
 PIN_PWMB = 13
 # 左右のduty比(定義域：0~100)
 DUTY_A = 62 # 20~40でICが高温になります．60~70が妥当です
