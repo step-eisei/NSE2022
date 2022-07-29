@@ -610,33 +610,37 @@ def record(theta,gps_latitude,gps_longitude,x_now,y_now,i):
     
 # 角度取得関数
 def magnet():
-    magXs=[]
-    magYs=[]
-    for lowpass_ in range(5):
-        mag = mpu9250.readMagnet()
-        # print(" mx = " , ( mag['x']   ), end='')
-        # print(" my = " , ( mag['y']   ), end='')
-        # print(" mz = " , ( mag['z'] ))
-        # print()
+#     magXs=[]
+#     magYs=[]
+#     for lowpass_ in range(5):
+    mag = mpu9250.readMagnet()
+    # print(" mx = " , ( mag['x']   ), end='')
+    # print(" my = " , ( mag['y']   ), end='')
+    # print(" mz = " , ( mag['z'] ))
+    # print()
 
-        # キャリブレーション
-        magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
-        magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
-        
-        #リスト追加
-        magXs.append(magX_calibrated)
-        magYs.append(magY_calibrated)
-        
-        # ローパスフィルタ
-        magX_mean = sum(magXs)/len(magXs)
-        magY_mean = sum(magYs)/len(magYs)
+    # キャリブレーション
+    print("mag['x']=" + str(mag['x']))
+    print("mag['y']=" + str(mag['y']))
+    magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
+    magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
+    print("magX_calibrated" + str(magX_calibrated))
+    print("magY_calibrated" + str(magY_calibrated))
 
-        # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
-        theta_absolute = math.atan2(-magY_calibrated, -magX_calibrated)*180/math.pi
-        # print(theta_absolute)
-        theta_absolute_lowPass = math.atan2(-magY_mean, -magX_mean)*180/math.pi
-        # print(theta_absolute_lowPass)
-        # ローパスが悪さをしている可能性があったので，未ローパスの値を使っている
+    #リスト追加
+#     magXs.append(magX_calibrated)
+#     magYs.append(magY_calibrated)
+
+    # ローパスフィルタ
+#     magX_mean = sum(magXs)/len(magXs)
+#     magY_mean = sum(magYs)/len(magYs)
+
+    # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
+    theta_absolute = math.atan2(-magY_calibrated, -magX_calibrated)*180/math.pi
+    # print(theta_absolute)
+#     theta_absolute_lowPass = math.atan2(-magY_mean, -magX_mean)*180/math.pi
+    # print(theta_absolute_lowPass)
+    # ローパスが悪さをしている可能性があったので，未ローパスの値を使っている
     return theta_absolute
 
 
