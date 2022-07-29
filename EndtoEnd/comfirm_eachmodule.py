@@ -22,8 +22,6 @@ import datetime
 import re
 import os
 
-from PIL import Image,ImageOps
-import picamera
 
 from struct import *
 #####################################
