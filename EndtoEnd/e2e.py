@@ -994,8 +994,8 @@ try:
     print("find!!")
 
     # 赤コーン接近フェーズ 
-    DUTY_A = 31
-    DUTY_B = 30   
+    DUTY_A = 30
+    DUTY_B = 33   
     for i in range(5):
         data = takepic()
         theta = data[0]
@@ -1006,8 +1006,8 @@ try:
         if prop > 60:
             break
         if prop > 10:
-            DUTY_A = 21
-            DUTY_B = 20   
+            DUTY_A = 20
+            DUTY_B = 22   
             
     pwm_left.stop()
     pwm_right.stop()
