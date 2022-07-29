@@ -26,6 +26,7 @@ import os
 
 from PIL import Image,ImageOps
 import picamera
+camera=picamera.PiCamera()
 
 image_folder="image_jpg_folder"
 scanth_folder="scanth_jpg_folder"
@@ -733,7 +734,7 @@ def takepic():
     # 撮影
     image=Image
     imageo=ImageOps
-    camera=picamera.PiCamera()
+    
     global takepic_counter
     now_time_camera = datetime.datetime.now()
     filename_camera = now_time_camera.strftime('%m%d_%H%M_')+str(takepic_counter)
