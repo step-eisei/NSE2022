@@ -935,6 +935,7 @@ try:
             theta_relative = angle(x_now, y_now, theta_absolute)
             print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
             if(theta_relative > -10 and theta_relative < 10): break
+            break
         """
         # x_now, y_now を表示したい
         getgps()
