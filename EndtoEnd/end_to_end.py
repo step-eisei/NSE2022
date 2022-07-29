@@ -213,14 +213,12 @@ def get_pressure():
     setup()
     get_calib_param()
 
+    try:
+        x=readData() #気圧の値読み取り
 
-    if __name__ == '__main__':
-        try:
-            x=readData() #気圧の値読み取り
-            
-            return x #pressure関数が呼び出されたら渡す
-        except KeyboardInterrupt:
-            pass
+        return x #pressure関数が呼び出されたら渡す
+    except KeyboardInterrupt:
+        pass
 
 
 def average_pressure():
