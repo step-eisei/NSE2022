@@ -987,7 +987,7 @@ try:
     # 赤コーン接近フェーズ 
     DUTY_A = 31
     DUTY_B = 30   
-    for i in range(4):
+    for i in range(5):
         data = takepic()
         theta = data[0]
         print(f"theta={theta}")
