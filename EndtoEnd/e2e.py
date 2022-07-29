@@ -88,10 +88,10 @@ val_rate = 0.6
 #     magY_max = float(line[1][2])
 #     magY_min = float(line[1][3])
     
-magX_max = 90.3
-magX_min = 30.9
-magY_max = -68.9
-magY_min = -126.7
+magX_max = 70.3
+magX_min = 12.4
+magY_max = -72.6
+magY_min = -134.2
 
 
 magXs = [0]*5
