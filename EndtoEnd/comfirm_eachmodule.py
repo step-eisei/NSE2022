@@ -146,6 +146,7 @@ if __name__=="__main__":
     print("thread got up")
 
     for times in range(3):
+        ser.write(data)
         # gpsから緯度・経度取得
         end_to_end.getgps()
         print(f"got gps[lat,long]={gps_latitude},{gps_longitude}")
@@ -154,6 +155,6 @@ if __name__=="__main__":
         print(f"magx={mag['x']}")
         print(f"magy={mag['y']}")
         
-        ser.write(data)
+
 
     GPIO.cleanup()
