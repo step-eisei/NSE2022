@@ -146,6 +146,8 @@ if __name__=="__main__":
     print("thread got up")
 
     for times in range(3):
+        print(data)
+        print(type(data))
         ser.write(data)
         # gpsから緯度・経度取得
         end_to_end.getgps()
