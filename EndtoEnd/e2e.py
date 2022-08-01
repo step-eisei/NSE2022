@@ -48,12 +48,12 @@ with open ('goal.csv', 'r') as f :
 PIN_AIN1 = 24   # 右モータ(A)
 PIN_AIN2 = 23
 PIN_PWMA = 12
-PIN_BIN1 = 16   # 左モータ(B)
-PIN_BIN2 = 26
+PIN_BIN1 = 26   # 左モータ(B)
+PIN_BIN2 = 16
 PIN_PWMB = 13
 # 左右のduty比(定義域：0~100)
-DUTY_A = 62 # 20~40でICが高温になります．60~70が妥当です
-DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
+DUTY_A = 59 # 20~40でICが高温になります．60~70が妥当です
+DUTY_B = 65 # 20~40でICが高温になります．60~70が妥当です
 freq = 300 # PWMの周波数
 
 T_straight = 0
@@ -72,19 +72,27 @@ satellites_used = 0
 stack = False
 
 takepic_counter = 1
-borderprop = 3
+borderprop = 1
 theta_relative = 0
 prop = 0
 
+val_rate = 0.6
+
 
 # 以下，キャリブレーションにより計算した最大値と最小値
-with open ('mag.csv', 'r' ) as f :
-    reader = csv.reader(f)
-    line = [row for row in reader]
-    magX_max = float(line[1][0])
-    magX_min = float(line[1][1])
-    magY_max = float(line[1][2])
-    magY_min = float(line[1][3])
+# with open ('mag.csv', 'r' ) as f :
+#     reader = csv.reader(f)
+#     line = [row for row in reader]
+#     magX_max = float(line[1][0])
+#     magX_min = float(line[1][1])
+#     magY_max = float(line[1][2])
+#     magY_min = float(line[1][3])
+    
+magX_max = 70.3
+magX_min = 12.4
+magY_max = -72.6
+magY_min = -134.2
+
 
 magXs = [0]*5
 magYs = [0]*5
@@ -610,33 +618,37 @@ def record(theta,gps_latitude,gps_longitude,x_now,y_now,i):
     
 # 角度取得関数
 def magnet():
-    magXs=[]
-    magYs=[]
-    for lowpass_ in range(5):
-        mag = mpu9250.readMagnet()
-        # print(" mx = " , ( mag['x']   ), end='')
-        # print(" my = " , ( mag['y']   ), end='')
-        # print(" mz = " , ( mag['z'] ))
-        # print()
+#     magXs=[]
+#     magYs=[]
+#     for lowpass_ in range(5):
+    mag = mpu9250.readMagnet()
+    # print(" mx = " , ( mag['x']   ), end='')
+    # print(" my = " , ( mag['y']   ), end='')
+    # print(" mz = " , ( mag['z'] ))
+    # print()
 
-        # キャリブレーション
-        magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
-        magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
-        
-        #リスト追加
-        magXs.append(magX_calibrated)
-        magYs.append(magY_calibrated)
-        
-        # ローパスフィルタ
-        magX_mean = sum(magXs)/len(magXs)
-        magY_mean = sum(magYs)/len(magYs)
+    # キャリブレーション
+    print("mag['x']=" + str(mag['x']))
+    print("mag['y']=" + str(mag['y']))
+    magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
+    magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
+    print("magX_calibrated" + str(magX_calibrated))
+    print("magY_calibrated" + str(magY_calibrated))
 
-        # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
-        theta_absolute = math.atan2(-magY_calibrated, -magX_calibrated)*180/math.pi
-        # print(theta_absolute)
-        theta_absolute_lowPass = math.atan2(-magY_mean, -magX_mean)*180/math.pi
-        # print(theta_absolute_lowPass)
-        # ローパスが悪さをしている可能性があったので，未ローパスの値を使っている
+    #リスト追加
+#     magXs.append(magX_calibrated)
+#     magYs.append(magY_calibrated)
+
+    # ローパスフィルタ
+#     magX_mean = sum(magXs)/len(magXs)
+#     magY_mean = sum(magYs)/len(magYs)
+
+    # とりあえずatan2に入れたものをtheta_absoluteとしているが，本当に欲しいtheta_absoluteにするには演算が必要かも
+    theta_absolute = math.atan2(-magY_calibrated, -magX_calibrated)*180/math.pi
+    # print(theta_absolute)
+#     theta_absolute_lowPass = math.atan2(-magY_mean, -magX_mean)*180/math.pi
+    # print(theta_absolute_lowPass)
+    # ローパスが悪さをしている可能性があったので，未ローパスの値を使っている
     return theta_absolute
 
 
@@ -686,9 +698,9 @@ def hsv_binary(img_hsv,sat_avg,val_avg):
     # np.where(条件, Trueの時に置換する数, Falseの時に置換する数)
     #色相環は360度→0～255に変換
     #色相環の内、赤色は0度と360度をまたぐ
-    img_h_th = np.where((im_h < 15/360*255) | (im_h > 175/360*255), 1, 0)
+    img_h_th = np.where((im_h < 20/360*255) | (im_h > 210/360*255), 1, 0)
     img_s_th = np.where(im_s > sat_avg*0.9, 1, 0)
-    img_v_th = np.where(im_v > val_avg*0.9, 1, 0)
+    img_v_th = np.where(im_v > val_avg*val_rate, 1, 0)
 
     #行列の掛け算ではなく各要素の掛け算をする 上記の条件で一つでも満たしていないものがあれば，0となる．
     #検出された物を白にするために最後に255を掛ける(この時点で2値化)
@@ -747,9 +759,9 @@ def takepic():
     camera.capture(os.path.join(image_folder,"image"+filename_camera+".jpg"))
 
     # 読み込み
-    img = image.open ("image"+filename_camera+".jpg")
+    img = image.open ("image_jpg_folder/image"+filename_camera+".jpg")
     #hsv空間に変換 「色相(Hue)」「彩度(Saturation)」「明度(Value)」
-    img_hsv = image.open("image"+filename_camera+".jpg").convert('HSV')
+    img_hsv = image.open("image_jpg_folder/image"+filename_camera+".jpg").convert('HSV')
     #それぞれ上下左右反転し，Pillow → Numpyへ変換
     # 上下反転メソッド　flip()
     # 左右反転メソッド　mirror()
@@ -820,6 +832,7 @@ while(i<=10): #着地したかを判断
     time.sleep(0.1)
 print("On the land")
 
+time.sleep(240)
 
 #展開検知
 for j in range(5): #赤の割合が一定以下になるまで繰り返す
@@ -830,7 +843,7 @@ for j in range(5): #赤の割合が一定以下になるまで繰り返す
     prop=data[1] #Rの割合取得
     
     
-    if prop<60: 
+    if prop<10: 
        print(prop)
        break 
 
@@ -841,6 +854,7 @@ for j in range(5): #赤の割合が一定以下になるまで繰り返す
    
 print("open!")
 GPIO.cleanup()
+
 # ---ここまで着地・展開検知---
 
 # ---ここからGPSフェーズ---
@@ -895,6 +909,8 @@ theta_relative = angle(x_now, y_now, theta_absolute)
 print("got theta_relative=", theta_relative)
 # ループ(3mゴールまで)
 try:
+    go_ahead()
+    print("went ahead")
     while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
         print("entered while")
         """
@@ -930,6 +946,15 @@ try:
             theta_relative = angle(x_now, y_now, theta_absolute)
             print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
             if(theta_relative > -10 and theta_relative < 10): break
+        """
+        # x_now, y_now を表示したい
+        getgps()
+        print("got gps")
+        # calc_xyから座標取得
+        x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
+        print("calced xy\n")
+        print("x_now, y_now =", x_now, y_now)
+        """
         go_ahead()
         print("went ahead")
 #         stack = False
@@ -955,6 +980,8 @@ try:
         print("got theta_relative=", theta_relative)     
 
     print("3m goal")
+    
+    val_rate = 2.0
         
     # 赤コーン探索フェーズ
     while True:
@@ -967,14 +994,21 @@ try:
     print("find!!")
 
     # 赤コーン接近フェーズ 
-    DUTY_A = 31
-    DUTY_B = 30   
-    for i in range(4):
+    DUTY_A = 30
+    DUTY_B = 33   
+    for i in range(5):
         data = takepic()
         theta = data[0]
+        prop = data[1]
         print(f"theta={theta}")
         rotate(theta_relative)
         go_ahead()
+        if prop > 60:
+            break
+        if prop > 10:
+            DUTY_A = 20
+            DUTY_B = 22   
+            
     pwm_left.stop()
     pwm_right.stop()
     GPIO.cleanup()
