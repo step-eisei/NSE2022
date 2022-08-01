@@ -870,10 +870,6 @@ gpsthread.setDaemon(True)
 gpsthread.start() # スレッドを起動
 print("thread got up")
 
-# gpsから緯度・経度取得
-getgps()
-print("got gps")
-
 # 以下，キャリブレーションにより計算した最大値と最小値
 with open ('mag.csv', 'r' ) as f :
     reader = csv.reader(f)
@@ -887,6 +883,9 @@ with open ('mag.csv', 'r' ) as f :
 try:
     go_ahead()
     print("went ahead")
+    # gpsから緯度・経度取得
+    getgps()
+    print("got gps")
     # calc_xyから座標取得
     x_now, y_now = calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude)
     print("calced xy¥n")
