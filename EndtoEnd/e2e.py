@@ -987,6 +987,7 @@ try:
     # angleから回転角度取得
     theta_relative = angle(x_now, y_now, theta_absolute)
     print("got theta_relative=", theta_relative)
+    distance = math.sqrt( x_now**2 + y_now**2 )
     write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
     
     while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
