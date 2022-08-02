@@ -987,6 +987,8 @@ try:
     # angleから回転角度取得
     theta_relative = angle(x_now, y_now, theta_absolute)
     print("got theta_relative=", theta_relative)
+    write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
+    
     while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
         print("entered while")
         """
@@ -1069,6 +1071,7 @@ try:
     
     while True:
         data = takepic()
+        theta_relative = data[0]
         prop = data[1]
         print(f"prop={prop}")
         if prop > borderprop:
@@ -1082,10 +1085,10 @@ try:
     DUTY_B = 33   
     for i in range(5):
         data = takepic()
-        theta = data[0]
+        theta_relative = data[0]
         prop = data[1]
-        print(f"theta={theta}")
-        rotate(theta)
+        print(f"theta_relative={theta_relative}")
+        rotate(theta_relative)
         go_ahead()
         if prop > 60:
             break
