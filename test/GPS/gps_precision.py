@@ -10,8 +10,8 @@ import numpy as np
 
 gps_latitude = 0
 gps_longitude = 0
-goal_latitude = 0
-goal_longitude = 0
+goal_latitude = 36.11179533333334
+goal_longitude = 140.09845099999998
 
 gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
                                     # 引数はタイムゾーンの時差と出力フォーマット

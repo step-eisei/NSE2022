@@ -27,6 +27,8 @@ import os
 from PIL import Image,ImageOps
 import picamera
 
+from struct import *
+
 image=Image
 imageo=ImageOps
 camera=picamera.PiCamera()
@@ -72,7 +74,7 @@ satellites_used = 0
 stack = False
 
 takepic_counter = 1
-borderprop = 1
+borderprop = 1.2
 theta_relative = 0
 prop = 0
 
@@ -587,14 +589,7 @@ def stack():
      スタックを前進により抜けたがスタック検知した場合,後進で再度スタックする危険がある
     """
 
-# 制御履歴の保存
-def record():
-    distance = math.sqrt(x_now**2+y_now**2)
-    stacking = ["True", "False"]
-    with open('phase1_record.csv','a',newline='') as f: 
-        writer = csv.writer(f)
-        writer.writerow([theta_absolute,theta_relative,gps_latitude,gps_longitude,x_now,y_now,distance,stacking[i]])
-    f.close()
+
     
 # 角度取得関数
 def magnet():
@@ -628,41 +623,136 @@ def magnet():
     print(f"lowPass = {theta_absolute_lowPass}, notlowPass = {theta_absolute}")
     return theta_absolute_lowPass
 
+# 以下サブスレッド関数
+# ---------------------------------------------------------------------------------------------------
+def subThread():
+
+    COM = '/dev/ttyAMA0'
+    ser_sub = serial.Serial(COM, 115200)   
+    
+    def send_data(*data):
+
+        if data[0] == "land_detect":
+            data = pack('>bd',1, data[1])
+            data = data + b'\n'
+            ser_sub.write(data)
+
+        elif data[0] == "open_detect":
+            data = pack('>bd', 2, data[1])
+            data = data + b'\n'
+            ser_sub.write(data)
+
+        elif data[0] == "guide_phase1":
+            data = pack('>bddd',3, data[1], data[2], data[3])
+            data = data + b'\n'
+            ser_sub.write(data)
+
+        else:
+            data = pack('>bdd', 4, data[1], data[2])
+            data = data + b'\n'
+            ser_sub.write(data)
+
+
+    def csv_write_f():
+
+        flag1 = True
+        flag2 = True
+        flag3 = True
+        flag4 = True
+
+        filename = ""
+
+        def write(*data):
+
+            import datetime
+            import csv
+
+            nonlocal flag1
+            nonlocal flag2
+            nonlocal flag3
+            nonlocal flag4
+
+            nonlocal filename
+
+
+            if data[0] == "land_detect":
+                if flag1:
+                    now_time = datetime.datetime.now()
+                    filename = 'land_detect_phase_' + now_time.strftime('%Y%m%d_%H%M%S') + '.csv'
+
+                    with open(filename,'a',newline='') as f: 
+                        writer = csv.writer(f)
+                        writer.writerow(["pressure"])
+                    flag1 = False
+
+
+                with open(filename,'a',newline='') as f: 
+                        writer = csv.writer(f)
+                        writer.writerow([data[1]])
+
+            elif data[0] == "open_detect":
+                if flag2:
+                    now_time = datetime.datetime.now()
+                    filename = 'open_detect_phase_' + now_time.strftime('%Y%m%d_%H%M%S') + '.csv'
+
+                    with open(filename,'a',newline='') as f: 
+                        writer = csv.writer(f)
+                        writer.writerow(["prop"])
+                    flag2 = False
+
+
+                with open(filename,'a',newline='') as f: 
+                        writer = csv.writer(f)
+                        writer.writerow([data[1]])
+
+
+            elif data[0] == "guide_phase1":
+                if flag3:
+                    now_time = datetime.datetime.now()
+                    filename = 'guide_phase1_' + now_time.strftime('%Y%m%d_%H%M%S') + '.csv'
+
+                    with open(filename,'a',newline='') as f: 
+                        writer = csv.writer(f)
+                        writer.writerow(["theta", "gps_latitude", "gps_longitude", "x_now", "y_now", "distance", "stack"])
+                    flag3 = False
+
+
+                with open(filename,'a',newline='') as f: 
+                        writer = csv.writer(f)
+                        writer.writerow([data[1], data[2], data[3], data[4], data[5], data[6], data[7]])
+
+            else:
+                if flag4:
+                    now_time = datetime.datetime.now()
+                    filename = 'guide_phase2_' + now_time.strftime('%Y%m%d_%H%M%S') + '.csv'
+
+                    with open(filename,'a',newline='') as f: 
+                        writer = csv.writer(f)
+                        writer.writerow(["theta", "prop"])
+                    flag4 = False
+
+
+                with open(filename,'a',newline='') as f: 
+                        writer = csv.writer(f)
+                        writer.writerow([data[1], data[2]])
+
+        return write
+
+    csv_write = csv_write_f()
+
+
+
+    while True:
+
+        csv_write(*write_data)
+        send_data(*write_data)
+
+        time.sleep(1)
+# --------------------------------------------------------------------------------------------------
+
 
 # 以下カメラ用関数
 # ----------------------------------------------------------------------------------------------
-
-def csv_write_f():
-
-    flag = True
-    filename = ""
-
-    def write(x,y):
-
-        import csv
-
-        nonlocal flag
-        nonlocal filename
-
-        if flag:
-            now_time = datetime.datetime.now()
-            filename = 'test_' + now_time.strftime('%Y%m%d_%H%M%S') + '.csv'
-
-            with open(filename,'a',newline='') as f: 
-                writer = csv.writer(f)
-                writer.writerow(["theta", "prop"])
-            flag = False
-
-
-        with open(filename,'a',newline='') as f: 
-                writer = csv.writer(f)
-                writer.writerow([x, y])
-
-    return write
-
-csv_write = csv_write_f()
-
-
 def hsv_binary(img_hsv,sat_avg,val_avg):
     #画像のチャンネルを分ける
     #画像のチャンネルを分ける img[縦，横，[h,s,v]]　この行程でグレースケールになる
@@ -758,27 +848,25 @@ def takepic():
     prop=scanprop(img_th)
 
     data = (theta,prop)
-    csv_write(*data)
 
     return theta,prop
 
 # -----------------------------------------------------------------------------------------------
 
-
-
 # ここからメイン
 print("main started")
 
-# 制御履歴CSVファイルの作成
-with open('phase1_record.csv','w',newline='') as f: 
-    writer = csv.writer(f)
-    writer.writerow(["theta_absolute","theta_relative","gps_latitude","gps_longitude","x_now","y_now","distance","stack"])
-f.close()
-print("csv created")
 
 # ---ここから着地・展開検知---
 land_pressure=average_pressure() #基準となる地表での気圧を取得
 print('land_pressure : {} hPa'.format(land_pressure))
+
+pressure=get_pressure()
+
+write_data = ("land_detect",pressure) 
+th_subthread = threading.Thread(target=subThread)
+th_subthread.setDaemon(True)
+th_subthread.start()
 
 i=0
 while(i<=10): #上昇したかを判断
@@ -788,28 +876,28 @@ while(i<=10): #上昇したかを判断
     if pressure<(land_pressure-1.21923): #3階用 
     #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
         i+=1
-        print("In the sky")
         print(i)
     else: #50m地点に上がりきるまでyetを出力
         i=0
-        print("yet") 
-print("next\n") #10回連続50m以上の値になったら着地判定へ
-
+    time.sleep(0.1)
+    write_data = ("land_detect",pressure)
+print("In the sky")
 
 i=0
 while(i<=10): #着地したかを判断
     pressure=get_pressure()
+    time.sleep(0.1)
 
     if pressure>(land_pressure-0.05): 
-        i=i+1
+        i+=1
         print(i)
     else: 
         i=0
-        print("yet")
     time.sleep(0.1)
+    write_data = ("land_detect",pressure)
 print("On the land")
 
-time.sleep(240)
+time.sleep(180)
 
 #展開検知
 for j in range(5): #赤の割合が一定以下になるまで繰り返す
@@ -819,13 +907,12 @@ for j in range(5): #赤の割合が一定以下になるまで繰り返す
     data=takepic()
     prop=data[1] #Rの割合取得
     
+    write_data = ("open_detect",prop)
     
     if prop<10: 
        print(prop)
        break 
-
     else:
-        print("yet")
         print(prop) 
         continue
    
@@ -900,7 +987,9 @@ try:
     # angleから回転角度取得
     theta_relative = angle(x_now, y_now, theta_absolute)
     print("got theta_relative=", theta_relative)
-    record()
+    distance = math.sqrt( x_now**2 + y_now**2 )
+    write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
+    
     while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
         print("entered while")
         """
@@ -939,7 +1028,8 @@ try:
             theta_absolute = magnet()
             theta_relative = angle(x_now, y_now, theta_absolute)
             print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
-            record()
+            distance = math.sqrt( x_now**2 + y_now**2 )
+            write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
             if(theta_relative > -10 and theta_relative < 10): break
         """
         # x_now, y_now を表示したい
@@ -970,20 +1060,25 @@ try:
         # angleから回転角度取得
         theta_relative = angle(x_now, y_now, theta_absolute)
         print("got theta_relative=", theta_relative)
-        record()
+        distance = math.sqrt( x_now**2 + y_now**2 )
+        write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
 
     print("3m goal")
     
     val_rate = 2.0
         
     # 赤コーン探索フェーズ
+    write_data = ("guide_phase2",theta_relative,prop)
+    
     while True:
         data = takepic()
+        theta_relative = data[0]
         prop = data[1]
         print(f"prop={prop}")
         if prop > borderprop:
             break
         rotate(20)
+        write_data = ("guide_phase2",theta_relative,prop)
     print("find!!")
 
     # 赤コーン接近フェーズ 
@@ -991,16 +1086,17 @@ try:
     DUTY_B = 33   
     for i in range(5):
         data = takepic()
-        theta = data[0]
+        theta_relative = data[0]
         prop = data[1]
-        print(f"theta={theta}")
-        rotate(theta)
+        print(f"theta_relative={theta_relative}")
+        rotate(theta_relative*1.2)
         go_ahead()
         if prop > 60:
             break
         if prop > 10:
             DUTY_A = 20
-            DUTY_B = 22   
+            DUTY_B = 22
+        write_data = ("guide_phase2",theta_relative,prop)
             
     pwm_left.stop()
     pwm_right.stop()
@@ -1013,4 +1109,3 @@ except KeyboardInterrupt:
     pwm_left.stop()
     pwm_right.stop()
     GPIO.cleanup()
-
