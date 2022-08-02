@@ -990,7 +990,7 @@ try:
         theta = data[0]
         prop = data[1]
         print(f"theta={theta}")
-        rotate(theta_relative)
+        rotate(theta)
         go_ahead()
         if prop > 60:
             break
