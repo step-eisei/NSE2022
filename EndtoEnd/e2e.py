@@ -858,8 +858,8 @@ print("main started")
 
 
 # ---ここから着地・展開検知---
-land_pressure=average_pressure() #基準となる地表での気圧を取得
-print('land_pressure : {} hPa'.format(land_pressure))
+# land_pressure=average_pressure() #基準となる地表での気圧を取得
+# print('land_pressure : {} hPa'.format(land_pressure))
 
 pressure=get_pressure()
 
@@ -868,56 +868,56 @@ th_subthread = threading.Thread(target=subThread)
 th_subthread.setDaemon(True)
 th_subthread.start()
 
-i=0
-while(i<=10): #上昇したかを判断
-    pressure=get_pressure()
-    time.sleep(0.1)
+# i=0
+# while(i<=10): #上昇したかを判断
+#     pressure=get_pressure()
+#     time.sleep(0.1)
     
-    if pressure<(land_pressure-1.21923): #3階用 
-    #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
-        i+=1
-        print(i)
-    else: #50m地点に上がりきるまでyetを出力
-        i=0
-    time.sleep(0.1)
-    write_data = ("land_detect",pressure)
-print("In the sky")
+#     if pressure<(land_pressure-1.21923): #3階用 
+#     #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
+#         i+=1
+#         print(i)
+#     else: #50m地点に上がりきるまでyetを出力
+#         i=0
+#     time.sleep(0.1)
+#     write_data = ("land_detect",pressure)
+# print("In the sky")
 
-i=0
-while(i<=10): #着地したかを判断
-    pressure=get_pressure()
-    time.sleep(0.1)
+# i=0
+# while(i<=10): #着地したかを判断
+#     pressure=get_pressure()
+#     time.sleep(0.1)
 
-    if pressure>(land_pressure-0.05): 
-        i+=1
-        print(i)
-    else: 
-        i=0
-    time.sleep(0.1)
-    write_data = ("land_detect",pressure)
-print("On the land")
+#     if pressure>(land_pressure-0.05): 
+#         i+=1
+#         print(i)
+#     else: 
+#         i=0
+#     time.sleep(0.1)
+#     write_data = ("land_detect",pressure)
+# print("On the land")
 
-time.sleep(180)
+# time.sleep(180)
 
-#展開検知
-for j in range(5): #赤の割合が一定以下になるまで繰り返す
-    nchrm()
-    print("nchrm "+str(j))
+# #展開検知
+# for j in range(5): #赤の割合が一定以下になるまで繰り返す
+#     nchrm()
+#     print("nchrm "+str(j))
 
-    data=takepic()
-    prop=data[1] #Rの割合取得
+#     data=takepic()
+#     prop=data[1] #Rの割合取得
     
-    write_data = ("open_detect",prop)
+#     write_data = ("open_detect",prop)
     
-    if prop<10: 
-       print(prop)
-       break 
-    else:
-        print(prop) 
-        continue
+#     if prop<10: 
+#        print(prop)
+#        break 
+#     else:
+#         print(prop) 
+#         continue
    
-print("open!")
-GPIO.cleanup()
+# print("open!")
+# GPIO.cleanup()
 
 # ---ここまで着地・展開検知---
 
@@ -1025,6 +1025,7 @@ try:
             theta_absolute = magnet()
             theta_relative = angle(x_now, y_now, theta_absolute)
             print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
+            distance = math.sqrt( x_now**2 + y_now**2 )
             write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
             if(theta_relative > -10 and theta_relative < 10): break
         """
