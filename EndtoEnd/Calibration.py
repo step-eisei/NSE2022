@@ -142,8 +142,6 @@ except KeyboardInterrupt:
     p = 3 # 上位何%をpickするか
     Xmax, Xmin = percentpick(magx)
     Ymax, Ymin = percentpick(magy)
-    Xcenter = (Xmax + Xmin) / 2
-    Ycenter = (Ymax + Ymin) / 2
     with open('mag.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['magX_max', 'magX_min', 'magY_max', 'magY_min'])
