@@ -768,7 +768,7 @@ def takepic():
 
 # ここからメイン
 print("main started")
-
+'''
 # 制御履歴CSVファイルの作成
 with open('phase1_record.csv','w',newline='') as f: 
     writer = csv.writer(f)
@@ -869,7 +869,7 @@ gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行す�
 gpsthread.setDaemon(True)
 gpsthread.start() # スレッドを起動
 print("thread got up")
-
+'''
 # 以下，キャリブレーションにより計算した最大値と最小値
 with open ('mag.csv', 'r' ) as f :
     reader = csv.reader(f)
@@ -878,7 +878,11 @@ with open ('mag.csv', 'r' ) as f :
     magX_min = float(line[1][1])
     magY_max = float(line[1][2])
     magY_min = float(line[1][3])
-
+print("magX_max = " + str(magX_max))
+print("magX_min = " + str(magX_min))
+print("magY_max = " + str(magY_max))
+print("magY_min = " + str(magY_min))
+'''
 # ループ(3mゴールまで)
 try:
     go_ahead()
@@ -1009,3 +1013,4 @@ except KeyboardInterrupt:
     pwm_left.stop()
     pwm_right.stop()
     GPIO.cleanup()
+'''
