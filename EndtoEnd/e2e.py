@@ -902,14 +902,13 @@ while(i<=10): #上昇したかを判断
     if pressure<(land_pressure-1.21923): #3階用 
     #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
         i+=1
-        print("In the sky")
         print(i)
     else: #50m地点に上がりきるまでyetを出力
         i=0
-        print("yet") 
-print("next\n") #10回連続50m以上の値になったら着地判定へ
+    write_data = ("land_detect",pressure) 
 
-write_data = ("open_detect",prop)
+print("In the sky") #10回連続50m以上の値になったら着地判定へ
+write_data = ("land_detect",pressure)
 
 i=0
 while(i<=10): #着地したかを判断
@@ -922,9 +921,12 @@ while(i<=10): #着地したかを判断
         i=0
         print("yet")
     time.sleep(0.1)
+    write_data = ("land_detect",pressure)
+    
 print("On the land")
+write_data = ("open_detect",prop)
 
-time.sleep(240)
+time.sleep(180)
 
 #展開検知
 for j in range(5): #赤の割合が一定以下になるまで繰り返す
@@ -933,8 +935,7 @@ for j in range(5): #赤の割合が一定以下になるまで繰り返す
 
     data=takepic()
     prop=data[1] #Rの割合取得
-    
-    
+        
     if prop<10: 
        print(prop)
        break 
@@ -943,6 +944,8 @@ for j in range(5): #赤の割合が一定以下になるまで繰り返す
         print("yet")
         print(prop) 
         continue
+        
+    write_data = ("open_detect",prop)
    
 print("open!")
 GPIO.cleanup()
@@ -1074,7 +1077,10 @@ try:
         theta_relative = angle(x_now, y_now, theta_absolute)
         print("got theta_relative=", theta_relative) 
         distance = math.sqrt( x_now**2 + y_now**2 )
+        
+        write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
 
+    
     print("3m goal")
     
     val_rate = 2.0
@@ -1090,6 +1096,7 @@ try:
         if prop > borderprop:
             break
         rotate(20)
+        write_data = ("guide_phase2",theta_relative,prop)
     print("find!!")
 
     # 赤コーン接近フェーズ 
@@ -1106,7 +1113,8 @@ try:
             break
         if prop > 10:
             DUTY_A = 20
-            DUTY_B = 22   
+            DUTY_B = 22
+        write_data = ("guide_phase2",theta_relative,prop)
             
     pwm_left.stop()
     pwm_right.stop()
