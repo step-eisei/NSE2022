@@ -74,7 +74,7 @@ try:
     
 except KeyboardInterrupt:
     # 最大値，最小値の算出
-    p = 3 # 上位何%をpickするか
+    p = 5 # 上位何%をpickするか
     Xmax, Xmin = percentpick(magx)
     Ymax, Ymin = percentpick(magy)
     with open('mag.csv', 'w', newline='') as f:
