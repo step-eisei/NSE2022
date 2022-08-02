@@ -74,7 +74,7 @@ satellites_used = 0
 stack = False
 
 takepic_counter = 1
-borderprop = 1
+borderprop = 5
 theta_relative = 0
 prop = 0
 
