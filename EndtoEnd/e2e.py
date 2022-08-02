@@ -858,8 +858,8 @@ print("main started")
 
 
 # ---ここから着地・展開検知---
-# land_pressure=average_pressure() #基準となる地表での気圧を取得
-# print('land_pressure : {} hPa'.format(land_pressure))
+land_pressure=average_pressure() #基準となる地表での気圧を取得
+print('land_pressure : {} hPa'.format(land_pressure))
 
 pressure=get_pressure()
 
