@@ -1065,7 +1065,7 @@ try:
 
     print("3m goal")
     
-    val_rate = 2.0
+    val_rate = 0.6
         
     # 赤コーン探索フェーズ
     write_data = ("guide_phase2",theta_relative,prop)
@@ -1084,7 +1084,6 @@ try:
     # 赤コーン接近フェーズ 
     DUTY_A = 30
     DUTY_B = 33   
-    val_rate = 0.6
     
     for i in range(5):
         data = takepic()
