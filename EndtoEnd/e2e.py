@@ -1084,6 +1084,8 @@ try:
     # 赤コーン接近フェーズ 
     DUTY_A = 30
     DUTY_B = 33   
+    val_rate = 0.6
+    
     for i in range(5):
         data = takepic()
         theta_relative = data[0]
