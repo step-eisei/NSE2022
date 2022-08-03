@@ -52,22 +52,23 @@ gps_latitude = 100
 gps_longitude = 100
 sum_latitude = 0
 sum_longitude = 0
-for i in range(300):
-    while True:
-        #ちゃんとしたデータがある程度たまってから出力
-        if my_gps.clean_sentences > 20:
-            gps_latitude = my_gps.latitude[0]
-            gps_longitude = my_gps.longitude[0]
-            sum_latitude += gps_latitude
-            sum_longitude += gps_longitude
-            #衛星数を出力
-            print(f"gps_latitude = {gps_latitude}, gps_longitude = {gps_longitude}")
-            #mode='a'は追記モードでファイルを開く
-            with open(gps_name,mode='a',newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([gps_latitude,gps_longitude])
-            time.sleep(1)
-            break
+i = 0
+while True:
+    #ちゃんとしたデータがある程度たまってから出力
+    if my_gps.clean_sentences > 20:
+        gps_latitude = my_gps.latitude[0]
+        gps_longitude = my_gps.longitude[0]
+        sum_latitude += gps_latitude
+        sum_longitude += gps_longitude
+        #衛星数を出力
+        print(f"data num = {i+1}")
+        print(f"gps_latitude = {gps_latitude}, gps_longitude = {gps_longitude}")
+        #mode='a'は追記モードでファイルを開く
+        with open(gps_name,mode='a',newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([gps_latitude,gps_longitude])
+        i += 1
+        time.sleep(1)
 
 #平均値を算出しgoal.pyに書き込み
 goal_la = sum_latitude / 300
