@@ -67,8 +67,8 @@ while True:
         with open(gps_name,mode='a',newline='') as f:
             writer = csv.writer(f)
             writer.writerow([gps_latitude,gps_longitude])
-        i += 1
         if(i == 300): break
+        i += 1
         time.sleep(1)
 
 #平均値を算出しgoal.pyに書き込み
