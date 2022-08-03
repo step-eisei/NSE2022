@@ -900,7 +900,7 @@ print("On the land")
 time.sleep(300)
 
 #展開検知
-for j in range(5): #赤の割合が一定以下になるまで繰り返す
+for j in range(10): #赤の割合が一定以下になるまで繰り返す
     nchrm()
     print("nchrm "+str(j))
 
