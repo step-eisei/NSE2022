@@ -52,7 +52,7 @@ gps_latitude = 100
 gps_longitude = 100
 sum_latitude = 0
 sum_longitude = 0
-i = 0
+i = 1
 while True:
     #ちゃんとしたデータがある程度たまってから出力
     if my_gps.clean_sentences > 20:
@@ -68,6 +68,7 @@ while True:
             writer = csv.writer(f)
             writer.writerow([gps_latitude,gps_longitude])
         i += 1
+        if(i == 300): break
         time.sleep(1)
 
 #平均値を算出しgoal.pyに書き込み
