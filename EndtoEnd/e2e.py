@@ -897,7 +897,15 @@ while(i<=10): #着地したかを判断
     write_data = ("land_detect",pressure)
 print("On the land")
 
-time.sleep(240)
+time.sleep(60)
+print("1 minutus passed")
+time.sleep(60)
+print("2 minutus passed")
+time.sleep(60)
+print("3 minutus passed")
+time.sleep(30)
+print("3.5 minutus passed")
+time.sleep(30)
 
 #展開検知
 for j in range(10): #赤の割合が一定以下になるまで繰り返す
