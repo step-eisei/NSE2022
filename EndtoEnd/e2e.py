@@ -888,7 +888,7 @@ while(i<=10): #着地したかを判断
     pressure=get_pressure()
     time.sleep(0.1)
 
-    if pressure>(land_pressure-0.05): 
+    if pressure>(land_pressure-0.): 
         i+=1
         print(i)
     else: 
