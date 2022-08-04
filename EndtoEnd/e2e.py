@@ -64,8 +64,8 @@ min_satellites_used = 10
 
 gps_latitude = 0
 gps_longitude = 0
-x_now = 0
-y_now = 0
+x_now = 10
+y_now = 10
 x_past = 0
 y_past = 0
 x_goal = 0
