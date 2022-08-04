@@ -873,7 +873,7 @@ while(i<=10): #上昇したかを判断
     pressure=get_pressure()
     time.sleep(0.1)
     
-    if pressure<(land_pressure-1.21923): #3階用 
+    if pressure<(land_pressure-1.0): #3階用 
     #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
         i+=1
         print(i)
