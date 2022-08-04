@@ -888,7 +888,7 @@ while(i<=10): #着地したかを判断
     pressure=get_pressure()
     time.sleep(0.1)
 
-    if pressure>(land_pressure-0.15): 
+    if pressure>(land_pressure-0.2): 
         i+=1
         print(i)
     else: 
@@ -1098,6 +1098,7 @@ try:
         theta_relative = data[0]
         prop = data[1]
         print(f"theta_relative={theta_relative}")
+        print(f"prop={prop}")
         rotate(theta_relative*1.2)
         go_ahead()
         if prop > 60:
