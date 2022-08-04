@@ -103,6 +103,8 @@ time.sleep(2)
 try:
     go_ahead()
     print("went ahead")
+    pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
+    pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
     pwm_left.stop()
     pwm_right.stop()
     GPIO.cleanup()
