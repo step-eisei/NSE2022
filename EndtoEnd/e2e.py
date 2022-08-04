@@ -395,6 +395,50 @@ def go_ahead():
 #     pwm_left.stop()
 #     GPIO.cleanup()
 
+# 機体を後進，急停止させる関数
+def go_stop():
+#     # モータのセッティング
+#     GPIO.setmode(GPIO.BCM)
+#     # 左モータ
+#     GPIO.setup(PIN_AIN1, GPIO.OUT)
+#     GPIO.setup(PIN_AIN2, GPIO.OUT)
+#     # 左モータPWM
+#     GPIO.setup(PIN_PWMA, GPIO.OUT)
+#     pwm_left = GPIO.PWM(PIN_PWMA, freq)
+#     pwm_left.start(10)
+#     # 右モータ
+#     GPIO.setup(PIN_BIN1, GPIO.OUT)
+#     GPIO.setup(PIN_BIN2, GPIO.OUT)
+#     # 右モータPWM
+#     GPIO.setup(PIN_PWMB, GPIO.OUT)
+#     pwm_right = GPIO.PWM(PIN_PWMB, freq)
+#     pwm_right.start(10)
+#     # sleep
+#     time.sleep(2)
+    # 右モータ後進
+    GPIO.output(PIN_AIN1, GPIO.HIGH)
+    GPIO.output(PIN_AIN2, GPIO.LOW)
+    # 左モータ後進
+    GPIO.output(PIN_BIN1, GPIO.LOW)
+    GPIO.output(PIN_BIN2, GPIO.HIGH)
+    # 0からDUTYまで数秒かけて上げる
+    for i in range(0, 101, 2):
+        pwm_left.ChangeDutyCycle(i*DUTY_A/100)
+        pwm_right.ChangeDutyCycle(i*DUTY_B/100)
+        time.sleep(0.1)
+    # sleep
+    time.sleep(T_straight)
+    # DUTYから0まで数秒かけて下げる
+    for i in range(0, 101, 50):
+        pwm_left.ChangeDutyCycle((100-i)*DUTY_A/100)
+        pwm_right.ChangeDutyCycle((100-i)*DUTY_B/100)
+        time.sleep(0.1)
+    time.sleep(2)
+    # モータの解放
+#     pwm_right.stop()
+#     pwm_left.stop()
+#     GPIO.cleanup()
+
 # 機体を後進させる関数
 def go_back():
     # モータのセッティング
@@ -980,8 +1024,8 @@ print("magY_min = " + str(magY_min))
 
 # ループ(3mゴールまで)
 try:
-    go_ahead()
-    print("went ahead")
+    go_stop()
+    print("do utimura")
     # gpsから緯度・経度取得
     getgps()
     print("got gps")
