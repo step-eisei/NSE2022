@@ -796,9 +796,9 @@ def subThread():
 
     csv_write = csv_write_f()
     while True:
-
-        csv_write(*write_data)
-        send_data(*write_data)
+        data = write_data
+        csv_write(*data)
+        send_data(*data)
 
         time.sleep(2)
 # --------------------------------------------------------------------------------------------------
