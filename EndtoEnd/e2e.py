@@ -791,7 +791,7 @@ def subThread():
         csv_write(*write_data)
         send_data(*write_data)
 
-        time.sleep(1)
+        time.sleep(2)
 # --------------------------------------------------------------------------------------------------
 
 
@@ -1116,6 +1116,7 @@ try:
         write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
 
     print("3m goal")
+    time.sleep(4)
     
     val_rate = 0.6
         
