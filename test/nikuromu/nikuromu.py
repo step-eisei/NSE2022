@@ -8,3 +8,5 @@ GPIO.output(22, True)
 #ここの数字は実験次第
 time.sleep(2)
 GPIO.output(22, False)
+
+GPIO.cleanup()
