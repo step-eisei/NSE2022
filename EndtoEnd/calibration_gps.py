@@ -20,14 +20,17 @@ def rungps():
     ser = serial.Serial("/dev/ttySOFT0",4800,timeout=20)
     ser.readline()
     while True:
-        #受信したデータをバイナリデータからテキストデータへ変換
-        sentence = ser.readline().decode('utf-8')
-        #先頭が'$'でなければ捨てる
-        if sentence[0] != '$':
-            continue
-        #
-        for x in sentence:
-            my_gps.update(x)
+        try:
+            #受信したデータをバイナリデータからテキストデータへ変換
+            sentence = ser.readline().decode('utf-8')
+            #先頭が'$'でなければ捨てる
+            if sentence[0] != '$':
+                continue
+            #
+            for x in sentence:
+                my_gps.update(x)
+        except:
+            print("GPS error, but ignored")
 
 #上の関数を実行するスレッドを生成
 gpsthread = threading.Thread(target=rungps, args=())
