@@ -279,6 +279,7 @@ def getgps():
     
 # 機体を旋回させる関数
 def rotate(theta_relative):
+    global motor
     motor = "rotate"
     R_DUTY_A = 10
     R_DUTY_B = 10
@@ -315,7 +316,7 @@ def rotate(theta_relative):
     pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
     pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
     time.sleep(3)
-    motor = ""
+#     motor = ""
     """
      # モータのセッティング
      GPIO.setmode(GPIO.BCM)
@@ -395,7 +396,7 @@ def go_ahead():
             pwm_right.ChangeDutyCycle((100-i)*DUTY_B/200)
             time.sleep(0.07)
     time.sleep(2)
-    motor = ""
+#     motor = ""
     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
@@ -442,7 +443,7 @@ def go_stop():
         pwm_right.ChangeDutyCycle((100-i)*DUTY_B/100)
         time.sleep(0.1)
     time.sleep(2)
-    motor = ""
+#     motor = ""
     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
@@ -501,7 +502,7 @@ def go_back():
             pwm_right.ChangeDutyCycle((100-i)*DUTY_B/200)
             time.sleep(0.05)
     time.sleep(2)
-    motor = ""
+#     motor = ""
     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
@@ -595,13 +596,13 @@ def calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude):
 # スタック処理をする関数
 def stack():
     global  motor
-    motor = "solve stack"
     global gps_latitude
     global gps_longitude
     global x_now
     global y_now
     global x_past
     global y_past
+    motor = "solve stack"
     p = 0
     x_past = x_now
     y_past = y_now
@@ -646,7 +647,7 @@ def stack():
     gpsの測定精度より完璧なスタック検知が困難である
      スタックを前進により抜けたがスタック検知した場合,後進で再度スタックする危険がある
     """
-    motor = ""
+#     motor = ""
 
     
 # 角度取得関数
