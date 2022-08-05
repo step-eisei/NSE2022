@@ -726,7 +726,7 @@ def subThread():
 
                     with open(filename,'a',newline='') as f: 
                         writer = csv.writer(f)
-                        writer.writerow(["pressure"])
+                        writer.writerow(["pressure[hPa]])
                     flag1 = False
 
 
@@ -741,7 +741,7 @@ def subThread():
 
                     with open(filename,'a',newline='') as f: 
                         writer = csv.writer(f)
-                        writer.writerow(["prop"])
+                        writer.writerow(["prop[%]"])
                     flag2 = False
 
 
@@ -757,7 +757,7 @@ def subThread():
 
                     with open(filename,'a',newline='') as f: 
                         writer = csv.writer(f)
-                        writer.writerow(["theta", "gps_latitude", "gps_longitude", "x_now", "y_now", "distance", "stack"])
+                        writer.writerow(["theta[°]", "gps_latitude[°]", "gps_longitude[°]", "x_now[m]", "y_now[m]", "distance[m]", "stack"])
                     flag3 = False
 
 
@@ -772,7 +772,7 @@ def subThread():
 
                     with open(filename,'a',newline='') as f: 
                         writer = csv.writer(f)
-                        writer.writerow(["theta", "prop"])
+                        writer.writerow(["theta[°]", "prop[%]"])
                     flag4 = False
 
 
