@@ -346,6 +346,7 @@ def rotate(theta_relative):
 
 # 機体を前進させる関数
 def go_ahead():
+    global  motor
     motor = "go ahead"
 #     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
@@ -402,6 +403,7 @@ def go_ahead():
 
 # 機体を後進，急停止させる関数
 def go_stop():
+    global  motor
     motor = "stop"
 #     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
@@ -448,6 +450,7 @@ def go_stop():
 
 # 機体を後進させる関数
 def go_back():
+    global  motor
     motor = "go back"
     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
@@ -591,6 +594,7 @@ def calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude):
 
 # スタック処理をする関数
 def stack():
+    global  motor
     motor = "solve stack"
     global gps_latitude
     global gps_longitude
@@ -644,7 +648,6 @@ def stack():
     """
     motor = ""
 
-
     
 # 角度取得関数
 def magnet():
@@ -679,9 +682,8 @@ def magnet():
     return theta_absolute_lowPass
 
 # 以下サブスレッド関数
-# ---------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------
 def subThread():
-
     COM = '/dev/ttyAMA0'
     ser_sub = serial.Serial(COM, 115200)   
     
@@ -728,7 +730,6 @@ def subThread():
             nonlocal flag4
 
             nonlocal filename
-
 
             if data[0] == "land_detect":
                 if flag1:
@@ -794,9 +795,6 @@ def subThread():
         return write
 
     csv_write = csv_write_f()
-
-
-
     while True:
 
         csv_write(*write_data)
