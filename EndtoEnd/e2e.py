@@ -427,7 +427,7 @@ def go_stop():
         pwm_right.ChangeDutyCycle(i*DUTY_B/100)
         time.sleep(0.1)
     # sleep
-    time.sleep(T_straight)
+    time.sleep(1)
     # DUTYから0まで数秒かけて下げる
     for i in range(0, 101, 50):
         pwm_left.ChangeDutyCycle((100-i)*DUTY_A/100)
