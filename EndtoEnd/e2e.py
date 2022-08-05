@@ -440,6 +440,7 @@ def go_stop():
         pwm_right.ChangeDutyCycle((100-i)*DUTY_B/100)
         time.sleep(0.1)
     time.sleep(2)
+    motor = ""
     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
