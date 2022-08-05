@@ -738,7 +738,7 @@ def subThread():
 
                     with open(filename,'a',newline='') as f: 
                         writer = csv.writer(f)
-                        writer.writerow(["pressure[hPa]])
+                        writer.writerow(["pressure[hPa]"])
                     flag1 = False
 
 
