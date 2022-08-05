@@ -72,6 +72,7 @@ x_goal = 0
 y_goal = 0
 satellites_used = 0
 stack = False
+motor = ""
 
 takepic_counter = 1
 borderprop = 1.2
@@ -278,6 +279,7 @@ def getgps():
     
 # 機体を旋回させる関数
 def rotate(theta_relative):
+    motor = "rotate"
     R_DUTY_A = 10
     R_DUTY_B = 10
     const = 10/765        # 単位角度における回転所要時間
@@ -313,6 +315,7 @@ def rotate(theta_relative):
     pwm_left.ChangeDutyCycle(INITIAL_DUTY_A)
     pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
     time.sleep(3)
+    motor = ""
     """
      # モータのセッティング
      GPIO.setmode(GPIO.BCM)
@@ -343,6 +346,7 @@ def rotate(theta_relative):
 
 # 機体を前進させる関数
 def go_ahead():
+    motor = "go ahead"
 #     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
 #     # 左モータ
@@ -390,6 +394,7 @@ def go_ahead():
             pwm_right.ChangeDutyCycle((100-i)*DUTY_B/200)
             time.sleep(0.07)
     time.sleep(2)
+    motor = ""
     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
@@ -397,6 +402,7 @@ def go_ahead():
 
 # 機体を後進，急停止させる関数
 def go_stop():
+    motor = "stop"
 #     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
 #     # 左モータ
@@ -441,6 +447,7 @@ def go_stop():
 
 # 機体を後進させる関数
 def go_back():
+    motor = "go back"
     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
 #     # 左モータ
@@ -490,6 +497,7 @@ def go_back():
             pwm_right.ChangeDutyCycle((100-i)*DUTY_B/200)
             time.sleep(0.05)
     time.sleep(2)
+    motor = ""
     # モータの解放
 #     pwm_right.stop()
 #     pwm_left.stop()
@@ -582,6 +590,7 @@ def calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude):
 
 # スタック処理をする関数
 def stack():
+    motor = "solve stack"
     global gps_latitude
     global gps_longitude
     global x_now
@@ -632,6 +641,7 @@ def stack():
     gpsの測定精度より完璧なスタック検知が困難である
      スタックを前進により抜けたがスタック検知した場合,後進で再度スタックする危険がある
     """
+    motor = ""
 
 
     
@@ -757,13 +767,13 @@ def subThread():
 
                     with open(filename,'a',newline='') as f: 
                         writer = csv.writer(f)
-                        writer.writerow(["theta[°]", "gps_latitude[°]", "gps_longitude[°]", "x_now[m]", "y_now[m]", "distance[m]", "stack"])
+                        writer.writerow(["theta[°]", "gps_latitude[°]", "gps_longitude[°]", "x_now[m]", "y_now[m]", "distance[m]", "stack", "motor"])
                     flag3 = False
 
 
                 with open(filename,'a',newline='') as f: 
                         writer = csv.writer(f)
-                        writer.writerow([data[1], data[2], data[3], data[4], data[5], data[6], data[7]])
+                        writer.writerow([data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]])
 
             else:
                 if flag4:
@@ -940,6 +950,7 @@ while(i<=10): #着地したかを判断
     time.sleep(0.1)
     write_data = ("land_detect",pressure)
 print("On the land")
+time.sleep(3)
 
 time.sleep(60)
 print("1 minutus passed")
@@ -970,6 +981,7 @@ for j in range(10): #赤の割合が一定以下になるまで繰り返す
    
 print("open!")
 GPIO.cleanup()
+time.sleep(3)
 
 # ---ここまで着地・展開検知---
 
@@ -1040,7 +1052,7 @@ try:
     theta_relative = angle(x_now, y_now, theta_absolute)
     print("got theta_relative=", theta_relative)
     distance = math.sqrt( x_now**2 + y_now**2 )
-    write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
+    write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack, motor)
     
     while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
         print("entered while")
@@ -1113,10 +1125,10 @@ try:
         theta_relative = angle(x_now, y_now, theta_absolute)
         print("got theta_relative=", theta_relative)
         distance = math.sqrt( x_now**2 + y_now**2 )
-        write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
+        write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack, motor)
 
     print("3m goal")
-    time.sleep(4)
+    time.sleep(3)
     
     val_rate = 0.6
         
