@@ -347,7 +347,7 @@ def rotate(theta_relative):
 
 # 機体を前進させる関数
 def go_ahead():
-    global  motor
+    global motor
     motor = "go ahead"
 #     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
@@ -404,7 +404,7 @@ def go_ahead():
 
 # 機体を後進，急停止させる関数
 def go_stop():
-    global  motor
+    global motor
     motor = "stop"
 #     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
@@ -451,7 +451,7 @@ def go_stop():
 
 # 機体を後進させる関数
 def go_back():
-    global  motor
+    global motor
     motor = "go back"
     # モータのセッティング
 #     GPIO.setmode(GPIO.BCM)
@@ -595,7 +595,7 @@ def calc_xy(gps_latitude, gps_longitude, goal_latitude, goal_longitude):
 
 # スタック処理をする関数
 def stack():
-    global  motor
+    global motor
     global gps_latitude
     global gps_longitude
     global x_now
