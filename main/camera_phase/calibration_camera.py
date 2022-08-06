@@ -1,4 +1,4 @@
- RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import numpy as nimport serial
 import csv
 import threading
