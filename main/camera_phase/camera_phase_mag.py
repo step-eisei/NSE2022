@@ -6,6 +6,7 @@
 - 変更点
  - printの追加
  - csv_write(*data)のコメントアウト
+ - rotate(mag), rotate(-max_prop_mag) → rotate(mag - max_prop_mag)
 '''
 
 import time
@@ -435,10 +436,9 @@ try:
         rotate(30)
         
     mag = magnet()
-    print("rotate mag = " + str(mag) + " deg")
-    rotate(mag)
-    print("rotate -max_prop_mag = " + str(-max_prop_mag) + " deg\n")
-    rotate(-max_prop_mag)
+    print("turn the nose towards the goal")
+    print("rotate mag " + str(mag - max_prop_mag) + " deg\n")
+    rotate(mag - max_prop_mag)
 
     # 赤コーン接近フェーズ 
     print("approaching the red cone...")
