@@ -79,8 +79,6 @@ img_th = hsv_binary(img_hsv,sat_avg,val_avg) #条件を満たす要素を255，�
 (image.fromarray(img_th)).save("scanth"+filename_camera+".jpg")
     
 takepic_counter += 1
-theta=scantheta(img_th)
-prop=scanprop(img_th)
     
 print(sat_avg)
 print(val_avg)
