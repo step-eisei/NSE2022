@@ -402,6 +402,7 @@ print("set up finished")
 
 try:
     # 赤コーン探索フェーズ
+    print("searching the red cone...")
     max_prop_mag = magnet()
     max_prop = 0
     
@@ -415,14 +416,18 @@ try:
             max_prop = prop
         
         rotate(30)
+        print("rotate 30 deg")
         
     mag = magnet()
     rotate(mag)
+    rotate("rotate mag = " + str(mag) + " deg")
     rotate(-max_prop_mag)
+    rotate("rotate -max_prop_mag = " + str(-max_prop_mag) + " deg")
     
 
 
     # 赤コーン接近フェーズ 
+    print("approaching the red corn...")
     DUTY_A = 31
     DUTY_B = 30   
     for i in range(4):
