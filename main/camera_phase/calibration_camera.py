@@ -31,8 +31,7 @@ def sv_scan(img_hsv):
     
     return sat_avg,val_avg
   
-  # 撮影
-global takepic_counter
+# 撮影
 now_time_camera = datetime.datetime.now()
 filename_camera = now_time_camera.strftime('%m%d_%H%M_')+str(takepic_counter)
 camera.capture("image"+filename_camera+".jpg")
