@@ -364,7 +364,7 @@ def takepic():
     prop=scanprop(img_th)
 
     data = (theta,prop)
-    csv_write(*data)
+    # csv_write(*data)
 
     return theta,prop
 
