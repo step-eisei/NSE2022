@@ -45,6 +45,17 @@ borderprop = 3
 theta_relative = 0
 prop = 0
 
+with open ('mag.csv', 'r' ) as f :
+    reader = csv.reader(f)
+    line = [row for row in reader]
+    magX_max = float(line[1][0])
+    magX_min = float(line[1][1])
+    magY_max = float(line[1][2])
+    magY_min = float(line[1][3])
+print("magX_max = " + str(magX_max))
+print("magX_min = " + str(magX_min))
+print("magY_max = " + str(magY_max))
+print("magY_min = " + str(magY_min))
     
 # 機体を旋回させる関数
 def rotate(theta_relative):
