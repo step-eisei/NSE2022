@@ -425,7 +425,7 @@ print("set up finished\n")
 
 try:
     # 赤コーン探索フェーズ
-    print("searching the red cone...")
+    print("looking for the red cone...")
     max_prop_mag = magnet()
     max_prop = 0
     
