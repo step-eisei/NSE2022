@@ -17,6 +17,7 @@ imageo=ImageOps
 import RPi.GPIO as GPIO
 camera=picamera.PiCamera()
 
+takepic_counter = 0
 def sv_scan(img_hsv):
     # img[:,:,0]　色相(Hue)
     # img[:,:,1]　彩度(Saturation)
