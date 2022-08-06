@@ -1,3 +1,13 @@
+'''
+- ダミーデータ
+ - x_now, y_now
+ - mag.csv
+ 
+- 変更点
+ - printの追加
+ - csv_write(*data)のコメントアウト
+'''
+
 import time
 import math
 import RPi.GPIO as GPIO
@@ -45,6 +55,10 @@ borderprop = 3
 theta_relative = 0
 prop = 0
 
+x_now = 0.1 # ダミー
+y_now = 0.1 # ダミー
+
+# ダミー
 with open ('mag.csv', 'r' ) as f :
     reader = csv.reader(f)
     line = [row for row in reader]
@@ -415,19 +429,17 @@ try:
             max_prop_mag = magnet()
             max_prop = prop
         
-        rotate(30)
         print("rotate 30 deg")
+        rotate(30)
         
     mag = magnet()
-    rotate(mag)
     print("rotate mag = " + str(mag) + " deg")
-    rotate(-max_prop_mag)
+    rotate(mag)
     print("rotate -max_prop_mag = " + str(-max_prop_mag) + " deg")
-    
-
+    rotate(-max_prop_mag)
 
     # 赤コーン接近フェーズ 
-    print("approaching the red corn...")
+    print("approaching the red cone...")
     DUTY_A = 31
     DUTY_B = 30   
     for i in range(4):
