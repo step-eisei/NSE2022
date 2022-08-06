@@ -66,7 +66,9 @@ with open ('mag.csv', 'r' ) as f :
     magX_min = float(line[1][1])
     magY_max = float(line[1][2])
     magY_min = float(line[1][3])
-print("magX_max = " + str(magX_max))
+
+    
+    ("magX_max = " + str(magX_max))
 print("magX_min = " + str(magX_min))
 print("magY_max = " + str(magY_max))
 print("magY_min = " + str(magY_min))
@@ -411,7 +413,7 @@ pwm_right.start(10)
 pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
 # sleep
 time.sleep(2)
-print("set up finished")
+print("set up finished\n")
 
 
 try:
@@ -429,13 +431,13 @@ try:
             max_prop_mag = magnet()
             max_prop = prop
         
-        print("rotate 30 deg")
+        print("rotate 30 deg\n")
         rotate(30)
         
     mag = magnet()
     print("rotate mag = " + str(mag) + " deg")
     rotate(mag)
-    print("rotate -max_prop_mag = " + str(-max_prop_mag) + " deg")
+    print("rotate -max_prop_mag = " + str(-max_prop_mag) + " deg\n")
     rotate(-max_prop_mag)
 
     # 赤コーン接近フェーズ 
