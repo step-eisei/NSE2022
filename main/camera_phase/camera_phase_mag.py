@@ -420,9 +420,9 @@ try:
         
     mag = magnet()
     rotate(mag)
-    rotate("rotate mag = " + str(mag) + " deg")
+    print("rotate mag = " + str(mag) + " deg")
     rotate(-max_prop_mag)
-    rotate("rotate -max_prop_mag = " + str(-max_prop_mag) + " deg")
+    print("rotate -max_prop_mag = " + str(-max_prop_mag) + " deg")
     
 
 
