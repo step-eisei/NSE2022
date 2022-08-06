@@ -445,6 +445,7 @@ try:
     print("turn the nose towards the goal")
     print("rotate mag " + str(mag - max_prop_mag) + " deg\n")
     rotate(mag - max_prop_mag)
+    time.sleep(3)
 
     # 赤コーン接近フェーズ 
     print("approaching the red cone...")
