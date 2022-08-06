@@ -405,7 +405,7 @@ try:
     max_prop_mag = magnet()
     max_prop = 0
     
-    if i in range(15):
+    for i in range(15):
         data = takepic()
         prop = data[1]
         
