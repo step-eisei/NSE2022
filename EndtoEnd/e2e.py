@@ -54,7 +54,7 @@ PIN_BIN1 = 26   # 左モータ(B)
 PIN_BIN2 = 16
 PIN_PWMB = 13
 # 左右のduty比(定義域：0~100)
-DUTY_A = 59 # 20~40でICが高温になります．60~70が妥当です
+DUTY_A = 50 # 20~40でICが高温になります．60~70が妥当です
 DUTY_B = 65 # 20~40でICが高温になります．60~70が妥当です
 freq = 300 # PWMの周波数
 
@@ -1088,13 +1088,13 @@ try:
             print(f"{theta_relative/1.5} deg rotated")
             """
             # 旋回後に角度のフィードバック
-            time.sleep(3)
+            time.sleep(5)
             theta_absolute = magnet()
             theta_relative = angle(x_now, y_now, theta_absolute)
             print(f"theta_absolute = {theta_absolute}\ntheta_relative = {theta_relative}")
             distance = math.sqrt( x_now**2 + y_now**2 )
             write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack)
-            if(theta_relative > -10 and theta_relative < 10): break
+            if(theta_relative > -20 and theta_relative < 20): break
         """
         # x_now, y_now を表示したい
         getgps()
