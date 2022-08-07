@@ -231,6 +231,35 @@ def go_stop():
             pwm_left.ChangeDutyCycle((100-i)*DUTY_A/200)
             pwm_right.ChangeDutyCycle((100-i)*DUTY_B/200)
             time.sleep(0.07)
+    time.sleep(0.2)
+    # 右モータ前進
+    GPIO.output(PIN_AIN1, GPIO.LOW)
+    GPIO.output(PIN_AIN2, GPIO.HIGH)
+    # 左モータ前進
+    GPIO.output(PIN_BIN1, GPIO.HIGH)
+    GPIO.output(PIN_BIN2, GPIO.LOW)
+    # 0からDUTYまで数秒かけて上げる
+    for i in range(0, 101, 10):
+        if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/100)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/100)
+            time.sleep(0.1)
+        else: 
+            pwm_left.ChangeDutyCycle(i*DUTY_A/200)
+            pwm_right.ChangeDutyCycle(i*DUTY_B/200)
+            time.sleep(0.07)
+    # sleep
+    time.sleep(T_straight)
+    # DUTYから0まで数秒かけて下げる
+    for i in range(0, 101, 5):
+        if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
+            pwm_left.ChangeDutyCycle((100-i)*DUTY_A/100)
+            pwm_right.ChangeDutyCycle((100-i)*DUTY_B/100)
+            time.sleep(0.1)
+        else: 
+            pwm_left.ChangeDutyCycle((100-i)*DUTY_A/200)
+            pwm_right.ChangeDutyCycle((100-i)*DUTY_B/200)
+            time.sleep(0.07)
     time.sleep(2)
 
 def go_stop2(): # 前進速め
