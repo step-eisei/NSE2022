@@ -909,7 +909,7 @@ def takepic():
 
 # ここからメイン
 print("main started")
-
+'''
 
 # ---ここから着地・展開検知---
 land_pressure=average_pressure() #基準となる地表での気圧を取得
@@ -982,7 +982,7 @@ for j in range(10): #赤の割合が一定以下になるまで繰り返す
 print("open!")
 GPIO.cleanup()
 time.sleep(3)
-
+'''
 # ---ここまで着地・展開検知---
 
 # ---ここからGPSフェーズ---
