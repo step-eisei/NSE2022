@@ -8,7 +8,7 @@ PIN_BIN1 = 26
 PIN_BIN2 = 16
 PIN_PWMB = 13
 DUTY_A = 50 # 念のため20より上には上げないように
-DUTY_B = 60 # 念のため20より上には上げないように
+DUTY_B = 65 # 念のため20より上には上げないように
 
 GPIO.setmode(GPIO.BCM)
 
