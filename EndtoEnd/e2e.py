@@ -968,6 +968,9 @@ print("3.5 minutus passed")
 time.sleep(30)
 
 #展開検知
+for k in range(3): #最低3回加熱
+    nchrm()
+    print("nchrm " +str(k-3))
 for j in range(10): #赤の割合が一定以下になるまで繰り返す
     nchrm()
     print("nchrm "+str(j))
