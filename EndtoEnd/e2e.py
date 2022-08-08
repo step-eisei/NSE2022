@@ -59,7 +59,7 @@ DUTY_B = 60 # 20~40でICが高温になります．60~70が妥当です
 freq = 300 # PWMの周波数
 
 T_straight = 0
-final_distance = 3
+final_distance = 5
 min_satellites_used = 10
 
 gps_latitude = 0
