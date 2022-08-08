@@ -1209,6 +1209,14 @@ try:
     print("turn the nose towards the goal")
     print("rotate mag " + str(mag - max_prop_mag) + " deg\n")
     rotate(mag - max_prop_mag)
+    while True:
+        mag_now = magnet()
+        if(mag_now >= max_prop_mag-30 and mag_now <= max_prop_mag+30): break
+        else:
+            if(mag_now < 0 and max_prop_mag > 0): mag_now += 360
+            if(mag_now > 0 and max_prop_mag < 0): max_prop_mag += 360
+            if(mag_now >= max_prop_mag-30 and mag_now <= max_prop_mag+30): break
+            rotate(mag_now - max_prop_mag)
     time.sleep(3)
 
     # 赤コーン接近フェーズ 
