@@ -1084,11 +1084,12 @@ print("magY_max = " + str(magY_max))
 print("magY_min = " + str(magY_min))
 
 # デバッグ用関数
-while True:
-    # magnetから絶対角度取得
-    theta_absolute = magnet()
-    print("got theta_absolute=", theta_absolute)
-    time.sleep(1)
+try:
+    while True:
+        # magnetから絶対角度取得
+        theta_absolute = magnet()
+        print("got theta_absolute=", theta_absolute)
+        time.sleep(1)
 
 # # ループ(3mゴールまで)
 # try:
