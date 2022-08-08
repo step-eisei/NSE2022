@@ -913,83 +913,83 @@ def takepic():
 
 # -----------------------------------------------------------------------------------------------
 
-# # ここからメイン
-# print("main started")
+# ここからメイン
+print("main started")
 
-# # ---ここから着地・展開検知---
-# land_pressure=average_pressure() #基準となる地表での気圧を取得
-# print('land_pressure : {} hPa'.format(land_pressure))
+# ---ここから着地・展開検知---
+land_pressure=average_pressure() #基準となる地表での気圧を取得
+print('land_pressure : {} hPa'.format(land_pressure))
 
-# pressure=get_pressure()
+pressure=get_pressure()
 
-# write_data = ("land_detect",pressure) 
-# th_subthread = threading.Thread(target=subThread)
-# th_subthread.setDaemon(True)
-# th_subthread.start()
+write_data = ("land_detect",pressure) 
+th_subthread = threading.Thread(target=subThread)
+th_subthread.setDaemon(True)
+th_subthread.start()
 
-# i=0
-# while(i<=10): #上昇したかを判断
-#     pressure=get_pressure()
-#     time.sleep(0.1)
+i=0
+while(i<=10): #上昇したかを判断
+    pressure=get_pressure()
+    time.sleep(0.1)
     
-#     if pressure<(land_pressure-0.8): #3階用 
-#     #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
-#         i+=1
-#         print(i)
-#     else: #50m地点に上がりきるまでyetを出力
-#         i=0
-#     time.sleep(0.1)
-#     write_data = ("land_detect",pressure)
-# print("In the sky")
+    if pressure<(land_pressure-0.8): #3階用 
+    #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
+        i+=1
+        print(i)
+    else: #50m地点に上がりきるまでyetを出力
+        i=0
+    time.sleep(0.1)
+    write_data = ("land_detect",pressure)
+print("In the sky")
 
-# i=0
-# while(i<=10): #着地したかを判断
-#     pressure=get_pressure()
-#     time.sleep(0.1)
+i=0
+while(i<=10): #着地したかを判断
+    pressure=get_pressure()
+    time.sleep(0.1)
 
-#     if pressure>(land_pressure-0.4): 
-#         i+=1
-#         print(i)
-#     else: 
-#         i=0
-#     time.sleep(0.1)
-#     write_data = ("land_detect",pressure)
-# print("On the land")
-# time.sleep(3)
+    if pressure>(land_pressure-0.4): 
+        i+=1
+        print(i)
+    else: 
+        i=0
+    time.sleep(0.1)
+    write_data = ("land_detect",pressure)
+print("On the land")
+time.sleep(3)
 
-# time.sleep(60)
-# print("1 minutus passed")
-# time.sleep(60)
-# print("2 minutus passed")
-# time.sleep(60)
-# print("3 minutus passed")
-# time.sleep(30)
-# print("3.5 minutus passed")
-# time.sleep(30)
+time.sleep(60)
+print("1 minutus passed")
+time.sleep(60)
+print("2 minutus passed")
+time.sleep(60)
+print("3 minutus passed")
+time.sleep(30)
+print("3.5 minutus passed")
+time.sleep(30)
 
-# #展開検知
-# for k in range(3): #最低3回加熱
-#     nchrm()
-#     print("nchrm " +str(k-3))
-# for j in range(10): #赤の割合が一定以下になるまで繰り返す
-#     nchrm()
-#     print("nchrm "+str(j))
+#展開検知
+for k in range(3): #最低3回加熱
+    nchrm()
+    print("nchrm " +str(k-3))
+for j in range(10): #赤の割合が一定以下になるまで繰り返す
+    nchrm()
+    print("nchrm "+str(j))
 
-#     data=takepic()
-#     prop=data[1] #Rの割合取得
+    data=takepic()
+    prop=data[1] #Rの割合取得
     
-#     write_data = ("open_detect",prop)
+    write_data = ("open_detect",prop)
     
-#     if prop<10: 
-#        print(prop)
-#        break 
-#     else:
-#         print(prop) 
-#         continue
+    if prop<10: 
+       print(prop)
+       break 
+    else:
+        print(prop) 
+        continue
    
-# print("open!")
-# GPIO.cleanup()
-# time.sleep(3)
+print("open!")
+GPIO.cleanup()
+time.sleep(3)
 
 # ---ここまで着地・展開検知---
 
