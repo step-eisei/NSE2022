@@ -1211,14 +1211,23 @@ try:
     rotate(mag - max_prop_mag)
     while True:
         mag_now = magnet()
-        if(mag_now >= max_prop_mag-30 and mag_now <= max_prop_mag+30): break
-        else:
-            if(mag_now < 0 and max_prop_mag > 0): mag_now += 360
-            if(mag_now > 0 and max_prop_mag < 0): max_prop_mag += 360
+        if(int(mag_now/math.fabs(mag_now)) == int(max_prop_mag/math.fabs(max_prop_mag))):
             if(mag_now >= max_prop_mag-30 and mag_now <= max_prop_mag+30): break
-            rotate(mag_now - max_prop_mag)
-            print(f"rotate mag {mag_now-max_prop_mag} deg")
-            time.sleep(1)
+            else:
+                rotate(mag_now - max_prop_mag)
+                print(f"rotate mag {mag_now-max_prop_mag} deg")
+                time.sleep(1)
+        else:
+            if(mag_now < 0): mag_now += 360
+            if(mag_now > 0): max_prop_mag += 360
+            if(mag_now >= max_prop_mag-30 and mag_now <= max_prop_mag+30): break
+            else:
+                need_mag = mag_now - max_prop_mag
+                if(need_mag < -180): need_mag += 360
+                if(need_mag > 180): need_mag -= 360
+                rotate(need_mag)
+                print(f"rotate mag {need_mag} deg")
+                time.sleep(1)
     time.sleep(3)
 
     # 赤コーン接近フェーズ 
