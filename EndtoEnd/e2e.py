@@ -1,7 +1,4 @@
 # 案1 rungps()関数をthreadする方法
-# 未定義：モータ制御の時間など，座標計算時の定数をループするか，スタックの条件
-# magnetは作っていません
-# 制御履歴の保存先はphase1_record.csv
 # 移動検知は3.5mとした．スタックの過剰検知に寄せる．後々検知幅を小さくする予定
 
 from xml.dom.expatbuilder import parseString
@@ -18,7 +15,7 @@ import micropyGPS
 import csv
 import threading
 
-import FaBo9Axis_MPU9250
+from smbus import SMBus
 import sys
 import datetime
 import re
@@ -33,7 +30,15 @@ image=Image
 imageo=ImageOps
 camera=picamera.PiCamera()
 
-mpu9250 = FaBo9Axis_MPU9250.MPU9250()
+# BMX055とI2C
+ACCL_ADDR = 0x19
+ACCL_R_ADDR = 0x02
+GYRO_ADDR = 0x69
+GYRO_R_ADDR = 0x02
+MAG_ADDR = 0x13
+MAG_R_ADDR = 0x42
+i2c = SMBus(1)
+
 image_folder="image_jpg_folder"
 scanth_folder="scanth_jpg_folder"
 os.makedirs(image_folder, exist_ok=True)
@@ -276,7 +281,31 @@ def getgps():
             #print(gps_longitude)
             break
         time.sleep(3)
-    
+
+# 地磁気からデータを得る関数
+def mag_value():
+    data = [0, 0, 0, 0, 0, 0, 0, 0]
+    mag_data = [0.0, 0.0, 0.0]
+
+    try:
+        for i in range(8):
+            data[i] = i2c.read_byte_data(MAG_ADDR, MAG_R_ADDR + i)
+
+        for i in range(3):
+            if i != 2:
+                mag_data[i] = ((data[2*i + 1] * 256) + (data[2*i] & 0xF8)) / 8
+                if mag_data[i] > 4095:
+                    mag_data[i] -= 8192
+            else:
+                mag_data[i] = ((data[2*i + 1] * 256) + (data[2*i] & 0xFE)) / 2
+                if mag_data[i] > 16383:
+                    mag_data[i] -= 32768
+
+    except IOError as e:
+        print("I/O error({0}): {1}".format(e.errno, e.strerror))
+
+    return mag_data
+
 # 機体を旋回させる関数
 def rotate(theta_relative):
     global motor
@@ -655,7 +684,6 @@ def stack():
     """
 #     motor = ""
 
-    
 # 角度取得関数
 def magnet():
     # データを取り始めて数データはノイズが大きい可能性
@@ -663,15 +691,15 @@ def magnet():
     magXs=[]
     magYs=[]
     for i in range(5):
-        mag = mpu9250.readMagnet()
+        mag = mag_value()
         # print(" mx = " , ( mag['x']   ), end='')
         # print(" my = " , ( mag['y']   ), end='')
         # print(" mz = " , ( mag['z'] ))
         # print()
 
         # キャリブレーション
-        magX_calibrated = (mag['x']-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
-        magY_calibrated = (mag['y']-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
+        magX_calibrated = (mag[0]-(magX_max + magX_min)/2) / ((magX_max - magX_min)/2)
+        magY_calibrated = (mag[1]-(magY_max + magY_min)/2) / ((magY_max - magY_min)/2)
         
         #リスト追加
         magXs.append(magX_calibrated)
@@ -1028,6 +1056,19 @@ gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行す�
 gpsthread.setDaemon(True)
 gpsthread.start() # スレッドを起動
 print("thread got up")
+
+# 地磁気値をセットアップ
+data = i2c.read_byte_data(MAG_ADDR, 0x4B)
+if(data == 0):
+    i2c.write_byte_data(MAG_ADDR, 0x4B, 0x83)
+    time.sleep(0.5)
+i2c.write_byte_data(MAG_ADDR, 0x4B, 0x01)
+i2c.write_byte_data(MAG_ADDR, 0x4C, 0x00)
+i2c.write_byte_data(MAG_ADDR, 0x4E, 0x84)
+i2c.write_byte_data(MAG_ADDR, 0x51, 0x04)
+i2c.write_byte_data(MAG_ADDR, 0x52, 0x16)
+print("BMX setup fin.")
+time.sleep(0.5)
 
 # 以下，キャリブレーションにより計算した最大値と最小値
 with open ('mag.csv', 'r' ) as f :
