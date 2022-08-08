@@ -1140,39 +1140,40 @@ try:
     
     val_rate = 0.6
         
+ try:
     # 赤コーン探索フェーズ
-    write_data = ("guide_phase2",theta_relative,prop)
+    print("looking for the red cone...")
+    max_prop_mag = magnet()
+    max_prop = 0
     
-    while True:
+    for i in range(15):
         data = takepic()
-        theta_relative = data[0]
         prop = data[1]
+        
         print(f"prop={prop}")
-        if prop > borderprop:
-            break
-        rotate(20)
-        write_data = ("guide_phase2",theta_relative,prop)
-    print("find!!")
+        if prop > max_prop:
+            max_prop_mag = magnet()
+            max_prop = prop
+        
+        print("rotate 30 deg\n")
+        rotate(30)
+        
+    mag = magnet()
+    print("turn the nose towards the goal")
+    print("rotate mag " + str(mag - max_prop_mag) + " deg\n")
+    rotate(mag - max_prop_mag)
+    time.sleep(3)
 
     # 赤コーン接近フェーズ 
-    DUTY_A = 30
-    DUTY_B = 33   
-    
-    for i in range(5):
+    print("approaching the red cone...")
+    DUTY_A = 31
+    DUTY_B = 30   
+    for i in range(4):
         data = takepic()
-        theta_relative = data[0]
-        prop = data[1]
-        print(f"theta_relative={theta_relative}")
-        print(f"prop={prop}")
-        rotate(theta_relative*1.2)
+        theta = data[0]
+        print(f"theta={theta}")
+        rotate(theta_relative)
         go_ahead()
-        if prop > 60:
-            break
-        if prop > 10:
-            DUTY_A = 20
-            DUTY_B = 22
-        write_data = ("guide_phase2",theta_relative,prop)
-            
     pwm_left.stop()
     pwm_right.stop()
     GPIO.cleanup()
