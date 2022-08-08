@@ -1226,8 +1226,8 @@ try:
         if prop > 10:
             DUTY_A = 20
             DUTY_B = 22
-        if prop < 2:
-            break
+        # if prop < 2:
+        #   break
         write_data = ("guide_phase2",theta_relative,prop)
         
     pwm_left.stop()
