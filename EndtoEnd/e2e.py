@@ -1146,7 +1146,6 @@ try:
     
     val_rate = 0.6
         
- try:
     # 赤コーン探索フェーズ
     print("looking for the red cone...")
     max_prop_mag = magnet()
