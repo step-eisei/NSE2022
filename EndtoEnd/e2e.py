@@ -52,8 +52,8 @@ with open ('goal.csv', 'r') as f :
 
 
 # モータのピン割り当て(GPIO 〇〇)
-PIN_AIN1 = 24   # 右モータ(A)
-PIN_AIN2 = 23
+PIN_AIN1 = 23   # 右モータ(A)
+PIN_AIN2 = 24
 PIN_PWMA = 12
 PIN_BIN1 = 26   # 左モータ(B)
 PIN_BIN2 = 16
