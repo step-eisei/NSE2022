@@ -56,8 +56,8 @@ PIN_AIN1 = 24   # 右モータ(A)
 PIN_AIN2 = 23
 PIN_PWMA = 12
 PIN_BIN1 = 26   # 左モータ(B)
-PIN_BIN2 = 16
-PIN_PWMB = 13
+PIN_BIN2 = 13
+PIN_PWMB = 16
 # 左右のduty比(定義域：0~100)
 DUTY_A = 59 # 20~40でICが高温になります．60~70が妥当です
 DUTY_B = 61 # 20~40でICが高温になります．60~70が妥当です
