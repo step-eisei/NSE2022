@@ -411,7 +411,7 @@ def go_ahead():
         else: 
             pwm_left.ChangeDutyCycle(i*DUTY_A/200)
             pwm_right.ChangeDutyCycle(i*DUTY_B/200)
-            time.sleep(0.07)
+            time.sleep(0.05)
     # sleep
     time.sleep(T_straight)
     # DUTYから0まで数秒かけて下げる
@@ -423,7 +423,7 @@ def go_ahead():
         else: 
             pwm_left.ChangeDutyCycle((100-i)*DUTY_A/200)
             pwm_right.ChangeDutyCycle((100-i)*DUTY_B/200)
-            time.sleep(0.07)
+            time.sleep(0.05)
     time.sleep(2)
 #     motor = ""
     # モータの解放
