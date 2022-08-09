@@ -404,14 +404,14 @@ def go_ahead():
     GPIO.output(PIN_BIN2, GPIO.LOW)
     # 0からDUTYまで数秒かけて上げる
     for i in range(0, 101, 2):
-        if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
+        if(math.sqrt( x_now**2 + y_now**2 ) > 20): 
             pwm_left.ChangeDutyCycle(i*DUTY_A/100)
             pwm_right.ChangeDutyCycle(i*DUTY_B/100)
             time.sleep(0.1)
         else: 
             pwm_left.ChangeDutyCycle(i*DUTY_A/200)
             pwm_right.ChangeDutyCycle(i*DUTY_B/200)
-            time.sleep(0.05)
+            time.sleep(0.04)
     # sleep
     time.sleep(T_straight)
     # DUTYから0まで数秒かけて下げる
@@ -1233,7 +1233,7 @@ try:
 
     # 赤コーン接近フェーズ 
     print("approaching the red cone...")
-    for i in range(6):
+    for i in range(8):
         data = takepic()
         theta_relative = data[0]
         prop = data[1]
