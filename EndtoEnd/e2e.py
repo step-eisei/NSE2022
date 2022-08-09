@@ -940,7 +940,7 @@ def takepic():
     return theta,prop
 
 # -----------------------------------------------------------------------------------------------
-"""
+'''
 # ここからメイン
 print("main started")
 
@@ -1023,6 +1023,7 @@ time.sleep(3)
 
 # ---ここからGPSフェーズ---
 print("enter GPS phase")
+'''
 # motorをセットアップする
 INITIAL_DUTY_A = 0
 INITIAL_DUTY_B = 0
@@ -1048,7 +1049,7 @@ pwm_right.ChangeDutyCycle(INITIAL_DUTY_B)
 # sleep
 time.sleep(2)
 print("set up finished")
-
+'''
 # gpsの設定
 gps = micropyGPS.MicropyGPS(9, 'dd') # MicroGPSオブジェクトを生成する。
                                      # 引数はタイムゾーンの時差と出力フォーマット
@@ -1056,7 +1057,7 @@ gpsthread = threading.Thread(target=rungps, args=()) # 上の関数を実行す�
 gpsthread.setDaemon(True)
 gpsthread.start() # スレッドを起動
 print("thread got up")
-"""
+'''
 # 地磁気値をセットアップ
 data = i2c.read_byte_data(MAG_ADDR, 0x4B)
 if(data == 0):
