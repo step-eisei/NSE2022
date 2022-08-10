@@ -154,7 +154,7 @@ get_calib_param()
 
 if __name__ == '__main__':
     try:
-        write_csv(["temp","pres","hum"])
+        write_csv("temp","pres","hum")
         for i in range(10):
             [t,p,h] = readData()
             print(str(t) + ":" + str(p) + ":" + str(h) + "\n")
