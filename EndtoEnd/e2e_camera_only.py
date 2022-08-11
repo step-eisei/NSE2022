@@ -949,12 +949,12 @@ land_pressure=average_pressure() #基準となる地表での気圧を取得
 print('land_pressure : {} hPa'.format(land_pressure))
 
 pressure=get_pressure()
-
+'''
 write_data = ("land_detect",pressure) 
 th_subthread = threading.Thread(target=subThread)
 th_subthread.setDaemon(True)
 th_subthread.start()
-
+'''
 i=0
 while(i<=10): #上昇したかを判断
     pressure=get_pressure()
@@ -1106,9 +1106,9 @@ try:
 #     write_data = ("guide_phase1",theta_relative, gps_latitude, gps_longitude, x_now, y_now, distance, stack, motor)
     
     
-#     th_subthread = threading.Thread(target=subThread)
-#     th_subthread.setDaemon(True)
-#     th_subthread.start()
+    th_subthread = threading.Thread(target=subThread)
+    th_subthread.setDaemon(True)
+    th_subthread.start()
     
     
 #     while math.sqrt( x_now**2 + y_now**2 ) > final_distance :
