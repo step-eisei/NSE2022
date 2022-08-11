@@ -960,8 +960,8 @@ while(i<=10): #上昇したかを判断
     pressure=get_pressure()
     time.sleep(0.1)
     
-    if pressure<(land_pressure-0.6): #10m用 
-    #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
+    if pressure<(land_pressure-0.6): #2ndfloor用 
+    #if pressure<(land_pressure-0.9):#10m用
         i+=1
         print(i)
     else: #50m地点に上がりきるまでyetを出力
