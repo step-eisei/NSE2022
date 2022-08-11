@@ -984,17 +984,17 @@ while(i<=10): #着地したかを判断
     time.sleep(0.1)
     write_data = ("land_detect",pressure)
 print("On the land")
-time.sleep(3)
+time.sleep(30)
 
-time.sleep(60)
-print("1 minutus passed")
-time.sleep(60)
-print("2 minutus passed")
-time.sleep(60)
-print("3 minutus passed")
-time.sleep(30)
-print("3.5 minutus passed")
-time.sleep(30)
+# time.sleep(60)
+# print("1 minutus passed")
+# time.sleep(60)
+# print("2 minutus passed")
+# time.sleep(60)
+# print("3 minutus passed")
+# time.sleep(30)
+# print("3.5 minutus passed")
+# time.sleep(30)
 
 #展開検知
 for k in range(3): #最低3回加熱
