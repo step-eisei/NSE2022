@@ -970,6 +970,7 @@ while(i<=10): #上昇したかを判断
     write_data = ("land_detect",pressure)
 print("In the sky")
 
+
 i=0
 while(i<=10): #着地したかを判断
     pressure=get_pressure()
@@ -994,7 +995,7 @@ print("3 minutus passed")
 time.sleep(30)
 print("3.5 minutus passed")
 time.sleep(30)
-
+'''
 #展開検知
 for k in range(3): #最低3回加熱
     nchrm()
@@ -1023,7 +1024,7 @@ time.sleep(3)
 
 # ---ここからGPSフェーズ---
 print("enter GPS phase")
-'''
+
 # motorをセットアップする
 INITIAL_DUTY_A = 0
 INITIAL_DUTY_B = 0
