@@ -57,7 +57,7 @@ def hsv_binary(img_hsv,sat_avg,val_avg):
   
 # 撮影
 now_time_camera = datetime.datetime.now()
-filename_camera = now_time_camera.strftime('%m%d_%H%M_')+str(takepic_counter)
+filename_camera = now_time_camera.strftime('%m%d_%H%M%S_')+str(takepic_counter)
 camera.capture("calibration_camera/image"+filename_camera+".jpg")
 
 # 読み込み
