@@ -1186,7 +1186,7 @@ try:
     print("3m goal")
     time.sleep(3)
     
-    val_rate = 0.6
+    val_rate = 0.9
         
     # 赤コーン探索フェーズ
     print("looking for the red cone...")
