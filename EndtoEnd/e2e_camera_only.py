@@ -10,6 +10,7 @@ import time
 import math
 import RPi.GPIO as GPIO
 import numpy as np
+
 import serial
 import micropyGPS
 import csv
@@ -947,9 +948,9 @@ print("main started")
 # ---ここから着地・展開検知---
 land_pressure=average_pressure() #基準となる地表での気圧を取得
 print('land_pressure : {} hPa'.format(land_pressure))
-
-pressure=get_pressure()
 '''
+pressure=get_pressure()
+
 write_data = ("land_detect",pressure) 
 th_subthread = threading.Thread(target=subThread)
 th_subthread.setDaemon(True)
@@ -1197,7 +1198,9 @@ try:
     for i in range(15):
         data = takepic()
         prop = data[1]
+        mag = magnet()
         
+        write_data = ("guide_phase2",mag,prop)
         print(f"prop={prop}")
         if prop > max_prop:
             max_prop_mag = magnet()
@@ -1205,6 +1208,7 @@ try:
         
         print("rotate 30 deg\n")
         rotate(30)
+        
         
     mag = magnet()
     write_data = ("guide_phase2",mag,prop)
