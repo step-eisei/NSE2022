@@ -943,7 +943,7 @@ def takepic():
 
 # ここからメイン
 print("main started")
-'''
+
 # ---ここから着地・展開検知---
 land_pressure=average_pressure() #基準となる地表での気圧を取得
 print('land_pressure : {} hPa'.format(land_pressure))
@@ -960,7 +960,7 @@ while(i<=10): #上昇したかを判断
     pressure=get_pressure()
     time.sleep(0.1)
     
-    if pressure<(land_pressure-0.8): #3階用 
+    if pressure<(land_pressure-0.6): #10m用 
     #if pressure<(land_pressure-7.84011):#50m以上になったら上がったと判断
         i+=1
         print(i)
@@ -976,7 +976,7 @@ while(i<=10): #着地したかを判断
     pressure=get_pressure()
     time.sleep(0.1)
 
-    if pressure>(land_pressure-0.4): 
+    if pressure>(land_pressure-0.3): 
         i+=1
         print(i)
     else: 
@@ -995,7 +995,7 @@ print("3 minutus passed")
 time.sleep(30)
 print("3.5 minutus passed")
 time.sleep(30)
-'''
+
 #展開検知
 for k in range(3): #最低3回加熱
     nchrm()
