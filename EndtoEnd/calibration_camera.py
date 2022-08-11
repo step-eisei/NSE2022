@@ -58,12 +58,12 @@ def hsv_binary(img_hsv,sat_avg,val_avg):
 # 撮影
 now_time_camera = datetime.datetime.now()
 filename_camera = now_time_camera.strftime('%m%d_%H%M_')+str(takepic_counter)
-camera.capture("image"+filename_camera+".jpg")
+camera.capture("calibration_camera/image"+filename_camera+".jpg")
 
 # 読み込み
-img = image.open ("image"+filename_camera+".jpg")
+img = image.open ("calibration_camera/image"+filename_camera+".jpg")
 #hsv空間に変換 「色相(Hue)」「彩度(Saturation)」「明度(Value)」
-img_hsv = image.open("image"+filename_camera+".jpg").convert('HSV')
+img_hsv = image.open("calibration_camera/image"+filename_camera+".jpg").convert('HSV')
 #それぞれ上下左右反転し，Pillow → Numpyへ変換
 # 上下反転メソッド　flip()
 # 左右反転メソッド　mirror()
@@ -76,7 +76,7 @@ sat_avg = sv_avg[0]
 val_avg = sv_avg[1]
     
 img_th = hsv_binary(img_hsv,sat_avg,val_avg) #条件を満たす要素を255，それ以外を0とする配列
-(image.fromarray(img_th)).save("scanth"+filename_camera+".jpg")
+(image.fromarray(img_th)).save("calibration_camera/scanth"+filename_camera+".jpg")
     
 takepic_counter += 1
     
