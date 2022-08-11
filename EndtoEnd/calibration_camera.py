@@ -43,8 +43,8 @@ def hsv_binary(img_hsv,sat_avg,val_avg):
     # np.where(条件, Trueの時に置換する数, Falseの時に置換する数)
     #色相環は360度→0～255に変換
     #色相環の内、赤色は0度と360度をまたぐ
-    img_h_th = np.where((im_h < 15/360*255) | (im_h > 345/360*255), 1, 0)
-    img_s_th = np.where(im_s > sat_avg*0.9, 1, 0)
+    img_h_th = np.where((im_h < 20/360*255) | (im_h > 350/360*255), 1, 0)
+    img_s_th = np.where(im_s > sat_avg, 1, 0)
     img_v_th = np.where(im_v > val_avg*0.9, 1, 0)
 
     #行列の掛け算ではなく各要素の掛け算をする 上記の条件で一つでも満たしていないものがあれば，0となる．
