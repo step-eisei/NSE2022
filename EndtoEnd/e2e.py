@@ -1086,8 +1086,8 @@ print("magY_min = " + str(magY_min))
 
 # ループ(3mゴールまで)
 try:
-#     go_stop()
-#     print("do Uchimura")
+    go_stop()
+    print("do Uchimura")
 #     # gpsから緯度・経度取得
 #     getgps()
 #     print("got gps")
