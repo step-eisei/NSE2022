@@ -1236,7 +1236,7 @@ try:
 
     # 赤コーン接近フェーズ 
     print("approaching the red cone...")
-    for i in range(8):
+    for i in range(20):
         data = takepic()
         theta_relative = data[0]
         prop = data[1]
