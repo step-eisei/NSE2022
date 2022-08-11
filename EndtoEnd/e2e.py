@@ -1215,8 +1215,11 @@ try:
         if(int(mag_now/math.fabs(mag_now)) == int(max_prop_mag/math.fabs(max_prop_mag))):
             if(mag_now >= max_prop_mag-10 and mag_now <= max_prop_mag+10): break
             else:
-                rotate(mag_now - max_prop_mag)
-                print(f"rotate mag {mag_now-max_prop_mag} deg")
+                need_mag = mag_now - max_prop_mag
+                if(need_mag < -180): need_mag += 360
+                if(need_mag > 180): need_mag -= 360
+                rotate(need_mag)
+                print(f"rotate mag {need_mag} deg")
                 time.sleep(1)
         else:
             if(mag_now < 0): mag_now += 360
