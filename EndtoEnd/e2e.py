@@ -1197,7 +1197,8 @@ try:
     for i in range(15):
         data = takepic()
         prop = data[1]
-        
+        mag = magnet()
+        write_data = ("guide_phase2",mag,prop)
         print(f"prop={prop}")
         if prop > max_prop:
             max_prop_mag = magnet()
