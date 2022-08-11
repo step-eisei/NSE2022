@@ -416,7 +416,7 @@ def go_ahead():
     time.sleep(T_straight)
     # DUTYから0まで数秒かけて下げる
     for i in range(0, 101, 2):
-        if(math.sqrt( x_now**2 + y_now**2 ) > 7): 
+        if(math.sqrt( x_now**2 + y_now**2 ) > 20): 
             pwm_left.ChangeDutyCycle((100-i)*DUTY_A/100)
             pwm_right.ChangeDutyCycle((100-i)*DUTY_B/100)
             time.sleep(0.1)
@@ -1213,7 +1213,7 @@ try:
     while True:
         mag_now = magnet()
         if(int(mag_now/math.fabs(mag_now)) == int(max_prop_mag/math.fabs(max_prop_mag))):
-            if(mag_now >= max_prop_mag-10 and mag_now <= max_prop_mag+10): break
+            if(mag_now >= max_prop_mag-20 and mag_now <= max_prop_mag+20): break
             else:
                 need_mag = mag_now - max_prop_mag
                 if(need_mag < -180): need_mag += 360
@@ -1224,7 +1224,7 @@ try:
         else:
             if(mag_now < 0): mag_now += 360
             if(mag_now > 0): max_prop_mag += 360
-            if(mag_now >= max_prop_mag-10 and mag_now <= max_prop_mag+10): break
+            if(mag_now >= max_prop_mag-20 and mag_now <= max_prop_mag+20): break
             else:
                 need_mag = mag_now - max_prop_mag
                 if(need_mag < -180): need_mag += 360
