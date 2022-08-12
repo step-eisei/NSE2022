@@ -4,7 +4,7 @@ try:
   GPIO.setmode(GPIO.BCM)
   GPIO.setup(22,  GPIO.OUT)
 
-  for i in range(4):
+  for i in range(2):
     GPIO.output(22, True)
     print("nchrm "+str(i))
     time.sleep(2)
