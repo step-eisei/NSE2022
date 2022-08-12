@@ -998,24 +998,24 @@ time.sleep(30)
 # time.sleep(30)
 
 #展開検知
-for k in range(3): #最低3回加熱
+for k in range(4): #最低3回加熱
     nchrm()
     print("nchrm " +str(k-3))
-for j in range(3): #赤の割合が一定以下になるまで繰り返す
-    nchrm()
-    print("nchrm "+str(j))
+# for j in range(3): #赤の割合が一定以下になるまで繰り返す
+#     nchrm()
+#     print("nchrm "+str(j))
 
-    data=takepic()
-    prop=data[1] #Rの割合取得
+#     data=takepic()
+#     prop=data[1] #Rの割合取得
     
-    write_data = ("open_detect",prop)
+#     write_data = ("open_detect",prop)
     
-    if prop<10: 
-       print(prop)
-       break 
-    else:
-        print(prop) 
-        continue
+#     if prop<10: 
+#        print(prop)
+#        break 
+#     else:
+#         print(prop) 
+#         continue
    
 print("open!")
 GPIO.cleanup()
@@ -1239,7 +1239,7 @@ try:
 
     # 赤コーン接近フェーズ 
     print("approaching the red cone...")
-    for i in range(20):
+    for i in range(30):
         data = takepic()
         theta_relative = data[0]
         prop = data[1]
@@ -1247,7 +1247,7 @@ try:
         print(f"prop={prop}")
         rotate(theta_relative*1.2)
         go_ahead()
-        if prop > 60:
+        if prop > 30:
             break
         if prop > 10:
             DUTY_A = 20
